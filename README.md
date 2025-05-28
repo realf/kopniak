@@ -1,2 +1,2 @@
 # kopnyak
-Gives you a kick in the ass so you don't forget to take a break from the computer.
+Gives you a kick in the butt so you don't forget to take a break from the computer.
