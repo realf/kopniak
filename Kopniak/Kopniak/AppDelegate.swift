@@ -25,10 +25,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         "Pretend you dropped something and stand up!",
         "Posture check: don't be a croissant."
     ]
-
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         requestNotificationPermission()
         scheduleBreakTimer()
+        UNUserNotificationCenter.current().delegate = self
     }
 
     func requestNotificationPermission() {
@@ -89,5 +90,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         timer?.invalidate()
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        // Called when a notification is delivered while app is in foreground
+        print("Intercepted notification while active")
+        completionHandler([.banner, .sound]) // You can override and show it anyway
     }
 }
