@@ -9,8 +9,10 @@ import SwiftUI
 
 @main
 struct KopniakApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(AppContext.appName) {
             ContentView()
         }
     }

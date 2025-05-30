@@ -24,7 +24,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75C977322DE8872A00DAA738 /* Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kopniak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75C977322DE8872A00DAA738 /* Sergeant Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sergeant Kopniak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C977402DE8872C00DAA738 /* KopniakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C9774A2DE8872C00DAA738 /* KopniakUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -85,7 +85,7 @@
 		75C977332DE8872A00DAA738 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				75C977322DE8872A00DAA738 /* Kopniak.app */,
+				75C977322DE8872A00DAA738 /* Sergeant Kopniak.app */,
 				75C977402DE8872C00DAA738 /* KopniakTests.xctest */,
 				75C9774A2DE8872C00DAA738 /* KopniakUITests.xctest */,
 			);
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		75C977312DE8872A00DAA738 /* Kopniak */ = {
+		75C977312DE8872A00DAA738 /* Sergeant Kopniak */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75C977542DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "Kopniak" */;
+			buildConfigurationList = 75C977542DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */;
 			buildPhases = (
 				75C9772E2DE8872A00DAA738 /* Sources */,
 				75C9772F2DE8872A00DAA738 /* Frameworks */,
@@ -110,11 +110,11 @@
 			fileSystemSynchronizedGroups = (
 				75C977342DE8872A00DAA738 /* Kopniak */,
 			);
-			name = Kopniak;
+			name = "Sergeant Kopniak";
 			packageProductDependencies = (
 			);
 			productName = Kopniak;
-			productReference = 75C977322DE8872A00DAA738 /* Kopniak.app */;
+			productReference = 75C977322DE8872A00DAA738 /* Sergeant Kopniak.app */;
 			productType = "com.apple.product-type.application";
 		};
 		75C9773F2DE8872C00DAA738 /* KopniakTests */ = {
@@ -200,7 +200,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				75C977312DE8872A00DAA738 /* Kopniak */,
+				75C977312DE8872A00DAA738 /* Sergeant Kopniak */,
 				75C9773F2DE8872C00DAA738 /* KopniakTests */,
 				75C977492DE8872C00DAA738 /* KopniakUITests */,
 			);
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		75C977422DE8872C00DAA738 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 75C977312DE8872A00DAA738 /* Kopniak */;
+			target = 75C977312DE8872A00DAA738 /* Sergeant Kopniak */;
 			targetProxy = 75C977412DE8872C00DAA738 /* PBXContainerItemProxy */;
 		};
 		75C9774C2DE8872C00DAA738 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 75C977312DE8872A00DAA738 /* Kopniak */;
+			target = 75C977312DE8872A00DAA738 /* Sergeant Kopniak */;
 			targetProxy = 75C9774B2DE8872C00DAA738 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -523,7 +523,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75C977542DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "Kopniak" */ = {
+		75C977542DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				75C977552DE8872C00DAA738 /* Debug */,
