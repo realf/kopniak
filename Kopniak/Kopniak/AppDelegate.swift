@@ -12,18 +12,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var timer: Timer?
     var recentMessages: [String] = []
     let maxRecent = 5
+    
+    let titles = [
+        "Attention, Soldier!",
+        "Mission Alert!",
+        "Posture Command!",
+        "Drill Time!",
+        "Bootcamp Break!",
+        "Move It, Trooper!",
+        "Action Stations!",
+        "Sergeant’s Call!",
+        "Orders from HQ!"
+    ]
 
     let messages: [String] = [
-        "Your spine called. It wants a better life.",
-        "Stretch now, or your keyboard might become permanent furniture.",
-        "Be kind to your spine.",
-        "You're not a robot (yet). Move those human limbs.",
-        "Stand up before your chair finishes absorbing you.",
-        "Clicking isn't cardio. Move a little.",
-        "Coffee's brewing. So should your circulation.",
-        "Tired? Brain fog’s worst enemy is movement.",
-        "Pretend you dropped something and stand up!",
-        "Posture check: don't be a croissant."
+        "Listen up, recruit! Drop that mouse and march in place!",
+        "Sergeant Kopniak here! Stand up and stretch, soldier!",
+        "At ease… but only for a second. Move it, move it!",
+        "Attention! Your spine needs you to report for duty.",
+        "Private, your chair’s not the only thing that needs action. Get up!",
+        "This is an order! Step away from the screen. Now.",
+        "Stand tall, soldier! Hunching is not part of your mission.",
+        "Sergeant Kopniak: whipping that posture into shape. Let’s move!",
+        "Operation: Stretch & Breathe is underway. You’re the star recruit!",
+        "Don’t make me come over there. Stretch those limbs!",
+        "Break time is now, trooper. Execute a perfect posture drill."
     ]
     
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -55,7 +68,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let message = pickRandomMessage() else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "Break Reminder"
+        let title = titles.randomElement() ?? "Sergeant Kopniak Orders!"
+        content.title = title
         content.body = message
         content.sound = .default
         
