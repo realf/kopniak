@@ -9,11 +9,12 @@ import Cocoa
 import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var timer: Timer?
-    var recentMessages: [String] = []
-    let maxRecent = 5
+    private var timer: Timer?
+    private var recentMessages: [String] = []
+    private let maxRecent = 5
+    private var overlayController: FloatingOverlayController?
     
-    let titles = [
+    private let titles = [
         "Attention, Soldier!",
         "Mission Alert!",
         "Posture Command!",
@@ -25,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         "Orders from HQ!"
     ]
 
-    let messages: [String] = [
+    private let messages: [String] = [
         "Listen up, recruit! Drop that mouse and march in place!",
         "Sergeant Kopniak here! Stand up and stretch, soldier!",
         "At ease… but only for a second. Move it, move it!",
@@ -41,6 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         requestNotificationPermission()
+        setupOverlay()
         scheduleBreakTimer()
         UNUserNotificationCenter.current().delegate = self
     }
@@ -60,11 +62,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let reminderTimeInterval = AppContext.notificationTimeInterval()
         
         timer = Timer.scheduledTimer(withTimeInterval: reminderTimeInterval, repeats: true) { [weak self] _ in
-            self?.sendRandomBreakReminder()
+//            self?.showRandomBreakReminderNotification()
+            self?.showBreakReminderOverlay()
         }
     }
+    
+    func setupOverlay() {
+        overlayController = FloatingOverlayController(rootView: AlternativeNotificationView())
+    }
 
-    func sendRandomBreakReminder() {
+    func showRandomBreakReminderNotification() {
         guard let message = pickRandomMessage() else { return }
 
         let content = UNMutableNotificationContent()
@@ -72,9 +79,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         content.title = title
         content.body = message
         content.sound = .default
-        
-        // TODO: Check if we need a time-sensitive entitlement for that.
-//        content.interruptionLevel = .timeSensitive
 
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
@@ -85,6 +89,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UNUserNotificationCenter.current().add(request)
         updateRecentMessages(message)
     }
+    
+    func showBreakReminderOverlay() {
+            overlayController?.showOverlay()
+
+            // Play an optional audio cue
+            NSSound(named: "Ping")?.play()
+
+            // Hide after a few seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                self?.overlayController?.hideOverlay()
+            }
+        }
 
     func pickRandomMessage() -> String? {
         let available = messages.filter { !recentMessages.contains($0) }
