@@ -12,6 +12,7 @@ struct ReminderView: View {
             Text(message)
                 .multilineTextAlignment(.center)
                 .font(.body)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding()
         .frame(width: 360)
