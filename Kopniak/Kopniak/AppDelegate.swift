@@ -12,37 +12,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var timer: Timer?
     private var recentMessages: [String] = []
     private let maxRecent = 5
-    private var overlayController: FloatingOverlayController?
-    
-    private let titles = [
-        "Attention, Soldier!",
-        "Mission Alert!",
-        "Posture Command!",
-        "Drill Time!",
-        "Bootcamp Break!",
-        "Move It, Trooper!",
-        "Action Stations!",
-        "Sergeant’s Call!",
-        "Orders from HQ!"
-    ]
-
-    private let messages: [String] = [
-        "Listen up, recruit! Drop that mouse and march in place!",
-        "Sergeant Kopniak here! Stand up and stretch, soldier!",
-        "At ease… but only for a second. Move it, move it!",
-        "Attention! Your spine needs you to report for duty.",
-        "Private, your chair’s not the only thing that needs action. Get up!",
-        "This is an order! Step away from the screen. Now.",
-        "Stand tall, soldier! Hunching is not part of your mission.",
-        "Sergeant Kopniak: whipping that posture into shape. Let’s move!",
-        "Operation: Stretch & Breathe is underway. You’re the star recruit!",
-        "Don’t make me come over there. Stretch those limbs!",
-        "Break time is now, trooper. Execute a perfect posture drill."
-    ]
+    let reminderTimeInterval = 45.0 * 60.0
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         requestNotificationPermission()
-        setupOverlay()
         scheduleBreakTimer()
         UNUserNotificationCenter.current().delegate = self
     }
@@ -59,16 +32,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func scheduleBreakTimer() {
-        let reminderTimeInterval = AppContext.notificationTimeInterval()
         
         timer = Timer.scheduledTimer(withTimeInterval: reminderTimeInterval, repeats: true) { [weak self] _ in
-//            self?.showRandomBreakReminderNotification()
-            self?.showBreakReminderOverlay()
+            self?.showRandomBreakReminderNotification()
         }
-    }
-    
-    func setupOverlay() {
-        overlayController = FloatingOverlayController(rootView: AlternativeNotificationView())
     }
 
     func showRandomBreakReminderNotification() {
@@ -89,18 +56,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UNUserNotificationCenter.current().add(request)
         updateRecentMessages(message)
     }
-    
-    func showBreakReminderOverlay() {
-            overlayController?.showOverlay()
-
-            // Play an optional audio cue
-            NSSound(named: "Ping")?.play()
-
-            // Hide after a few seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-                self?.overlayController?.hideOverlay()
-            }
-        }
 
     func pickRandomMessage() -> String? {
         let available = messages.filter { !recentMessages.contains($0) }
