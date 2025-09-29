@@ -89,18 +89,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let hosting = reminderHostingController, let window = reminderWindow {
             hosting.rootView = view
             self.sizeWindowToFitContent(hosting: hosting, window: window)
-            window.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
+            window.orderFrontRegardless()
             return
         }
 
         let hosting = NSHostingController(rootView: view)
-        let window = NSWindow(
+        let window = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: 380, height: 200),
-            styleMask: [.titled, .closable, .miniaturizable],
+            styleMask: [.titled, .closable, .miniaturizable, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )
+        window.collectionBehavior = [.canJoinAllSpaces]
+
         window.title = "Kopniak Reminder"
         window.isReleasedWhenClosed = false
         window.contentViewController = hosting
@@ -110,8 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.reminderHostingController = hosting
         self.reminderWindow = window
 
-        window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        window.orderFrontRegardless()
     }
     
     private func sizeWindowToFitContent(hosting: NSHostingController<ReminderView>, window: NSWindow) {
