@@ -32,6 +32,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         scheduleBreakTimer()
         setupMenuBar()
+        
+        // Show briefing on first launch
+        showBriefingOnFirstLaunch()
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -59,6 +62,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem?.menu = menu
+    }
+    
+    private func showBriefingOnFirstLaunch() {
+        let hasLaunchedBefore = UserDefaults.standard.bool(forKey: "HasLaunchedBefore")
+        
+        if !hasLaunchedBefore {
+            // Mark as launched
+            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+            
+            // Show briefing after a short delay to ensure UI is ready
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.showIntroduction()
+            }
+        }
     }
 
     @objc private func showIntroduction() {
