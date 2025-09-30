@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         
         // Toggle reminders menu item
-        let toggleRemindersItem = NSMenuItem(title: "Pause Reminders", action: #selector(toggleTimer), keyEquivalent: "")
+        let toggleRemindersItem = NSMenuItem(title: "Stand Down", action: #selector(toggleTimer), keyEquivalent: "")
         toggleMenuItem = toggleRemindersItem
         menu.addItem(toggleRemindersItem)
         
@@ -69,13 +69,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+            contentRect: NSRect(x: 0, y: 0, width: 450, height: 500),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false
         )
         
-        window.title = "Sergeant Kopniak - Briefing"
+        window.title = "Sergeant Kopniak"
         window.isReleasedWhenClosed = false
         window.isRestorable = false
 
@@ -86,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Size window to fit content
         hostingController.view.layoutSubtreeIfNeeded()
         let fittingSize = hostingController.view.fittingSize
-        let windowSize = NSSize(width: 400, height: max(300, fittingSize.height))
+        let windowSize = NSSize(width: 450, height: max(500, fittingSize.height))
         window.setContentSize(windowSize)
         
         window.center()
@@ -101,11 +101,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             timer?.invalidate()
             snoozeTimer?.invalidate()
             statusItem?.button?.image = iconInactive
-            toggleMenuItem?.title = "Start Reminders"
+            toggleMenuItem?.title = "Report for Duty"
         } else {
             scheduleBreakTimer()
             statusItem?.button?.image = iconActive
-            toggleMenuItem?.title = "Pause Reminders"
+            toggleMenuItem?.title = "Stand Down"
         }
     }
 
