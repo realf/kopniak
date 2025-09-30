@@ -22,13 +22,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func scheduleBreakTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: reminderTimeInterval, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            let content = self.prepareReminderContent()
-            self.showReminderWindow(title: content.title, message: content.message)
-            NSSound.beep()
-            self.updateRecentMessages(content.message)
+        // Fire immediately, uncomment for testing
+//        self.showReminder()
+
+        timer = Timer.scheduledTimer(
+            withTimeInterval: reminderTimeInterval,
+            repeats: true
+        ) { [weak self] _ in
+            self?.showReminder()
         }
+    }
+
+    private func showReminder() {
+        let content = self.prepareReminderContent()
+        self.showReminderWindow(title: content.title, message: content.message)
+        NSSound.beep()
+        self.updateRecentMessages(content.message)
     }
 
     func pickRandomMessage() -> String? {
