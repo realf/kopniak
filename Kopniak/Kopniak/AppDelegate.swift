@@ -17,12 +17,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var reminderWindow: NSWindow?
     private var reminderHostingController: NSHostingController<ReminderView>?
+    
+    private var introductionWindow: NSWindow?
 
     private var toggleMenuItem: NSMenuItem?
     private let iconActive = NSImage(systemSymbolName: "chevron.up.2", accessibilityDescription: "Sergeant Kopniak")
     private let iconInactive = NSImage(systemSymbolName: "chevron.up.dotted.2", accessibilityDescription: "Sergeant Kopniak")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Hide all windows by default
+        NSApplication.shared.setActivationPolicy(.accessory)
+
         scheduleBreakTimer()
         setupMenuBar()
     }
@@ -36,12 +41,56 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem?.button?.image = iconActive
 
         let menu = NSMenu()
+        
+        // Show Introduction menu item
+        let showIntroItem = NSMenuItem(title: "Show Briefing", action: #selector(showIntroduction), keyEquivalent: "")
+        menu.addItem(showIntroItem)
+        
+        menu.addItem(NSMenuItem.separator())
+        
+        // Toggle reminders menu item
         let toggleRemindersItem = NSMenuItem(title: "Pause Reminders", action: #selector(toggleTimer), keyEquivalent: "")
         toggleMenuItem = toggleRemindersItem
         menu.addItem(toggleRemindersItem)
+        
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem?.menu = menu
+    }
+
+    @objc private func showIntroduction() {
+        if let window = introductionWindow {
+            window.makeKeyAndOrderFront(nil)
+            NSApplication.shared.activate(ignoringOtherApps: true)
+            return
+        }
+        
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+            styleMask: [.titled, .closable, .miniaturizable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        window.title = "Sergeant Kopniak - Briefing"
+        window.isReleasedWhenClosed = false
+        window.isRestorable = false
+
+        let contentView = IntroView()
+        let hostingController = NSHostingController(rootView: contentView)
+        window.contentViewController = hostingController
+        
+        // Size window to fit content
+        hostingController.view.layoutSubtreeIfNeeded()
+        let fittingSize = hostingController.view.fittingSize
+        let windowSize = NSSize(width: 400, height: max(300, fittingSize.height))
+        window.setContentSize(windowSize)
+        
+        window.center()
+        self.introductionWindow = window
+        
+        window.makeKeyAndOrderFront(nil)
+        NSApplication.shared.activate(ignoringOtherApps: true)
     }
 
     @objc private func toggleTimer() {

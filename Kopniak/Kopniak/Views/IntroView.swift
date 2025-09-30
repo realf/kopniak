@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  IntroView.swift
 //  Kopniak
 //
 //  Created by alf on 29.05.2025.
@@ -7,12 +7,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct IntroView: View {
     var body: some View {
         VStack(spacing: 10) {
-            Text("Briefing")
-                .font(.headline)
-                .bold()
             Text(
                 """
                 Listen up, recruit! I’m Sergeant Kopniak, and my mission is to keep your spine straight, your mind sharp, and your butt out of that chair.
@@ -31,5 +28,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    IntroView()
 }

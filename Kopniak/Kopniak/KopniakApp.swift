@@ -13,9 +13,9 @@ struct KopniakApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup() {
-            ContentView()
+        // Empty scene - all windows are managed by AppDelegate
+        Settings {
+            EmptyView()
         }
-        .defaultSize(width: 400, height: 300)
     }
 }
