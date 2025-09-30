@@ -18,7 +18,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var reminderWindow: NSWindow?
     private var reminderHostingController: NSHostingController<ReminderView>?
 
-    private let toggleRemindersTag: Int = 0
+    private var toggleMenuItem: NSMenuItem?
+    private let iconActive = NSImage(systemSymbolName: "chevron.up.2", accessibilityDescription: "Sergeant Kopniak")
+    private let iconInactive = NSImage(systemSymbolName: "chevron.up.dotted.2", accessibilityDescription: "Sergeant Kopniak")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         scheduleBreakTimer()
@@ -31,11 +33,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func setupMenuBar() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem?.button?.title = "🎖️"
+        statusItem?.button?.image = iconActive
 
         let menu = NSMenu()
         let toggleRemindersItem = NSMenuItem(title: "Pause Reminders", action: #selector(toggleTimer), keyEquivalent: "")
-        toggleRemindersItem.tag = toggleRemindersTag
+        toggleMenuItem = toggleRemindersItem
         menu.addItem(toggleRemindersItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -45,12 +47,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func toggleTimer() {
         if timer?.isValid == true {
             timer?.invalidate()
-            statusItem?.button?.title = "😴"
-            statusItem?.menu?.item(withTag: toggleRemindersTag)?.title = "Start Reminders"
+            statusItem?.button?.image = iconInactive
+            toggleMenuItem?.title = "Start Reminders"
         } else {
             scheduleBreakTimer()
-            statusItem?.button?.title = "🎖️"
-            statusItem?.menu?.item(withTag: toggleRemindersTag)?.title = "Pause Reminders"
+            statusItem?.button?.image = iconActive
+            toggleMenuItem?.title = "Pause Reminders"
         }
     }
 
