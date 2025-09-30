@@ -37,6 +37,8 @@ struct IntroView: View {
             .multilineTextAlignment(.leading)
         }
         .padding()
+        .frame(width: 380)
+        .fixedSize()
     }
 }
 

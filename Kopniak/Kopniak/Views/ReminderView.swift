@@ -28,7 +28,8 @@ struct ReminderView: View {
             }
         }
         .padding()
-        .frame(width: 380)
+        .frame(minWidth: 380, minHeight: 100)
+        .fixedSize()
     }
 }
 

@@ -87,7 +87,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         let popover = NSPopover()
-        popover.contentSize = NSSize(width: 400, height: 450)
         popover.behavior = .transient
         popover.animates = true
         
@@ -189,7 +188,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             )
             hosting.rootView = view
-            self.sizeWindowToFitContent(hosting: hosting, window: window)
             window.orderFrontRegardless()
             return
         }
@@ -217,22 +215,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.title = "Sergeant Kopniak says:"
         window.isReleasedWhenClosed = false
         window.contentViewController = hosting
-        self.sizeWindowToFitContent(hosting: hosting, window: window)
         window.center()
 
         self.reminderHostingController = hosting
         self.reminderWindow = window
 
         window.orderFrontRegardless()
-    }
-    
-    private func sizeWindowToFitContent(hosting: NSHostingController<ReminderView>, window: NSWindow) {
-        let contentWidth: CGFloat = 380
-        // Ensure layout is up to date before measuring
-        hosting.view.layoutSubtreeIfNeeded()
-        let fittingSize = hosting.view.fittingSize
-        let minHeight: CGFloat = 160
-        let contentHeight = max(minHeight, fittingSize.height)
-        window.setContentSize(NSSize(width: contentWidth, height: contentHeight))
     }
 }
