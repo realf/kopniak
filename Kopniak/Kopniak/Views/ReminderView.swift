@@ -4,6 +4,7 @@ struct ReminderView: View {
     let title: String
     let message: String
     let onDismiss: () -> Void
+    let onSnooze: (() -> Void)
 
     var body: some View {
         VStack(spacing: 12) {
@@ -16,9 +17,14 @@ struct ReminderView: View {
                 .fixedSize(horizontal: false, vertical: true)
             HStack {
                 Spacer()
+                Button("At Ease for 10!") {
+                    onSnooze()
+                }
+                .buttonStyle(.bordered)
                 Button("Yes, sir!") {
                     onDismiss()
                 }
+                .buttonStyle(.borderedProminent)
             }
         }
         .padding()
@@ -30,6 +36,7 @@ struct ReminderView: View {
     ReminderView(
         title: titles.first ?? "Reminder",
         message: messages.first ?? "Time to move!",
-        onDismiss: {}
+        onDismiss: {},
+        onSnooze: {}
     )
 }

@@ -10,10 +10,12 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var timer: Timer?
+    private var snoozeTimer: Timer?
     private var recentMessages: [String] = []
     private let maxRecent = 5
     private var statusItem: NSStatusItem?
-    private let reminderTimeInterval = 45.0 * 60.0
+    private let reminderInterval = 45.0 * 60.0
+    private let snoozeInterval = 10.0 * 60.0
 
     private var reminderWindow: NSWindow?
     private var reminderHostingController: NSHostingController<ReminderView>?
@@ -34,6 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         timer?.invalidate()
+        snoozeTimer?.invalidate()
     }
 
     private func setupMenuBar() {
@@ -96,6 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func toggleTimer() {
         if timer?.isValid == true {
             timer?.invalidate()
+            snoozeTimer?.invalidate()
             statusItem?.button?.image = iconInactive
             toggleMenuItem?.title = "Start Reminders"
         } else {
@@ -110,7 +114,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        self.showReminder()
 
         timer = Timer.scheduledTimer(
-            withTimeInterval: reminderTimeInterval,
+            withTimeInterval: reminderInterval,
             repeats: true
         ) { [weak self] _ in
             self?.showReminder()
@@ -122,6 +126,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.showReminderWindow(title: content.title, message: content.message)
         NSSound.beep()
         self.updateRecentMessages(content.message)
+    }
+    
+    private func snoozeReminder() {
+        // Cancel any existing snooze timer
+        snoozeTimer?.invalidate()
+        // Cancel main timer
+        timer?.invalidate()
+
+        // Schedule a snooze timer
+        snoozeTimer = Timer.scheduledTimer(withTimeInterval: snoozeInterval, repeats: false) { [weak self] _ in
+            self?.showReminder()
+            // Restore main timer
+            self?.scheduleBreakTimer()
+        }
     }
 
     private func pickRandomMessage() -> String? {
@@ -148,7 +166,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showReminderWindow(title: String, message: String) {
         if let hosting = reminderHostingController, let window = reminderWindow {
-            let view = ReminderView(title: title, message: message, onDismiss: { window.close() })
+            let view = ReminderView(
+                title: title, 
+                message: message, 
+                onDismiss: { window.close() },
+                onSnooze: { [weak self] in
+                    window.close()
+                    self?.snoozeReminder()
+                }
+            )
             hosting.rootView = view
             self.sizeWindowToFitContent(hosting: hosting, window: window)
             window.orderFrontRegardless()
@@ -165,7 +191,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.level = .floating
         window.isRestorable = false
 
-        let view = ReminderView(title: title, message: message, onDismiss: { window.close() })
+        let view = ReminderView(
+            title: title, 
+            message: message, 
+            onDismiss: { window.close() },
+            onSnooze: { [weak self] in
+                window.close()
+                self?.snoozeReminder()
+            }
+        )
         let hosting = NSHostingController(rootView: view)
         window.title = "Sergeant Kopniak says:"
         window.isReleasedWhenClosed = false
