@@ -6,7 +6,6 @@
 //
 
 import Cocoa
-import UserNotifications
 import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -98,17 +97,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         timer?.invalidate()
-    }
-}
-
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification,
-        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-    ) {
-        // Called when a notification is delivered while app is in foreground
-        print("Intercepted notification while active")
-        completionHandler([.banner, .sound]) // You can override and show it anyway
     }
 }
