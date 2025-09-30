@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var reminderWindow: NSWindow?
     private var reminderHostingController: NSHostingController<ReminderView>?
     
-    private var introductionWindow: NSWindow?
+    private var introductionPopover: NSPopover?
 
     private var toggleMenuItem: NSMenuItem?
     private let iconActive = NSImage(systemSymbolName: "chevron.up.2", accessibilityDescription: "Sergeant Kopniak")
@@ -62,38 +62,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func showIntroduction() {
-        if let window = introductionWindow {
-            window.makeKeyAndOrderFront(nil)
-            NSApplication.shared.activate(ignoringOtherApps: true)
-            return
+        if let popover = introductionPopover {
+            if popover.isShown {
+                popover.close()
+                return
+            }
         }
         
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 450, height: 500),
-            styleMask: [.titled, .closable, .miniaturizable],
-            backing: .buffered,
-            defer: false
-        )
+        let popover = NSPopover()
+        popover.contentSize = NSSize(width: 400, height: 450)
+        popover.behavior = .transient
+        popover.animates = true
         
-        window.title = "Sergeant Kopniak"
-        window.isReleasedWhenClosed = false
-        window.isRestorable = false
-
         let contentView = IntroView()
         let hostingController = NSHostingController(rootView: contentView)
-        window.contentViewController = hostingController
+        popover.contentViewController = hostingController
         
-        // Size window to fit content
-        hostingController.view.layoutSubtreeIfNeeded()
-        let fittingSize = hostingController.view.fittingSize
-        let windowSize = NSSize(width: 450, height: max(500, fittingSize.height))
-        window.setContentSize(windowSize)
+        self.introductionPopover = popover
         
-        window.center()
-        self.introductionWindow = window
-        
-        window.makeKeyAndOrderFront(nil)
-        NSApplication.shared.activate(ignoringOtherApps: true)
+        if let statusButton = statusItem?.button {
+            // Activate the application to ensure proper focus
+            NSApplication.shared.activate(ignoringOtherApps: true)
+            popover.show(relativeTo: statusButton.bounds, of: statusButton, preferredEdge: .minY)
+            
+            // Ensure the popover gets focus
+            DispatchQueue.main.async {
+                popover.contentViewController?.view.window?.makeKey()
+            }
+        }
     }
 
     @objc private func toggleTimer() {
