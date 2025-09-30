@@ -19,7 +19,6 @@ struct ReminderView: View {
                 Button("Yes, sir!") {
                     onDismiss()
                 }
-                .keyboardShortcut(.escape)
             }
         }
         .padding()
