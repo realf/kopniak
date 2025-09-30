@@ -73,7 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let view = ReminderView(title: title, message: message, onDismiss: { window.close() })
         let hosting = NSHostingController(rootView: view)
-        window.title = "Kopniak Reminder"
+        window.title = "Sergeant Kopniak says:"
         window.isReleasedWhenClosed = false
         window.contentViewController = hosting
         self.sizeWindowToFitContent(hosting: hosting, window: window)
