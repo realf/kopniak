@@ -19,29 +19,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var reminderHostingController: NSHostingController<ReminderView>?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        requestNotificationPermission()
         scheduleBreakTimer()
-        UNUserNotificationCenter.current().delegate = self
-        showReminderWindowIfNeeded()
-    }
-
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                print("Notification permission granted.")
-            } else if let error {
-                print("Notification error: \(error)")
-                // TODO: Show message explaining why we need the notification permission
-            }
-        }
     }
 
     func scheduleBreakTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: reminderTimeInterval, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             let content = self.prepareReminderContent()
-            self.showReminderNotification(title: content.title, message: content.message)
             self.showReminderWindow(title: content.title, message: content.message)
+            NSSound.beep()
             self.updateRecentMessages(content.message)
         }
     }
@@ -68,21 +54,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return (titleText, messageText)
     }
 
-    func showReminderNotification(title: String, message: String) {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = message
-        content.sound = .default
-
-        let request = UNNotificationRequest(
-            identifier: UUID().uuidString,
-            content: content,
-            trigger: nil
-        )
-
-        UNUserNotificationCenter.current().add(request)
-    }
-    
     func showReminderWindow(title: String, message: String) {
         if let hosting = reminderHostingController, let window = reminderWindow {
             let view = ReminderView(title: title, message: message, onDismiss: { window.close() })
@@ -123,10 +94,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let minHeight: CGFloat = 160
         let contentHeight = max(minHeight, fittingSize.height)
         window.setContentSize(NSSize(width: contentWidth, height: contentHeight))
-    }
-    
-    private func showReminderWindowIfNeeded() {
-        // No-op for now; window is created on first show
     }
 
     func applicationWillTerminate(_ notification: Notification) {
