@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         
         // Show Introduction menu item
-        let showIntroItem = NSMenuItem(title: "Show Briefing", action: #selector(showIntroduction), keyEquivalent: "")
+        let showIntroItem = NSMenuItem(title: "Mission Briefing", action: #selector(showIntroduction), keyEquivalent: "")
         menu.addItem(showIntroItem)
         
         menu.addItem(NSMenuItem.separator())
