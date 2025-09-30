@@ -22,7 +22,7 @@ struct ReminderView: View {
             }
         }
         .padding()
-        .frame(width: 360)
+        .frame(width: 380)
     }
 }
 
