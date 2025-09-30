@@ -12,16 +12,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var timer: Timer?
     private var recentMessages: [String] = []
     private let maxRecent = 5
-    let reminderTimeInterval = 45.0 * 60.0
+    private var statusItem: NSStatusItem?
+    private let reminderTimeInterval = 45.0 * 60.0
 
     private var reminderWindow: NSWindow?
     private var reminderHostingController: NSHostingController<ReminderView>?
-    
+
+    private let toggleRemindersTag: Int = 0
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         scheduleBreakTimer()
+        setupMenuBar()
     }
 
-    func scheduleBreakTimer() {
+    func applicationWillTerminate(_ notification: Notification) {
+        timer?.invalidate()
+    }
+
+    private func setupMenuBar() {
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        statusItem?.button?.title = "🎖️"
+
+        let menu = NSMenu()
+        let toggleRemindersItem = NSMenuItem(title: "Pause Reminders", action: #selector(toggleTimer), keyEquivalent: "")
+        toggleRemindersItem.tag = toggleRemindersTag
+        menu.addItem(toggleRemindersItem)
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        statusItem?.menu = menu
+    }
+
+    @objc private func toggleTimer() {
+        if timer?.isValid == true {
+            timer?.invalidate()
+            statusItem?.button?.title = "😴"
+            statusItem?.menu?.item(withTag: toggleRemindersTag)?.title = "Start Reminders"
+        } else {
+            scheduleBreakTimer()
+            statusItem?.button?.title = "🎖️"
+            statusItem?.menu?.item(withTag: toggleRemindersTag)?.title = "Pause Reminders"
+        }
+    }
+
+    private func scheduleBreakTimer() {
         // Fire immediately, uncomment for testing
 //        self.showReminder()
 
@@ -40,7 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.updateRecentMessages(content.message)
     }
 
-    func pickRandomMessage() -> String? {
+    private func pickRandomMessage() -> String? {
         let available = messages.filter { !recentMessages.contains($0) }
         guard !available.isEmpty else {
             recentMessages.removeAll()
@@ -49,20 +82,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return available.randomElement()
     }
 
-    func updateRecentMessages(_ message: String) {
+    private func updateRecentMessages(_ message: String) {
         recentMessages.append(message)
         if recentMessages.count > maxRecent {
             recentMessages.removeFirst()
         }
     }
 
-    func prepareReminderContent() -> (title: String, message: String) {
+    private func prepareReminderContent() -> (title: String, message: String) {
         let titleText = titles.randomElement() ?? "Sergeant Kopniak Orders!"
         let messageText = pickRandomMessage() ?? (messages.randomElement() ?? "Time to move!")
         return (titleText, messageText)
     }
 
-    func showReminderWindow(title: String, message: String) {
+    private func showReminderWindow(title: String, message: String) {
         if let hosting = reminderHostingController, let window = reminderWindow {
             let view = ReminderView(title: title, message: message, onDismiss: { window.close() })
             hosting.rootView = view
@@ -102,9 +135,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let minHeight: CGFloat = 160
         let contentHeight = max(minHeight, fittingSize.height)
         window.setContentSize(NSSize(width: contentWidth, height: contentHeight))
-    }
-
-    func applicationWillTerminate(_ notification: Notification) {
-        timer?.invalidate()
     }
 }
