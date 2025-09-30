@@ -99,6 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             defer: false
         )
         window.collectionBehavior = [.canJoinAllSpaces]
+        window.level = .floating
 
         let view = ReminderView(title: title, message: message, onDismiss: { window.close() })
         let hosting = NSHostingController(rootView: view)
