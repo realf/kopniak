@@ -16,5 +16,6 @@ struct KopniakApp: App {
         WindowGroup() {
             ContentView()
         }
+        .defaultSize(width: 400, height: 300)
     }
 }

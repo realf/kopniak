@@ -27,7 +27,6 @@ struct ContentView: View {
             .multilineTextAlignment(.leading)
         }
         .padding()
-        .frame(minWidth: 400, minHeight: 300)
     }
 }
 
