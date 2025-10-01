@@ -35,8 +35,8 @@ struct ReminderView: View {
 
 #Preview {
     ReminderView(
-        title: titles.first ?? "Reminder",
-        message: messages.first ?? "Time to move!",
+        title: "Attention!",
+        message: "Time to move, Soldier!",
         onDismiss: {},
         onSnooze: {}
     )
