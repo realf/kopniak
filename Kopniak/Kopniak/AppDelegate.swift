@@ -93,7 +93,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let contentView = IntroView()
         let hostingController = NSHostingController(rootView: contentView)
         popover.contentViewController = hostingController
-        
+        popover.contentSize = hostingController.view.fittingSize
         self.introductionPopover = popover
         
         if let statusButton = statusItem?.button {
