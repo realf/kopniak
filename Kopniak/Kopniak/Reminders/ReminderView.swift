@@ -32,6 +32,8 @@ struct ReminderView: View {
 
             // Buttons
             HStack(spacing: 12) {
+                Spacer()
+
                 // "At Ease for 10" button
                 Button(action: onSnooze) {
                     HStack {
@@ -40,8 +42,7 @@ struct ReminderView: View {
                             .fontWeight(.semibold)
                     }
                 }
-                .keyboardShortcut("s", modifiers: [])
-                
+
                 // "Yes Sir!" button
                 Button(action: onDismiss) {
                     HStack {
@@ -50,7 +51,7 @@ struct ReminderView: View {
                             .fontWeight(.semibold)
                     }
                 }
-                .keyboardShortcut(.return)
+                .buttonStyle(.borderedProminent)
             }
         }
         .padding(20)

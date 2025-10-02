@@ -85,6 +85,7 @@ struct ContentView: View {
                 Button(action: { reminderManager.stopReminders() }) {
                     HStack {
                         Image(systemName: "stop.fill")
+                            .foregroundStyle(Color.red)
                         Text("Stand Down")
                     }
                 }
@@ -92,6 +93,7 @@ struct ContentView: View {
                 Button(action: { reminderManager.startReminders() }) {
                     HStack {
                         Image(systemName: "play.fill")
+                            .foregroundStyle(Color.blue)
                         Text("Report for Duty")
                     }
                 }
