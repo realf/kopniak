@@ -7,40 +7,40 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		75C977412DE8872C00DAA738 /* PBXContainerItemProxy */ = {
+		75997A352E8E6A2400C6F17B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 75C9772A2DE8872A00DAA738 /* Project object */;
+			containerPortal = 75997A1F2E8E6A2300C6F17B /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 75C977312DE8872A00DAA738;
+			remoteGlobalIDString = 75997A262E8E6A2300C6F17B;
 			remoteInfo = Kopniak;
 		};
-		75C9774B2DE8872C00DAA738 /* PBXContainerItemProxy */ = {
+		75997A3F2E8E6A2400C6F17B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 75C9772A2DE8872A00DAA738 /* Project object */;
+			containerPortal = 75997A1F2E8E6A2300C6F17B /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 75C977312DE8872A00DAA738;
+			remoteGlobalIDString = 75997A262E8E6A2300C6F17B;
 			remoteInfo = Kopniak;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75C977322DE8872A00DAA738 /* Sergeant Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sergeant Kopniak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		75C977402DE8872C00DAA738 /* KopniakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		75C9774A2DE8872C00DAA738 /* KopniakUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75997A272E8E6A2300C6F17B /* Sergeant Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sergeant Kopniak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75997A342E8E6A2400C6F17B /* KopniakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		75C977342DE8872A00DAA738 /* Kopniak */ = {
+		75997A292E8E6A2300C6F17B /* Kopniak */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Kopniak;
 			sourceTree = "<group>";
 		};
-		75C977432DE8872C00DAA738 /* KopniakTests */ = {
+		75997A372E8E6A2400C6F17B /* KopniakTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = KopniakTests;
 			sourceTree = "<group>";
 		};
-		75C9774D2DE8872C00DAA738 /* KopniakUITests */ = {
+		75997A412E8E6A2400C6F17B /* KopniakUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = KopniakUITests;
 			sourceTree = "<group>";
@@ -48,21 +48,21 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		75C9772F2DE8872A00DAA738 /* Frameworks */ = {
+		75997A242E8E6A2300C6F17B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75C9773D2DE8872C00DAA738 /* Frameworks */ = {
+		75997A312E8E6A2400C6F17B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75C977472DE8872C00DAA738 /* Frameworks */ = {
+		75997A3B2E8E6A2400C6F17B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,22 +72,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		75C977292DE8872A00DAA738 = {
+		75997A1E2E8E6A2300C6F17B = {
 			isa = PBXGroup;
 			children = (
-				75C977342DE8872A00DAA738 /* Kopniak */,
-				75C977432DE8872C00DAA738 /* KopniakTests */,
-				75C9774D2DE8872C00DAA738 /* KopniakUITests */,
-				75C977332DE8872A00DAA738 /* Products */,
+				75997A292E8E6A2300C6F17B /* Kopniak */,
+				75997A372E8E6A2400C6F17B /* KopniakTests */,
+				75997A412E8E6A2400C6F17B /* KopniakUITests */,
+				75997A282E8E6A2300C6F17B /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		75C977332DE8872A00DAA738 /* Products */ = {
+		75997A282E8E6A2300C6F17B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				75C977322DE8872A00DAA738 /* Sergeant Kopniak.app */,
-				75C977402DE8872C00DAA738 /* KopniakTests.xctest */,
-				75C9774A2DE8872C00DAA738 /* KopniakUITests.xctest */,
+				75997A272E8E6A2300C6F17B /* Sergeant Kopniak.app */,
+				75997A342E8E6A2400C6F17B /* KopniakTests.xctest */,
+				75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,134 +95,134 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		75C977312DE8872A00DAA738 /* Sergeant Kopniak */ = {
+		75997A262E8E6A2300C6F17B /* Sergeant Kopniak */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75C977542DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */;
+			buildConfigurationList = 75997A482E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */;
 			buildPhases = (
-				75C9772E2DE8872A00DAA738 /* Sources */,
-				75C9772F2DE8872A00DAA738 /* Frameworks */,
-				75C977302DE8872A00DAA738 /* Resources */,
+				75997A232E8E6A2300C6F17B /* Sources */,
+				75997A242E8E6A2300C6F17B /* Frameworks */,
+				75997A252E8E6A2300C6F17B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				75C977342DE8872A00DAA738 /* Kopniak */,
+				75997A292E8E6A2300C6F17B /* Kopniak */,
 			);
 			name = "Sergeant Kopniak";
 			packageProductDependencies = (
 			);
 			productName = Kopniak;
-			productReference = 75C977322DE8872A00DAA738 /* Sergeant Kopniak.app */;
+			productReference = 75997A272E8E6A2300C6F17B /* Sergeant Kopniak.app */;
 			productType = "com.apple.product-type.application";
 		};
-		75C9773F2DE8872C00DAA738 /* KopniakTests */ = {
+		75997A332E8E6A2400C6F17B /* KopniakTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75C977572DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "KopniakTests" */;
+			buildConfigurationList = 75997A4B2E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "KopniakTests" */;
 			buildPhases = (
-				75C9773C2DE8872C00DAA738 /* Sources */,
-				75C9773D2DE8872C00DAA738 /* Frameworks */,
-				75C9773E2DE8872C00DAA738 /* Resources */,
+				75997A302E8E6A2400C6F17B /* Sources */,
+				75997A312E8E6A2400C6F17B /* Frameworks */,
+				75997A322E8E6A2400C6F17B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				75C977422DE8872C00DAA738 /* PBXTargetDependency */,
+				75997A362E8E6A2400C6F17B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				75C977432DE8872C00DAA738 /* KopniakTests */,
+				75997A372E8E6A2400C6F17B /* KopniakTests */,
 			);
 			name = KopniakTests;
 			packageProductDependencies = (
 			);
 			productName = KopniakTests;
-			productReference = 75C977402DE8872C00DAA738 /* KopniakTests.xctest */;
+			productReference = 75997A342E8E6A2400C6F17B /* KopniakTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		75C977492DE8872C00DAA738 /* KopniakUITests */ = {
+		75997A3D2E8E6A2400C6F17B /* KopniakUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75C9775A2DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "KopniakUITests" */;
+			buildConfigurationList = 75997A4E2E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "KopniakUITests" */;
 			buildPhases = (
-				75C977462DE8872C00DAA738 /* Sources */,
-				75C977472DE8872C00DAA738 /* Frameworks */,
-				75C977482DE8872C00DAA738 /* Resources */,
+				75997A3A2E8E6A2400C6F17B /* Sources */,
+				75997A3B2E8E6A2400C6F17B /* Frameworks */,
+				75997A3C2E8E6A2400C6F17B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				75C9774C2DE8872C00DAA738 /* PBXTargetDependency */,
+				75997A402E8E6A2400C6F17B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				75C9774D2DE8872C00DAA738 /* KopniakUITests */,
+				75997A412E8E6A2400C6F17B /* KopniakUITests */,
 			);
 			name = KopniakUITests;
 			packageProductDependencies = (
 			);
 			productName = KopniakUITests;
-			productReference = 75C9774A2DE8872C00DAA738 /* KopniakUITests.xctest */;
+			productReference = 75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		75C9772A2DE8872A00DAA738 /* Project object */ = {
+		75997A1F2E8E6A2300C6F17B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 1630;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					75C977312DE8872A00DAA738 = {
-						CreatedOnToolsVersion = 16.3;
+					75997A262E8E6A2300C6F17B = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
-					75C9773F2DE8872C00DAA738 = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 75C977312DE8872A00DAA738;
+					75997A332E8E6A2400C6F17B = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 75997A262E8E6A2300C6F17B;
 					};
-					75C977492DE8872C00DAA738 = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 75C977312DE8872A00DAA738;
+					75997A3D2E8E6A2400C6F17B = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 75997A262E8E6A2300C6F17B;
 					};
 				};
 			};
-			buildConfigurationList = 75C9772D2DE8872A00DAA738 /* Build configuration list for PBXProject "Kopniak" */;
+			buildConfigurationList = 75997A222E8E6A2300C6F17B /* Build configuration list for PBXProject "Kopniak" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 75C977292DE8872A00DAA738;
+			mainGroup = 75997A1E2E8E6A2300C6F17B;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 75C977332DE8872A00DAA738 /* Products */;
+			productRefGroup = 75997A282E8E6A2300C6F17B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				75C977312DE8872A00DAA738 /* Sergeant Kopniak */,
-				75C9773F2DE8872C00DAA738 /* KopniakTests */,
-				75C977492DE8872C00DAA738 /* KopniakUITests */,
+				75997A262E8E6A2300C6F17B /* Sergeant Kopniak */,
+				75997A332E8E6A2400C6F17B /* KopniakTests */,
+				75997A3D2E8E6A2400C6F17B /* KopniakUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		75C977302DE8872A00DAA738 /* Resources */ = {
+		75997A252E8E6A2300C6F17B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75C9773E2DE8872C00DAA738 /* Resources */ = {
+		75997A322E8E6A2400C6F17B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75C977482DE8872C00DAA738 /* Resources */ = {
+		75997A3C2E8E6A2400C6F17B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,21 +232,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		75C9772E2DE8872A00DAA738 /* Sources */ = {
+		75997A232E8E6A2300C6F17B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75C9773C2DE8872C00DAA738 /* Sources */ = {
+		75997A302E8E6A2400C6F17B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75C977462DE8872C00DAA738 /* Sources */ = {
+		75997A3A2E8E6A2400C6F17B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,20 +256,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		75C977422DE8872C00DAA738 /* PBXTargetDependency */ = {
+		75997A362E8E6A2400C6F17B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 75C977312DE8872A00DAA738 /* Sergeant Kopniak */;
-			targetProxy = 75C977412DE8872C00DAA738 /* PBXContainerItemProxy */;
+			target = 75997A262E8E6A2300C6F17B /* Sergeant Kopniak */;
+			targetProxy = 75997A352E8E6A2400C6F17B /* PBXContainerItemProxy */;
 		};
-		75C9774C2DE8872C00DAA738 /* PBXTargetDependency */ = {
+		75997A402E8E6A2400C6F17B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 75C977312DE8872A00DAA738 /* Sergeant Kopniak */;
-			targetProxy = 75C9774B2DE8872C00DAA738 /* PBXContainerItemProxy */;
+			target = 75997A262E8E6A2300C6F17B /* Sergeant Kopniak */;
+			targetProxy = 75997A3F2E8E6A2400C6F17B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		75C977522DE8872C00DAA738 /* Debug */ = {
+		75997A462E8E6A2400C6F17B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -323,7 +323,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -333,7 +333,7 @@
 			};
 			name = Debug;
 		};
-		75C977532DE8872C00DAA738 /* Release */ = {
+		75997A472E8E6A2400C6F17B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -381,7 +381,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -389,19 +389,22 @@
 			};
 			name = Release;
 		};
-		75C977552DE8872C00DAA738 /* Debug */ = {
+		75997A492E8E6A2400C6F17B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Kopniak/Kopniak.entitlements;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6HXQVJ34RS;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -411,24 +414,31 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.realf.Kopniak;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		75C977562DE8872C00DAA738 /* Release */ = {
+		75997A4A2E8E6A2400C6F17B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Kopniak/Kopniak.entitlements;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6HXQVJ34RS;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -438,12 +448,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.realf.Kopniak;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		75C977582DE8872C00DAA738 /* Debug */ = {
+		75997A4C2E8E6A2400C6F17B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -451,17 +465,20 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6HXQVJ34RS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.realf.KopniakTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kopniak.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kopniak";
 			};
 			name = Debug;
 		};
-		75C977592DE8872C00DAA738 /* Release */ = {
+		75997A4D2E8E6A2400C6F17B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -469,17 +486,20 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6HXQVJ34RS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.realf.KopniakTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kopniak.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kopniak";
 			};
 			name = Release;
 		};
-		75C9775B2DE8872C00DAA738 /* Debug */ = {
+		75997A4F2E8E6A2400C6F17B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -489,13 +509,16 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.realf.KopniakUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Kopniak;
 			};
 			name = Debug;
 		};
-		75C9775C2DE8872C00DAA738 /* Release */ = {
+		75997A502E8E6A2400C6F17B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -505,7 +528,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.realf.KopniakUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = Kopniak;
 			};
@@ -514,43 +540,43 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		75C9772D2DE8872A00DAA738 /* Build configuration list for PBXProject "Kopniak" */ = {
+		75997A222E8E6A2300C6F17B /* Build configuration list for PBXProject "Kopniak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				75C977522DE8872C00DAA738 /* Debug */,
-				75C977532DE8872C00DAA738 /* Release */,
+				75997A462E8E6A2400C6F17B /* Debug */,
+				75997A472E8E6A2400C6F17B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75C977542DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */ = {
+		75997A482E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				75C977552DE8872C00DAA738 /* Debug */,
-				75C977562DE8872C00DAA738 /* Release */,
+				75997A492E8E6A2400C6F17B /* Debug */,
+				75997A4A2E8E6A2400C6F17B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75C977572DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "KopniakTests" */ = {
+		75997A4B2E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "KopniakTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				75C977582DE8872C00DAA738 /* Debug */,
-				75C977592DE8872C00DAA738 /* Release */,
+				75997A4C2E8E6A2400C6F17B /* Debug */,
+				75997A4D2E8E6A2400C6F17B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75C9775A2DE8872C00DAA738 /* Build configuration list for PBXNativeTarget "KopniakUITests" */ = {
+		75997A4E2E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "KopniakUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				75C9775B2DE8872C00DAA738 /* Debug */,
-				75C9775C2DE8872C00DAA738 /* Release */,
+				75997A4F2E8E6A2400C6F17B /* Debug */,
+				75997A502E8E6A2400C6F17B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 75C9772A2DE8872A00DAA738 /* Project object */;
+	rootObject = 75997A1F2E8E6A2300C6F17B /* Project object */;
 }

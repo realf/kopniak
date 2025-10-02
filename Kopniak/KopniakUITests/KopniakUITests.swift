@@ -2,7 +2,7 @@
 //  KopniakUITests.swift
 //  KopniakUITests
 //
-//  Created by alf on 29.05.2025.
+//  Created by alf on 02.10.2025.
 //
 
 import XCTest
