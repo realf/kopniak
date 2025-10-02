@@ -96,7 +96,7 @@ class ReminderManager {
         hideFloatingReminder()
     }
 
-    var areRemindersRunning: Bool {
+    var isActive: Bool {
         return reminderTimer?.isValid == true
     }
 

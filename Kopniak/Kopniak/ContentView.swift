@@ -81,7 +81,7 @@ struct ContentView: View {
                 .padding()
             }
 
-            if reminderManager.areRemindersRunning {
+            if reminderManager.isActive {
                 Button(action: { reminderManager.stopReminders() }) {
                     HStack {
                         Image(systemName: "stop.fill")

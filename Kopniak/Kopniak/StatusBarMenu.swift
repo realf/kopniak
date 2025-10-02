@@ -27,7 +27,7 @@ struct StatusBarMenu: View {
             
             Divider()
             
-            if reminderManager.areRemindersRunning {
+            if reminderManager.isActive {
                 Button {
                     reminderManager.stopReminders()
                 } label: {

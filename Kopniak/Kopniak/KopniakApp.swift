@@ -26,7 +26,7 @@ struct KopniakApp: App {
             StatusBarMenu()
                 .environment(reminderManager)
         } label: {
-            Image(systemName: reminderManager.areRemindersRunning ? "chevron.up.2" : "chevron.up.dotted.2")
+            Image(systemName: reminderManager.isActive ? "chevron.up.2" : "chevron.up.dotted.2")
                 .font(.system(size: 14, weight: .medium))
         }
     }
