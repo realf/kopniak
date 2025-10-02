@@ -29,15 +29,6 @@ struct KopniakApp: App {
         .windowResizability(.contentSize)
         .defaultLaunchBehavior(settingsManager.showMainWindowOnLaunch ? .presented : .suppressed)
 
-        // Settings window
-        Window("Settings", id: "settings") {
-            SettingsView()
-                .environment(reminderManager)
-                .environment(settingsManager)
-        }
-        .windowResizability(.contentSize)
-        .defaultPosition(.center)
-        
         // Status bar menu
         MenuBarExtra {
             StatusBarMenu()
@@ -46,6 +37,13 @@ struct KopniakApp: App {
         } label: {
             Image(systemName: reminderManager.isActive ? "chevron.up.2" : "chevron.up.dotted.2")
                 .font(.system(size: 14, weight: .medium))
+        }
+
+        // Settings
+        Settings {
+            SettingsView()
+                .environment(reminderManager)
+                .environment(settingsManager)
         }
     }
 }
