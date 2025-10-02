@@ -15,6 +15,8 @@ class ReminderManager {
     var reminderIntervalMinutes = 45
 
     private var reminderTimer: Timer?
+    private let userDefaults = UserDefaults.standard
+    private let isActiveKey = "ReminderManager.isActive"
     private var reminderInterval: TimeInterval {
         Double(reminderIntervalMinutes) * 60.0
     }
@@ -82,11 +84,22 @@ class ReminderManager {
         "Stretch those legs, private! Blood flow is essential for peak performance!",
     ]
 
+    init() {
+        // Restore persisted state and start reminders if they were active
+        if userDefaults.bool(forKey: isActiveKey) {
+            startReminders()
+        }
+    }
+
     func startReminders() {
         // Initialize reminder window controller
         if reminderWindowController == nil {
             reminderWindowController = ReminderController()
         }
+        
+        // Persist active state
+        userDefaults.set(true, forKey: isActiveKey)
+        
         scheduleNextReminder(interval: reminderInterval)
     }
 
@@ -94,6 +107,9 @@ class ReminderManager {
         reminderTimer?.invalidate()
         reminderTimer = nil
         hideFloatingReminder()
+        
+        // Persist inactive state
+        userDefaults.set(false, forKey: isActiveKey)
     }
 
     var isActive: Bool {
