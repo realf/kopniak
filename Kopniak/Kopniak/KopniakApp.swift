@@ -36,7 +36,6 @@ struct KopniakApp: App {
                 .environment(settingsManager)
         } label: {
             Image(systemName: reminderManager.isActive ? "chevron.up.2" : "chevron.up.dotted.2")
-                .font(.system(size: 14, weight: .medium))
         }
 
         // Settings
