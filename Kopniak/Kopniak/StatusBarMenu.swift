@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StatusBarMenu: View {
     @Environment(ReminderManager.self) private var reminderManager
+    @Environment(SettingsManager.self) private var settingsManager
     @Environment(\.openWindow) private var openWindow
     
     var body: some View {
@@ -51,6 +52,18 @@ struct StatusBarMenu: View {
             
             Divider()
             
+            Button {
+                openWindow(id: "settings")
+            } label: {
+                HStack {
+                    Image(systemName: "gear")
+                    Text("Settings...")
+                }
+            }
+            .keyboardShortcut(",", modifiers: .command)
+            
+            Divider()
+            
             Button("Quit Sergeant Kopniak") {
                 NSApplication.shared.terminate(nil)
             }
@@ -62,4 +75,5 @@ struct StatusBarMenu: View {
 #Preview {
     StatusBarMenu()
         .environment(ReminderManager())
+        .environment(SettingsManager())
 }

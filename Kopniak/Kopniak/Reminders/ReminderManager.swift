@@ -12,7 +12,8 @@ import SwiftUI
 @MainActor
 @Observable
 class ReminderManager {
-    var reminderIntervalMinutes = 45
+    // Reference to settings manager for sound playback and interval
+    weak var settingsManager: SettingsManager?
 
     private var reminderTimer: Timer?
     private let userDefaults = UserDefaults.standard
@@ -21,6 +22,11 @@ class ReminderManager {
         Double(reminderIntervalMinutes) * 60.0
     }
     private var snoozeInterval: TimeInterval = 10 * 60.0
+
+    // Computed property for easy access to interval minutes
+    var reminderIntervalMinutes: Int {
+        return settingsManager?.reminderIntervalMinutes ?? 45
+    }
 
     // Reminder window controller
     private var reminderWindowController: ReminderController?
