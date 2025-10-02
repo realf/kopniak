@@ -94,7 +94,8 @@ struct SettingsView: View {
 }
 
 #Preview {
+    let settingsManager = SettingsManager()
     SettingsView()
-        .environment(SettingsManager())
-        .environment(ReminderManager())
+        .environment(settingsManager)
+        .environment(ReminderManager(settingsManager: settingsManager))
 }

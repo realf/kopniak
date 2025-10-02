@@ -10,12 +10,16 @@ import AppKit
 
 @main
 struct KopniakApp: App {
-    @State private var reminderManager = ReminderManager()
     @State private var settingsManager = SettingsManager()
+    @State private var reminderManager: ReminderManager
     
     init() {
-        // Connect the managers
-        reminderManager.settingsManager = settingsManager
+        // Initialize reminder manager with settings manager dependency
+        let settings = SettingsManager()
+        let reminders = ReminderManager(settingsManager: settings)
+        
+        self._settingsManager = State(wrappedValue: settings)
+        self._reminderManager = State(wrappedValue: reminders)
     }
 
     var body: some Scene {

@@ -104,6 +104,7 @@ struct ContentView: View {
 }
 
 #Preview {
+    let settingsManager = SettingsManager()
     ContentView()
-        .environment(ReminderManager())
+        .environment(ReminderManager(settingsManager: settingsManager))
 }

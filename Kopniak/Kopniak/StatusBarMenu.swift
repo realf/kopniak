@@ -76,6 +76,7 @@ struct StatusBarMenu: View {
 }
 
 #Preview {
+    let settingsManager = SettingsManager()
     StatusBarMenu()
-        .environment(ReminderManager())
+        .environment(ReminderManager(settingsManager: settingsManager))
 }

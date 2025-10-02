@@ -12,8 +12,8 @@ import SwiftUI
 @MainActor
 @Observable
 class ReminderManager {
-    // Reference to settings manager for sound playback and interval
-    weak var settingsManager: SettingsManager?
+    // Reference to settings manager
+    private let settingsManager: SettingsManager
 
     private var reminderTimer: Timer?
     private let userDefaults = UserDefaults.standard
@@ -25,7 +25,7 @@ class ReminderManager {
 
     // Computed property for easy access to interval minutes
     var reminderIntervalMinutes: Int {
-        return settingsManager?.reminderIntervalMinutes ?? 45
+        return settingsManager.reminderIntervalMinutes
     }
 
     // Reminder window controller
@@ -90,7 +90,9 @@ class ReminderManager {
         "Stretch those legs, private! Blood flow is essential for peak performance!",
     ]
 
-    init() {
+    init(settingsManager: SettingsManager) {
+        self.settingsManager = settingsManager
+        
         // Restore persisted state and start reminders if they were active
         if userDefaults.bool(forKey: isActiveKey) {
             startReminders()
