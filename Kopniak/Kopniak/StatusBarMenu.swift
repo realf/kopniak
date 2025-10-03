@@ -14,7 +14,7 @@ struct StatusBarMenu: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Button() {
+            Button {
                 // Activate the app and show the window
                 NSApplication.shared.activate(ignoringOtherApps: true)
                 openWindow(id: "main")

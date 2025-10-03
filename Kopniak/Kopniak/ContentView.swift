@@ -10,6 +10,28 @@ import SwiftUI
 struct ContentView: View {
     @Environment(ReminderManager.self) private var reminderManager
 
+    // MARK: - Computed Properties
+
+    private var yesSirText: Text {
+        Text("\(Image(systemName: "checkmark.shield")) Yes Sir!")
+            .fontWeight(.semibold)
+    }
+
+    private var atEaseText: Text {
+        Text("\(Image(systemName: "pause.fill")) At Ease for 10")
+            .fontWeight(.semibold)
+    }
+
+    private var standDownText: Text {
+        Text("\(Image(systemName: "stop.fill")) Stand Down")
+            .fontWeight(.semibold)
+    }
+
+    private var reportForDutyText: Text {
+        Text("\(Image(systemName: "play.fill")) Report for Duty")
+            .fontWeight(.semibold)
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "chevron.up.2")
@@ -40,31 +62,14 @@ struct ContentView: View {
                         .font(.title2)
                         .fontWeight(.bold)
 
-                    let yesSir = Text(
-                        "\(Image(systemName: "checkmark.shield")) Yes Sir!"
-                    )
-                    .fontWeight(.semibold)
-                    let atEaseFor10 = Text(
-                        "\(Image(systemName: "pause.fill")) At Ease for 10"
-                    )
-                    .fontWeight(.semibold)
-                    let standDown = Text(
-                        "\(Image(systemName: "stop.fill")) Stand Down"
-                    )
-                    .fontWeight(.semibold)
-                    let reportForDuty = Text(
-                        "\(Image(systemName: "play.fill")) Report for Duty"
-                    )
-                    .fontWeight(.semibold)
-
                     Text(
                         """
                         • I'll bark orders every __\(reminderManager.reminderIntervalMinutes)__ minutes — time for a movement break!
-                        • \(reportForDuty) when you're ready to soldier on.
-                        • Use \(standDown) to pause me (but don't get too comfortable).
+                        • \(reportForDutyText) when you're ready to soldier on.
+                        • Use \(standDownText) to pause me (but don't get too comfortable).
                         • When I call, you drop and give me 20... or stretch and go have some water!
-                        • Hit \(yesSir) when you've completed your mission.
-                        • Need more time? \(atEaseFor10) buys you 10 minutes.
+                        • Hit \(yesSirText) when you've completed your mission.
+                        • Need more time? \(atEaseText) buys you 10 minutes.
 
                         My job? Keep your spine straight and your circulation flowing. Your chair is NOT a permanent duty station!
 

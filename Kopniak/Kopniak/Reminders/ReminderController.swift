@@ -8,8 +8,10 @@
 import AppKit
 import SwiftUI
 
-// Window controller to manage the floating window
+/// Window controller to manage the floating reminder window
 class ReminderController: NSWindowController {
+    // MARK: - Initialization
+
     init() {
         super.init(window: FloatingWindow())
     }
@@ -17,6 +19,8 @@ class ReminderController: NSWindowController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Public Methods
 
     func showReminder(
         title: String,

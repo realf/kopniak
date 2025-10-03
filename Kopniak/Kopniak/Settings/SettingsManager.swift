@@ -11,13 +11,16 @@ import AppKit
 @MainActor
 @Observable
 class SettingsManager {
+    // MARK: - Properties
+
     private let userDefaults = UserDefaults.standard
-    
-    // Keys for UserDefaults
+
+    // MARK: - UserDefaults Keys
+
     private let reminderIntervalKey = "SettingsManager.reminderInterval"
     private let showMainWindowOnLaunchKey = "SettingsManager.showMainWindowOnLaunch"
-    
-    // Settings properties
+
+    // MARK: - Settings Properties
     var reminderIntervalMinutes: Int {
         didSet {
             userDefaults.set(reminderIntervalMinutes, forKey: reminderIntervalKey)
@@ -29,7 +32,9 @@ class SettingsManager {
             userDefaults.set(showMainWindowOnLaunch, forKey: showMainWindowOnLaunchKey)
         }
     }
-    
+
+    // MARK: - Initialization
+
     init() {
         // Load settings from UserDefaults with default values
         self.reminderIntervalMinutes = userDefaults.object(forKey: reminderIntervalKey) as? Int ?? 45

@@ -1,5 +1,5 @@
 //
-//  FloatWindow.swift
+//  FloatingWindow.swift
 //  Sergeant Kopniak
 //
 //  Created by alf on 02.10.2025.
@@ -8,7 +8,10 @@
 import AppKit
 import Foundation
 
+/// Custom NSPanel configured as a non-activating floating window that appears above all other windows
 class FloatingWindow: NSPanel {
+    // MARK: - Initialization
+
     init() {
         // Make it non-activating (won't steal focus)
         super.init(
@@ -20,6 +23,8 @@ class FloatingWindow: NSPanel {
 
         setupFloatingBehavior()
     }
+
+    // MARK: - Setup
 
     private func setupFloatingBehavior() {
         // Make it float above everything
@@ -39,6 +44,8 @@ class FloatingWindow: NSPanel {
 
         isRestorable = false
     }
+
+    // MARK: - Overrides
 
     override var canBecomeKey: Bool {
         return true  // Allow it to receive keyboard events for the button

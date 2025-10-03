@@ -12,6 +12,11 @@ struct SettingsView: View {
     @Environment(SettingsManager.self) private var settingsManager
     @Environment(ReminderManager.self) private var reminderManager
 
+    // MARK: - Constants
+
+    private let minIntervalMinutes = 15
+    private let maxIntervalMinutes = 120
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             // Header
@@ -25,8 +30,6 @@ struct SettingsView: View {
             }
             .padding(.bottom, 10)
 
-            let minIntervalMinutes = 15
-            let maxIntervalMinutes = 120
             Form {
                 // Reminder Interval Section
                 Section {
@@ -44,8 +47,7 @@ struct SettingsView: View {
                             value: Binding(
                                 get: { Double(settingsManager.reminderIntervalMinutes) },
                                 set: { newValue in
-                                    let newInterval = Int(newValue.rounded())
-                                    settingsManager.reminderIntervalMinutes = newInterval
+                                    settingsManager.reminderIntervalMinutes = Int(newValue.rounded())
                                     // If reminders are active, restart them with new interval
                                     if reminderManager.isActive {
                                         reminderManager.stopReminders()
@@ -53,9 +55,7 @@ struct SettingsView: View {
                                     }
                                 }
                             ),
-                            in: Double(
-                                minIntervalMinutes
-                            )...Double(maxIntervalMinutes),
+                            in: Double(minIntervalMinutes)...Double(maxIntervalMinutes),
                             step: 5
                         )
 

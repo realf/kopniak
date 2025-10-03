@@ -12,21 +12,15 @@ import SwiftUI
 @MainActor
 @Observable
 class ReminderManager {
+    // MARK: - Properties
+
     // Reference to settings manager
     private let settingsManager: SettingsManager
 
     private var reminderTimer: Timer?
     private let userDefaults = UserDefaults.standard
     private let isActiveKey = "ReminderManager.isActive"
-    private var reminderInterval: TimeInterval {
-        Double(reminderIntervalMinutes) * 60.0
-    }
-    private var snoozeInterval: TimeInterval = 10 * 60.0
-
-    // Computed property for easy access to interval minutes
-    var reminderIntervalMinutes: Int {
-        return settingsManager.reminderIntervalMinutes
-    }
+    private let snoozeInterval: TimeInterval = 10 * 60.0
 
     // Reminder window controller
     private var reminderWindowController: ReminderController?
@@ -35,6 +29,22 @@ class ReminderManager {
     private var recentTitles: [String] = []
     private var recentMessages: [String] = []
     private let maxRecent = 10
+
+    // MARK: - Computed Properties
+
+    private var reminderInterval: TimeInterval {
+        Double(reminderIntervalMinutes) * 60.0
+    }
+
+    var reminderIntervalMinutes: Int {
+        settingsManager.reminderIntervalMinutes
+    }
+
+    var isActive: Bool {
+        reminderTimer?.isValid == true
+    }
+
+    // MARK: - Constants
 
     // Military-style titles
     private let militaryTitles = [
@@ -90,14 +100,18 @@ class ReminderManager {
         "Stretch those legs, private! Blood flow is essential for peak performance!",
     ]
 
+    // MARK: - Initialization
+
     init(settingsManager: SettingsManager) {
         self.settingsManager = settingsManager
-        
+
         // Restore persisted state and start reminders if they were active
         if userDefaults.bool(forKey: isActiveKey) {
             startReminders()
         }
     }
+
+    // MARK: - Public Methods
 
     func startReminders() {
         // Initialize reminder window controller
@@ -118,10 +132,6 @@ class ReminderManager {
         
         // Persist inactive state
         userDefaults.set(false, forKey: isActiveKey)
-    }
-
-    var isActive: Bool {
-        return reminderTimer?.isValid == true
     }
 
     func showReminder() {
@@ -173,34 +183,27 @@ class ReminderManager {
     // MARK: - Picking logic that avoids recent repeats
     private func pickRandomTitle() -> String {
         let available = militaryTitles.filter { !recentTitles.contains($0) }
-        if let choice =
-            (available.isEmpty
-                ? militaryTitles.randomElement() : available.randomElement())
-        {
-            return choice
-        }
-        return "Attention Soldier!"
+        let choice = available.isEmpty ? militaryTitles.randomElement() : available.randomElement()
+        return choice ?? "Attention Soldier!"
     }
 
     private func pickRandomMessage() -> String {
         let available = militaryMessages.filter { !recentMessages.contains($0) }
-        if let choice =
-            (available.isEmpty
-                ? militaryMessages.randomElement() : available.randomElement())
-        {
-            return choice
-        }
-        return "Time to exercise, soldier!"
+        let choice = available.isEmpty ? militaryMessages.randomElement() : available.randomElement()
+        return choice ?? "Time to exercise, soldier!"
     }
 
     private func updateRecentTitle(_ title: String) {
         recentTitles.append(title)
-        if recentTitles.count > maxRecent { recentTitles.removeFirst() }
+        if recentTitles.count > maxRecent {
+            recentTitles.removeFirst()
+        }
     }
 
     private func updateRecentMessage(_ message: String) {
         recentMessages.append(message)
-        if recentMessages.count > maxRecent { recentMessages.removeFirst() }
+        if recentMessages.count > maxRecent {
+            recentMessages.removeFirst()
+        }
     }
-
 }
