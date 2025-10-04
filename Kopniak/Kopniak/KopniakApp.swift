@@ -72,9 +72,9 @@ struct KopniakApp: App {
 
         // Launch at login dialog
         Window("Launch at Login", id: "launch-at-login-dialog") {
-            LaunchAtLoginDialog { enable, askLater in
+            LaunchAtLoginDialog { response in
                 if let onboardingManager {
-                    onboardingManager.handleLaunchAtLoginDialogResponse(enable: enable, askLater: askLater)
+                    onboardingManager.handleLaunchAtLoginDialogResponse(response)
                     // Close the window after response
                     dismissWindow(id: "launch-at-login-dialog")
                 }

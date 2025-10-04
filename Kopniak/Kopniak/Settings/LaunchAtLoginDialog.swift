@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LaunchAtLoginDialog: View {
-    let onResponse: (Bool?, Bool) -> Void
+    let onResponse: (LaunchAtLoginDialogResponse) -> Void
 
     var body: some View {
         VStack(spacing: 20) {
@@ -38,18 +38,18 @@ struct LaunchAtLoginDialog: View {
             // Buttons
             HStack(spacing: 12) {
                 Button("No Thanks") {
-                    onResponse(false, false)
+                    onResponse(.disable)
                 }
 
                 Spacer()
 
                 Button("Ask Later") {
-                    onResponse(nil, true)
+                    onResponse(.askLater)
                 }
                 .keyboardShortcut(.cancelAction)
 
                 Button("Yes, Sir!") {
-                    onResponse(true, false)
+                    onResponse(.enable)
                 }
                 .keyboardShortcut(.defaultAction)
                 .buttonStyle(.borderedProminent)
@@ -61,7 +61,7 @@ struct LaunchAtLoginDialog: View {
 }
 
 #Preview {
-    LaunchAtLoginDialog { enable, askLater in
-        print("Enable: \(String(describing: enable)), Ask Later: \(askLater)")
+    LaunchAtLoginDialog { response in
+        print("Response: \(response)")
     }
 }

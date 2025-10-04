@@ -9,6 +9,12 @@ import Foundation
 import SwiftUI
 import ServiceManagement
 
+enum LaunchAtLoginDialogResponse {
+    case enable
+    case disable
+    case askLater
+}
+
 @MainActor
 @Observable
 class OnboardingManager {
@@ -55,15 +61,19 @@ class OnboardingManager {
 
     // MARK: - Public Methods
 
-    func handleLaunchAtLoginDialogResponse(enable: Bool?, askLater: Bool) {
+    func handleLaunchAtLoginDialogResponse(_ response: LaunchAtLoginDialogResponse) {
         launchAtLoginDialogShown = true
 
-        if let enable = enable {
-            // User selected Yes or No
-            settingsManager.launchAtLogin = enable
+        switch response {
+        case .enable:
+            settingsManager.launchAtLogin = true
             // Clear the "ask later" tracking
             nextDialogAtCount = 0
-        } else if askLater {
+        case .disable:
+            settingsManager.launchAtLogin = false
+            // Clear the "ask later" tracking
+            nextDialogAtCount = 0
+        case .askLater:
             // User selected "Ask Later" - set to ask again after 3 more activations
             let currentCount = reminderManager.reportForDutyActivationCount
             nextDialogAtCount = currentCount + 3
