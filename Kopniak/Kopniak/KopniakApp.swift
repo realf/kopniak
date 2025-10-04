@@ -31,9 +31,6 @@ struct KopniakApp: App {
 
         self._settingsManager = State(wrappedValue: settings)
         self._reminderManager = State(wrappedValue: reminders)
-
-        // Restore the persisted state
-        reminderManager.restorePersistedState()
     }
 
     var body: some Scene {
