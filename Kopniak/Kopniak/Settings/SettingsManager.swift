@@ -15,12 +15,14 @@ class SettingsManager {
     // MARK: - Properties
 
     private let userDefaults = UserDefaults.standard
+    
+    /// Cached launch at login state to prevent UI flickering during system calls
+    private var _launchAtLogin: Bool?
 
     // MARK: - UserDefaults Keys
 
     private let reminderIntervalKey = "SettingsManager.reminderIntervalMinutes"
     private let showMainWindowOnLaunchKey = "SettingsManager.showMainWindowOnLaunch"
-    private let launchAtLoginKey = "SettingsManager.launchAtLogin"
 
     // MARK: - Settings Properties
 
@@ -37,9 +39,14 @@ class SettingsManager {
     }
 
     var launchAtLogin: Bool {
-        didSet {
-            userDefaults.set(launchAtLogin, forKey: launchAtLoginKey)
-            updateLaunchAtLogin(launchAtLogin)
+        get {
+            // Use cached value if available, otherwise read from system
+            return _launchAtLogin ?? (SMAppService.mainApp.status == .enabled)
+        }
+        set {
+            // Immediately update the cached state to prevent UI flickering
+            _launchAtLogin = newValue
+            updateLaunchAtLogin(newValue)
         }
     }
 
@@ -49,7 +56,9 @@ class SettingsManager {
         // Load settings from UserDefaults with default values
         self.reminderIntervalMinutes = userDefaults.object(forKey: reminderIntervalKey) as? Int ?? 45
         self.showMainWindowOnLaunch = userDefaults.object(forKey: showMainWindowOnLaunchKey) as? Bool ?? true
-        self.launchAtLogin = userDefaults.bool(forKey: launchAtLoginKey)
+        
+        // Initialize launch at login state from system
+        self._launchAtLogin = SMAppService.mainApp.status == .enabled
     }
 
     // MARK: - Launch at Login Implementation
@@ -61,8 +70,20 @@ class SettingsManager {
             } else {
                 try SMAppService.mainApp.unregister()
             }
+            
+            // Update cached state after successful operation
+            _launchAtLogin = enabled
         } catch {
             NSLog("Failed to \(enabled ? "enable" : "disable") launch at login: \(error)")
+            
+            // Revert cached state on failure and refresh UI
+            _launchAtLogin = SMAppService.mainApp.status == .enabled
         }
+    }
+    
+    /// Refreshes the launch at login state from the system
+    /// Call this method if you need to ensure the UI reflects the current system state
+    func refreshLaunchAtLoginState() {
+        _launchAtLogin = SMAppService.mainApp.status == .enabled
     }
 }

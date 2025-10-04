@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import ServiceManagement
 
 @MainActor
 @Observable
@@ -43,7 +44,7 @@ class OnboardingManager {
         self.openWindow = openWindow
 
         // If launch at login is already enabled, no need to show dialog
-        if settingsManager.launchAtLogin {
+        if SMAppService.mainApp.status == .enabled {
             launchAtLoginDialogShown = true
             nextDialogAtCount = 0
         } else {
@@ -76,9 +77,7 @@ class OnboardingManager {
         withObservationTracking {
             // Observe activation count changes
             let currentCount = reminderManager.reportForDutyActivationCount
-
-            // Observe manual launch at login changes
-            let launchAtLoginEnabled = settingsManager.launchAtLogin
+            let launchAtLoginEnabled = SMAppService.mainApp.status == .enabled
 
             // If user manually enabled launch at login, mark dialog as handled
             if launchAtLoginEnabled {
