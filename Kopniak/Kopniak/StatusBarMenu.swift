@@ -38,6 +38,38 @@ struct StatusBarMenu: View {
                     }
                 }
                 .keyboardShortcut("s", modifiers: .command)
+                
+                if reminderManager.canPause {
+                    Button {
+                        reminderManager.pauseReminders()
+                    } label: {
+                        HStack {
+                            Image(systemName: "pause.fill")
+                            Text("At Ease")
+                        }
+                    }
+                    .keyboardShortcut("p", modifiers: .command)
+                }
+            } else if reminderManager.canResume {
+                Button {
+                    reminderManager.resumeReminders()
+                } label: {
+                    HStack {
+                        Image(systemName: "play.fill")
+                        Text("Resume Duty")
+                    }
+                }
+                .keyboardShortcut("r", modifiers: .command)
+                
+                Button {
+                    reminderManager.stopReminders()
+                } label: {
+                    HStack {
+                        Image(systemName: "stop.fill")
+                        Text("Stand Down")
+                    }
+                }
+                .keyboardShortcut("s", modifiers: .command)
             } else {
                 Button {
                     reminderManager.startReminders()

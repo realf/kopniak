@@ -20,7 +20,13 @@ class ReminderManager {
     private var reminderTimer: Timer?
     private let userDefaults = UserDefaults.standard
     private let isActiveKey = "ReminderManager.isActive"
+    private let isPausedKey = "ReminderManager.isPaused"
+    private let pausedTimeRemainingKey = "ReminderManager.pausedTimeRemaining"
     private let snoozeInterval: TimeInterval = 10 * 60.0
+    
+    // Pause/Resume state
+    private var isPaused: Bool = false
+    private var pausedTimeRemaining: TimeInterval = 0
 
     // Reminder window controller
     private var reminderWindowController: ReminderController?
@@ -45,6 +51,14 @@ class ReminderManager {
 
     var isActive: Bool {
         reminderTimer?.isValid == true
+    }
+    
+    var canPause: Bool {
+        isActive && !isPaused
+    }
+    
+    var canResume: Bool {
+        !isActive && isPaused
     }
 
     // MARK: - Constants
@@ -112,9 +126,18 @@ class ReminderManager {
     // MARK: - Public Methods
 
     func restorePersistedState() {
+        // Restore pause state
+        isPaused = userDefaults.bool(forKey: isPausedKey)
+        pausedTimeRemaining = userDefaults.double(forKey: pausedTimeRemainingKey)
+        
         // Restore persisted state and start reminders if they were active
         if userDefaults.bool(forKey: isActiveKey) {
-            startReminders()
+            if isPaused {
+                // Don't start timer if paused, but keep the paused state
+                return
+            } else {
+                startReminders()
+            }
         }
     }
 
@@ -127,8 +150,14 @@ class ReminderManager {
         // Increment activation count (observed by OnboardingManager)
         reportForDutyActivationCount += 1
 
+        // Clear pause state when starting
+        isPaused = false
+        pausedTimeRemaining = 0
+
         // Persist active state
         userDefaults.set(true, forKey: isActiveKey)
+        userDefaults.set(false, forKey: isPausedKey)
+        userDefaults.set(0, forKey: pausedTimeRemainingKey)
 
         scheduleNextReminder(interval: reminderInterval)
     }
@@ -138,8 +167,14 @@ class ReminderManager {
         reminderTimer = nil
         hideFloatingReminder()
         
+        // Clear pause state when stopping
+        isPaused = false
+        pausedTimeRemaining = 0
+        
         // Persist inactive state
         userDefaults.set(false, forKey: isActiveKey)
+        userDefaults.set(false, forKey: isPausedKey)
+        userDefaults.set(0, forKey: pausedTimeRemainingKey)
     }
 
     func showReminder() {
@@ -159,6 +194,45 @@ class ReminderManager {
     func snoozeReminder() {
         hideFloatingReminder()
         scheduleNextReminder(interval: snoozeInterval)
+    }
+    
+    func pauseReminders() {
+        guard canPause else { return }
+        
+        // Calculate remaining time
+        if let fireDate = reminderTimer?.fireDate {
+            pausedTimeRemaining = fireDate.timeIntervalSinceNow
+        }
+        
+        // Stop the timer
+        reminderTimer?.invalidate()
+        reminderTimer = nil
+        hideFloatingReminder()
+        
+        // Set pause state
+        isPaused = true
+        
+        // Persist pause state
+        userDefaults.set(true, forKey: isPausedKey)
+        userDefaults.set(pausedTimeRemaining, forKey: pausedTimeRemainingKey)
+    }
+    
+    func resumeReminders() {
+        guard canResume else { return }
+        
+        // Clear pause state
+        isPaused = false
+        
+        // Use remaining time or fallback to full interval
+        let timeToWait = pausedTimeRemaining > 0 ? pausedTimeRemaining : reminderInterval
+        pausedTimeRemaining = 0
+        
+        // Persist resumed state
+        userDefaults.set(false, forKey: isPausedKey)
+        userDefaults.set(0, forKey: pausedTimeRemainingKey)
+        
+        // Schedule with remaining time
+        scheduleNextReminder(interval: timeToWait)
     }
 
     // MARK: - Presentation logic

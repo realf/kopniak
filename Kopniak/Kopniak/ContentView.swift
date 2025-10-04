@@ -22,6 +22,11 @@ struct ContentView: View {
             .fontWeight(.semibold)
     }
 
+    private var holdPositionText: Text {
+        Text("\(Image(systemName: "pause.circle")) Hold Position")
+            .fontWeight(.semibold)
+    }
+
     private var standDownText: Text {
         Text("\(Image(systemName: "stop.fill")) Stand Down")
             .fontWeight(.semibold)
@@ -65,8 +70,9 @@ struct ContentView: View {
                     Text(
                         """
                         • I'll bark orders every __\(reminderManager.reminderIntervalMinutes)__ minutes — time for a movement break!
-                        • \(reportForDutyText) when you're ready to soldier on.
-                        • Use \(standDownText) to pause me (but don't get too comfortable).
+                        • \(reportForDutyText) when you're ready to start your fitness regimen.
+                        • Use \(holdPositionText) to temporarily pause reminders (keeps your place in line).
+                        • Use \(standDownText) to completely stop and dismiss the drill sergeant.
                         • When I call, you drop and give me 20... or stretch and go have some water!
                         • Hit \(yesSirText) when you've completed your mission.
                         • Need more time? \(atEaseText) buys you 10 minutes.
@@ -87,11 +93,40 @@ struct ContentView: View {
             }
 
             if reminderManager.isActive {
-                Button(action: { reminderManager.stopReminders() }) {
-                    HStack {
-                        Image(systemName: "stop.fill")
-                            .foregroundStyle(Color.red)
-                        Text("Stand Down")
+                HStack(spacing: 12) {
+                    Button(action: { reminderManager.pauseReminders() }) {
+                        HStack {
+                            Image(systemName: "pause.circle")
+                                .foregroundStyle(Color.orange)
+                            Text("Hold Position")
+                        }
+                    }
+                    .disabled(!reminderManager.canPause)
+
+                    Button(action: { reminderManager.stopReminders() }) {
+                        HStack {
+                            Image(systemName: "stop.fill")
+                                .foregroundStyle(Color.red)
+                            Text("Stand Down")
+                        }
+                    }
+                }
+            } else if reminderManager.canResume {
+                HStack(spacing: 12) {
+                    Button(action: { reminderManager.resumeReminders() }) {
+                        HStack {
+                            Image(systemName: "play.fill")
+                                .foregroundStyle(Color.green)
+                            Text("Resume Duty")
+                        }
+                    }
+
+                    Button(action: { reminderManager.stopReminders() }) {
+                        HStack {
+                            Image(systemName: "stop.fill")
+                                .foregroundStyle(Color.red)
+                            Text("Stand Down")
+                        }
                     }
                 }
             } else {

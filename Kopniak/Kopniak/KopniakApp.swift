@@ -15,6 +15,14 @@ struct KopniakApp: App {
     @State private var onboardingManager: OnboardingManager?
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
+    
+    private var menuBarIcon: String {
+        if reminderManager.isActive {
+            return "chevron.up.2"
+        } else {
+            return "chevron.up.dotted.2"
+        }
+    }
 
     init() {
         // Initialize managers with dependencies
@@ -46,7 +54,7 @@ struct KopniakApp: App {
             .environment(reminderManager)
             .environment(settingsManager)
         } label: {
-            Image(systemName: reminderManager.isActive ? "chevron.up.2" : "chevron.up.dotted.2")
+            Image(systemName: menuBarIcon)
                 .task {
                     // Create OnboardingManager now that openWindow is available
                     if onboardingManager == nil {
