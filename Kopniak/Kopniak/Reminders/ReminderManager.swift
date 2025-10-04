@@ -30,6 +30,9 @@ class ReminderManager {
     private var recentMessages: [String] = []
     private let maxRecent = 10
 
+    // Observable activation count for onboarding
+    private(set) var reportForDutyActivationCount: Int = 0
+
     // MARK: - Computed Properties
 
     private var reminderInterval: TimeInterval {
@@ -104,24 +107,29 @@ class ReminderManager {
 
     init(settingsManager: SettingsManager) {
         self.settingsManager = settingsManager
+    }
 
+    // MARK: - Public Methods
+
+    func restorePersistedState() {
         // Restore persisted state and start reminders if they were active
         if userDefaults.bool(forKey: isActiveKey) {
             startReminders()
         }
     }
 
-    // MARK: - Public Methods
-
     func startReminders() {
         // Initialize reminder window controller
         if reminderWindowController == nil {
             reminderWindowController = ReminderController()
         }
-        
+
+        // Increment activation count (observed by OnboardingManager)
+        reportForDutyActivationCount += 1
+
         // Persist active state
         userDefaults.set(true, forKey: isActiveKey)
-        
+
         scheduleNextReminder(interval: reminderInterval)
     }
 

@@ -21,7 +21,7 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 20) {
             // Header
             HStack {
-                Image(systemName: "gearshape.fill")
+                Image(systemName: "gear")
                     .font(.title2)
                     .foregroundColor(.secondary)
                 Text("Mission Settings")
@@ -81,6 +81,11 @@ struct SettingsView: View {
                         "Show main window when app launches",
                         isOn: $settingsManager.showMainWindowOnLaunch
                     )
+
+                    Toggle(
+                        "Launch Sergeant Kopniak at login",
+                        isOn: $settingsManager.launchAtLogin
+                    )
                 } header: {
                     Label("Launch Behavior", systemImage: "macwindow")
                         .font(.headline)
@@ -89,7 +94,7 @@ struct SettingsView: View {
             .formStyle(.grouped)
         }
         .padding(20)
-        .frame(width: 450, height: 400)
+        .frame(width: 450, height: 450)
     }
 }
 
