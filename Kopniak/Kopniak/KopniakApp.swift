@@ -10,7 +10,7 @@ import AppKit
 
 @main
 struct KopniakApp: App {
-    @State private var settingsManager = SettingsManager()
+    @State private var settingsManager: SettingsManager
     @State private var reminderManager: ReminderManager
     @State private var onboardingManager: OnboardingManager?
     @Environment(\.openWindow) private var openWindow
@@ -31,6 +31,8 @@ struct KopniakApp: App {
 
         self._settingsManager = State(wrappedValue: settings)
         self._reminderManager = State(wrappedValue: reminders)
+        
+        // Don't restore state here - wait until OnboardingManager is ready
     }
 
     var body: some Scene {
