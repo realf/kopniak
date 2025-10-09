@@ -16,8 +16,8 @@ struct StatusBarMenu: View {
         VStack(spacing: 0) {
             Button {
                 // Activate the app and show the window
-                NSApplication.shared.activate(ignoringOtherApps: true)
                 openWindow(id: "main")
+                NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {
                     Image(systemName: "chevron.up.2")
@@ -86,9 +86,7 @@ struct StatusBarMenu: View {
 
             Button {
                 openSettings()
-                DispatchQueue.main.async {
-                    NSApp.activate(ignoringOtherApps: true)
-                }
+                NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {
                     Image(systemName: "gear")
