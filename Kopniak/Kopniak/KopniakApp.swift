@@ -66,6 +66,9 @@ struct KopniakApp: App {
 
                     // Restore the persisted state
                     reminderManager.restorePersistedState()
+                    
+                    // Activate the app to bring it to front
+                    NSApplication.shared.activate(ignoringOtherApps: true)
                 }
         }
 
