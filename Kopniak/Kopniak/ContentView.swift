@@ -23,7 +23,7 @@ struct ContentView: View {
     }
 
     private var holdPositionText: Text {
-        Text("\(Image(systemName: "pause.circle")) Hold Position")
+        Text("\(Image(systemName: "pause.fill")) At Ease")
             .fontWeight(.semibold)
     }
 
@@ -71,11 +71,9 @@ struct ContentView: View {
                         """
                         • I'll bark orders every __\(reminderManager.reminderIntervalMinutes)__ minutes — time for a movement break!
                         • \(reportForDutyText) when you're ready to start your fitness regimen.
-                        • Use \(holdPositionText) to temporarily pause reminders (keeps your place in line).
-                        • Use \(standDownText) to completely stop and dismiss the drill sergeant.
+                        • \(holdPositionText) to temporarily pause reminders (keeps your place in line).
+                        • \(standDownText) to completely stop and dismiss the drill sergeant.
                         • When I call, you drop and give me 20... or stretch and go have some water!
-                        • Hit \(yesSirText) when you've completed your mission.
-                        • Need more time? \(atEaseText) buys you 10 minutes.
 
                         My job? Keep your spine straight and your circulation flowing. Your chair is NOT a permanent duty station!
 
@@ -96,9 +94,9 @@ struct ContentView: View {
                 HStack(spacing: 12) {
                     Button(action: { reminderManager.pauseReminders() }) {
                         HStack {
-                            Image(systemName: "pause.circle")
+                            Image(systemName: "pause.fill")
                                 .foregroundStyle(Color.orange)
-                            Text("Hold Position")
+                            Text("At Ease")
                         }
                     }
                     .disabled(!reminderManager.canPause)

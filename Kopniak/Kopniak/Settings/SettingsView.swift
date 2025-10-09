@@ -78,7 +78,7 @@ struct SettingsView: View {
                 Section {
                     @Bindable var settingsManager = settingsManager
                     Toggle(
-                        "Show main window when app launches",
+                        "Show Mission Briefing when app launches",
                         isOn: $settingsManager.showMainWindowOnLaunch
                     )
 

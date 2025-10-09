@@ -27,7 +27,19 @@ struct StatusBarMenu: View {
             .keyboardShortcut("b", modifiers: .command)
             
             Divider()
-            
+
+            if reminderManager.canPause {
+                Button {
+                    reminderManager.pauseReminders()
+                } label: {
+                    HStack {
+                        Image(systemName: "pause.fill")
+                        Text("At Ease")
+                    }
+                }
+                .keyboardShortcut("p", modifiers: .command)
+            }
+
             if reminderManager.isActive {
                 Button {
                     reminderManager.stopReminders()
@@ -38,18 +50,6 @@ struct StatusBarMenu: View {
                     }
                 }
                 .keyboardShortcut("s", modifiers: .command)
-                
-                if reminderManager.canPause {
-                    Button {
-                        reminderManager.pauseReminders()
-                    } label: {
-                        HStack {
-                            Image(systemName: "pause.fill")
-                            Text("At Ease")
-                        }
-                    }
-                    .keyboardShortcut("p", modifiers: .command)
-                }
             } else if reminderManager.canResume {
                 Button {
                     reminderManager.resumeReminders()
