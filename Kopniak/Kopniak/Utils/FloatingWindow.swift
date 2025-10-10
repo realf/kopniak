@@ -16,7 +16,7 @@ class FloatingWindow: NSPanel {
         // Make it non-activating (won't steal focus)
         super.init(
             contentRect: NSRect(x: 0, y: 0, width: 350, height: 200),
-            styleMask: [.nonactivatingPanel],
+            styleMask: [.nonactivatingPanel, .titled],
             backing: .buffered,
             defer: false
         )
@@ -36,8 +36,6 @@ class FloatingWindow: NSPanel {
 
         // Show on all spaces and don't move with active space changes
         collectionBehavior = [.canJoinAllSpaces, .stationary]
-
-        styleMask.insert(.titled)
 
         // Center on screen
         center()
