@@ -14,7 +14,7 @@ struct SettingsView: View {
 
     // MARK: - Constants
 
-    private let minIntervalMinutes = 1
+    private let minIntervalMinutes = 15
     private let maxIntervalMinutes = 120
 
     var body: some View {
@@ -56,7 +56,7 @@ struct SettingsView: View {
                                 }
                             ),
                             in: Double(minIntervalMinutes)...Double(maxIntervalMinutes),
-                            step: 1
+                            step: 5
                         )
 
                         HStack {
