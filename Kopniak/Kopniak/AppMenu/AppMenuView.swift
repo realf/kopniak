@@ -16,7 +16,7 @@ struct AppMenuView: View {
         VStack {
             Button {
                 // Activate the app and show the window
-                store.send(.openBriefingTapped)
+                store.send(.missionBriefingTapped)
                 NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {
@@ -65,10 +65,10 @@ struct AppMenuView: View {
                 } label: {
                     HStack {
                         Image(systemName: "restart.circle.fill")
-                        Text("I Say Again")
+                        Text("Reissue Orders")
                     }
                 }
-                .keyboardShortcut("a", modifiers: .command)
+                .keyboardShortcut("o", modifiers: .command)
             case .paused:
                 Button {
                     store.send(.stopRemindersTapped)
@@ -95,16 +95,16 @@ struct AppMenuView: View {
                 } label: {
                     HStack {
                         Image(systemName: "restart.circle.fill")
-                        Text("I Say Again")
+                        Text("Reissue Orders")
                     }
                 }
-                .keyboardShortcut("a", modifiers: .command)
+                .keyboardShortcut("o", modifiers: .command)
             }
 
             Divider()
 
             Button {
-                store.send(.showSettingsTapped)
+                store.send(.settingsTapped)
                 NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {
@@ -132,33 +132,9 @@ struct AppMenuView: View {
 #Preview {
     AppMenuView(
         store: Store(
-            initialState: AppFeature.State(remindersStatus: .paused),
-            reducer: {
-                AppFeature()._printChanges()
-            }
-        )
-    )
-    .frame(width: 400, height: 300)
-}
-
-#Preview {
-    AppMenuView(
-        store: Store(
             initialState: AppFeature.State(remindersStatus: .on),
             reducer: {
-                AppFeature()._printChanges()
-            }
-        )
-    )
-    .frame(width: 400, height: 300)
-}
-
-#Preview {
-    AppMenuView(
-        store: Store(
-            initialState: AppFeature.State(remindersStatus: .off),
-            reducer: {
-                AppFeature()._printChanges()
+                AppFeature()
             }
         )
     )

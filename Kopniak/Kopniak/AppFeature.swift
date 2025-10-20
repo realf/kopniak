@@ -9,35 +9,61 @@ import AppKit
 import ComposableArchitecture
 import Foundation
 
+nonisolated enum RemindersStatus: Codable {
+    case off
+    case on
+    case paused
+}
+
+extension SharedReaderKey where Self == AppStorageKey<RemindersStatus> {
+    static var remindersStatus: Self {
+        .appStorage("RemindersStatus")
+    }
+}
+
+extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
+    static var defaultReminderInterval: Self {
+        .appStorage("RemindersDefaultIntervalSeconds")
+    }
+}
+
 @Reducer
 struct AppFeature {
     @Dependency(\.continuousClock) var clock
-    var defaultReminderInterval: TimeInterval = 45.0
 
     @ObservableState
     struct State {
-        var remainingTime: TimeInterval = 0.0
-        var remindersStatus: RemindersStatus = .on
+        @Shared(.defaultReminderInterval)
+        var defaultReminderInterval: TimeInterval = 45.0
+
+        var menuIcon: AppMenuIconFeature.State
+        var remainingTime: TimeInterval = 0
+        @Shared
+        var remindersStatus: RemindersStatus
+
         var openWindowID: String?
+
         let timerID = UUID()
 
-        enum RemindersStatus {
-            case off
-            case on
-            case paused
+        init(remindersStatus: @autoclosure () -> RemindersStatus) {
+            let status = Shared<RemindersStatus>(
+                wrappedValue: remindersStatus(),
+                .remindersStatus
+            )
+            _remindersStatus = status
+            menuIcon = AppMenuIconFeature.State(remindersStatus: status)
         }
     }
 
     enum Action {
-        case onAppear
+        case menuIcon(AppMenuIconFeature.Action)
+        case missionBriefingTapped
         case onSleep
         case onWake
-        case openBriefingTapped
         case pauseRemindersTapped
         case restartRemindersTapped
         case resumeRemindersTapped
-        case showIntroTapped
-        case showSettingsTapped
+        case settingsTapped
         case startRemindersTapped
         case stopRemindersTapped
         case timerTicked
@@ -45,10 +71,17 @@ struct AppFeature {
     }
 
     var body: some Reducer<State, Action> {
+        Scope(state: \.menuIcon, action: \.menuIcon) {
+            AppMenuIconFeature()
+        }
+
         Reduce { state, action in
             switch action {
-            case .onAppear:
+            case .menuIcon(.delegate(.onAppear)):
                 return handleOnAppear(&state)
+
+            case .menuIcon:
+                return .none
 
             case .onSleep:
                 return .cancel(id: state.timerID)
@@ -56,12 +89,8 @@ struct AppFeature {
             case .onWake:
                 return handleWake(&state)
 
-            case .openBriefingTapped:
-                state.openWindowID = "main"
-                return .none
-
             case .pauseRemindersTapped:
-                state.remindersStatus = .paused
+                state.$remindersStatus.withLock { $0 = .paused }
                 return .cancel(id: state.timerID)
 
             case .restartRemindersTapped:
@@ -70,12 +99,13 @@ struct AppFeature {
             case .resumeRemindersTapped:
                 return resumeReminders(&state)
 
-            case .showIntroTapped:
+            case .missionBriefingTapped:
+                state.openWindowID = "main"
                 return .run { send in
-                    print("show intro")
+                    print("show briefing")
                 }
 
-            case .showSettingsTapped:
+            case .settingsTapped:
                 return .run { send in
                     print("show settings")
                 }
@@ -103,16 +133,25 @@ struct AppFeature {
         handleWake(&state)
     }
 
+    private func makeStartTimerEffect(_ state: AppFeature.State) -> Effect<
+        AppFeature.Action
+    > {
+        return .run { @MainActor [clock] send in
+            for await _ in clock.timer(interval: .seconds(1)) {
+                send(.timerTicked)
+            }
+        }
+        .cancellable(id: state.timerID)
+    }
+
     private func handleWake(_ state: inout AppFeature.State) -> Effect<
         AppFeature.Action
     > {
         if state.remindersStatus == .on {
             if state.remainingTime <= 0 {
-                state.remainingTime = defaultReminderInterval
+                state.remainingTime = state.defaultReminderInterval
             }
-            return .run { send in
-                await startTimer(send)
-            }
+            return makeStartTimerEffect(state)
         }
         return .none
     }
@@ -123,39 +162,27 @@ struct AppFeature {
         guard state.remindersStatus != .on else {
             return .none
         }
-        state.remindersStatus = .on
-        state.remainingTime = defaultReminderInterval
-        return .run { send in
-            await startTimer(send)
-        }
-        .cancellable(id: state.timerID)
-    }
-
-    private func startTimer(_ send: Send<AppFeature.Action>) async {
-        for await _ in self.clock.timer(interval: .seconds(1)) {
-            send(.timerTicked)
-        }
+        state.$remindersStatus.withLock { $0 = .on }
+        state.remainingTime = state.defaultReminderInterval
+        return makeStartTimerEffect(state)
     }
 
     private func stopReminders(_ state: inout AppFeature.State) -> Effect<
         AppFeature.Action
     > {
         state.remainingTime = 0.0
-        state.remindersStatus = .off
+        state.$remindersStatus.withLock { $0 = .off }
         return .cancel(id: state.timerID)
     }
 
     private func restartReminders(_ state: inout AppFeature.State)
         -> Effect<AppFeature.Action>
     {
-        state.remindersStatus = .on
-        state.remainingTime = defaultReminderInterval
+        state.$remindersStatus.withLock { $0 = .on }
+        state.remainingTime = state.defaultReminderInterval
         return .concatenate(
             .cancel(id: state.timerID),
-            .run { send in
-                await startTimer(send)
-            }
-            .cancellable(id: state.timerID)
+            makeStartTimerEffect(state)
         )
     }
 
@@ -165,14 +192,11 @@ struct AppFeature {
         guard state.remindersStatus == .paused else {
             return .none
         }
-        state.remindersStatus = .on
+        state.$remindersStatus.withLock { $0 = .on }
         if state.remainingTime <= 0 {
-            state.remainingTime = defaultReminderInterval
+            state.remainingTime = state.defaultReminderInterval
         }
-        return .run { send in
-            await startTimer(send)
-        }
-        .cancellable(id: state.timerID)
+        return makeStartTimerEffect(state)
     }
 
     private func processTimerTick(_ state: inout AppFeature.State)

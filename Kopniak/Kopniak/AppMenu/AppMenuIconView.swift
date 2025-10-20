@@ -8,11 +8,41 @@
 import ComposableArchitecture
 import SwiftUI
 
+@Reducer
+struct AppMenuIconFeature {
+    @ObservableState
+    struct State {
+        @Shared var remindersStatus: RemindersStatus
+    }
+
+    enum Action {
+        case delegate(Delegate)
+        case onAppear
+
+        enum Delegate {
+            case onAppear
+        }
+    }
+
+    var body: some Reducer<State, Action> {
+        Reduce.init { state, action in
+            switch action {
+            case .delegate:
+                return .none
+            case .onAppear:
+                return .run { send in
+                    await send(.delegate(.onAppear))
+                }
+            }
+        }
+    }
+}
+
 struct AppMenuIconView: View {
-    let store: StoreOf<AppFeature>
+    let store: StoreOf<AppMenuIconFeature>
 
     private var menuBarIcon: String {
-        if store.remindersStatus != .off {
+        if store.remindersStatus == .on {
             return "chevron.up.2"
         } else {
             return "chevron.up.dotted.2"
@@ -28,13 +58,13 @@ struct AppMenuIconView: View {
 }
 
 #Preview {
+    let status = Shared<RemindersStatus>(value: .on)
     AppMenuIconView(
         store: Store(
-            initialState: AppFeature.State(),
-            reducer: {
-                AppFeature()._printChanges()
-            }
-        )
+            initialState: AppMenuIconFeature.State(remindersStatus: status)
+        ) {
+            AppMenuIconFeature()
+        }
     )
     .frame(width: 400, height: 300)
 }
