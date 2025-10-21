@@ -9,7 +9,6 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AppMenuView: View {
-    @Environment(\.openWindow) var openWindow
     let store: StoreOf<AppFeature>
 
     var body: some View {
@@ -17,7 +16,6 @@ struct AppMenuView: View {
             Button {
                 // Activate the app and show the window
                 store.send(.missionBriefingTapped)
-                NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {
                     Image(systemName: "chevron.up.2")
@@ -105,7 +103,6 @@ struct AppMenuView: View {
 
             Button {
                 store.send(.settingsTapped)
-                NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {
                     Image(systemName: "gear")
@@ -120,11 +117,6 @@ struct AppMenuView: View {
                 store.send(.quitTapped)
             }
             .keyboardShortcut("q", modifiers: .command)
-        }
-        .onChange(of: store.openWindowID) { _, id in
-            if let id {
-                openWindow(id: id)
-            }
         }
     }
 }

@@ -5,24 +5,24 @@
 //  Created by alf on 02.10.2025.
 //
 
-import SwiftUI
 import AppKit
+import ComposableArchitecture
+import SwiftUI
 
 @main
 struct KopniakApp: App {
+    private static let store = Store(
+        initialState: AppFeature.State(remindersStatus: .on)
+    ) {
+        AppFeature()
+            ._printChanges()
+    }
+
     @State private var settingsManager: SettingsManager
     @State private var reminderManager: ReminderManager
     @State private var onboardingManager: OnboardingManager?
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
-    
-    private var menuBarIcon: String {
-        if reminderManager.isActive {
-            return "chevron.up.2"
-        } else {
-            return "chevron.up.dotted.2"
-        }
-    }
 
     init() {
         // Initialize managers with dependencies
@@ -31,7 +31,7 @@ struct KopniakApp: App {
 
         self._settingsManager = State(wrappedValue: settings)
         self._reminderManager = State(wrappedValue: reminders)
-        
+
         // Don't restore state here - wait until OnboardingManager is ready
     }
 
@@ -45,15 +45,21 @@ struct KopniakApp: App {
         .defaultSize(width: 400, height: 500)
         .defaultPosition(.center)
         .windowResizability(.contentSize)
-        .defaultLaunchBehavior(settingsManager.showMainWindowOnLaunch ? .presented : .suppressed)
+        .defaultLaunchBehavior(.suppressed)
 
         // Status bar menu
         MenuBarExtra {
-            StatusBarMenu()
-            .environment(reminderManager)
-            .environment(settingsManager)
+            //            StatusBarMenu()
+            AppMenuView(store: KopniakApp.store)
+                .environment(reminderManager)
+                .environment(settingsManager)
         } label: {
-            Image(systemName: menuBarIcon)
+            //            Image(systemName: menuBarIcon)
+            let store = KopniakApp.store.scope(
+                state: \.menuIcon,
+                action: \.menuIcon
+            )
+            AppMenuIconView(store: store)
                 .task {
                     // Create OnboardingManager now that openWindow is available
                     if onboardingManager == nil {
@@ -66,7 +72,7 @@ struct KopniakApp: App {
 
                     // Restore the persisted state
                     reminderManager.restorePersistedState()
-                    
+
                     // Activate the app to bring it to front
                     NSApplication.shared.activate(ignoringOtherApps: true)
                 }
@@ -74,9 +80,11 @@ struct KopniakApp: App {
 
         // Settings
         Settings {
-            SettingsView()
-                .environment(reminderManager)
-                .environment(settingsManager)
+            let store = KopniakApp.store.scope(
+                state: \.settings,
+                action: \.settings
+            )
+            SettingsView(store: store)
         }
         .defaultPosition(.center)
 
@@ -84,7 +92,9 @@ struct KopniakApp: App {
         Window("Launch at Login", id: "launch-at-login-dialog") {
             LaunchAtLoginDialog { response in
                 if let onboardingManager {
-                    onboardingManager.handleLaunchAtLoginDialogResponse(response)
+                    onboardingManager.handleLaunchAtLoginDialogResponse(
+                        response
+                    )
                     // Close the window after response
                     dismissWindow(id: "launch-at-login-dialog")
                 }

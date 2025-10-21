@@ -15,33 +15,33 @@ nonisolated enum RemindersStatus: Codable {
     case paused
 }
 
-extension SharedReaderKey where Self == AppStorageKey<RemindersStatus> {
-    static var remindersStatus: Self {
-        .appStorage("RemindersStatus")
-    }
-}
+/// Type used to display windows in SwiftUI. Set a new value to `openWindowID`
+/// to show a window. Even if the `destination` stays the same, `uniqueID` will be
+/// different and the window will be activated.
+struct WindowID: Equatable {
+    let destination: Destination
+    let uniqueID = UUID()
 
-extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
-    static var defaultReminderInterval: Self {
-        .appStorage("RemindersDefaultIntervalSeconds")
+    enum Destination: Equatable {
+        case settings
+        case window(id: String)
     }
 }
 
 @Reducer
 struct AppFeature {
-    @Dependency(\.continuousClock) var clock
+    @Dependency(\.suspendingClock) var clock
 
     @ObservableState
     struct State {
-        @Shared(.defaultReminderInterval)
-        var defaultReminderInterval: TimeInterval = 45.0
+        static let defaultReminderInterval: TimeInterval = 45.0 * 60
 
         var menuIcon: AppMenuIconFeature.State
         var remainingTime: TimeInterval = 0
-        @Shared
-        var remindersStatus: RemindersStatus
-
-        var openWindowID: String?
+        @Shared var reminderInterval: TimeInterval
+        @Shared var remindersStatus: RemindersStatus
+        var settings: SettingsFeature.State
+        @Shared var showMissionBriefingAtLaunch: Bool
 
         let timerID = UUID()
 
@@ -52,17 +52,35 @@ struct AppFeature {
             )
             _remindersStatus = status
             menuIcon = AppMenuIconFeature.State(remindersStatus: status)
+
+            let showMissionBriefingAtLaunch = Shared(
+                wrappedValue: true,
+                .appStorage("ShowMissionBriefingAtLaunch")
+            )
+
+            _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
+
+            let reminderInterval = Shared(
+                wrappedValue: State.defaultReminderInterval,
+                .reminderInterval
+            )
+
+            _reminderInterval = reminderInterval
+
+            settings = SettingsFeature.State(
+                reminderInterval: reminderInterval,
+                showMissionBriefingAtLaunch: showMissionBriefingAtLaunch
+            )
         }
     }
 
     enum Action {
         case menuIcon(AppMenuIconFeature.Action)
         case missionBriefingTapped
-        case onSleep
-        case onWake
         case pauseRemindersTapped
         case restartRemindersTapped
         case resumeRemindersTapped
+        case settings(SettingsFeature.Action)
         case settingsTapped
         case startRemindersTapped
         case stopRemindersTapped
@@ -75,19 +93,17 @@ struct AppFeature {
             AppMenuIconFeature()
         }
 
+        Scope(state: \.settings, action: \.settings) {
+            SettingsFeature()
+        }
+
         Reduce { state, action in
             switch action {
             case .menuIcon(.delegate(.onAppear)):
-                return handleOnAppear(&state)
+                return handleMenuIconOnAppear(&state)
 
             case .menuIcon:
                 return .none
-
-            case .onSleep:
-                return .cancel(id: state.timerID)
-
-            case .onWake:
-                return handleWake(&state)
 
             case .pauseRemindersTapped:
                 state.$remindersStatus.withLock { $0 = .paused }
@@ -100,15 +116,20 @@ struct AppFeature {
                 return resumeReminders(&state)
 
             case .missionBriefingTapped:
-                state.openWindowID = "main"
-                return .run { send in
-                    print("show briefing")
-                }
+                return showMissionBriefing(&state)
+
+            case .settings(.delegate(.reminderIntervalChanged)):
+                return restartReminders(&state)
+
+            case .settings:
+                return .none
 
             case .settingsTapped:
-                return .run { send in
-                    print("show settings")
-                }
+                let window = WindowID(destination: .settings)
+                return reduce(
+                    into: &state,
+                    action: .menuIcon(.openWindow(window))
+                )
 
             case .startRemindersTapped:
                 return startReminders(&state)
@@ -127,10 +148,27 @@ struct AppFeature {
         }
     }
 
-    private func handleOnAppear(_ state: inout AppFeature.State) -> Effect<
-        AppFeature.Action
-    > {
-        handleWake(&state)
+    private func handleMenuIconOnAppear(_ state: inout AppFeature.State)
+        -> Effect<
+            AppFeature.Action
+        >
+    {
+        var effects: [Effect<Action>] = []
+        if state.showMissionBriefingAtLaunch {
+            effects.append(showMissionBriefing(&state))
+        }
+        if state.remindersStatus == .on {
+            if state.remainingTime <= 0 {
+                state.remainingTime = state.reminderInterval
+            }
+            effects.append(makeStartTimerEffect(state))
+        }
+        return .merge(effects)
+    }
+
+    private func showMissionBriefing(_ state: inout State) -> Effect<Action> {
+        let window = WindowID(destination: .window(id: "main"))
+        return reduce(into: &state, action: .menuIcon(.openWindow(window)))
     }
 
     private func makeStartTimerEffect(_ state: AppFeature.State) -> Effect<
@@ -144,18 +182,6 @@ struct AppFeature {
         .cancellable(id: state.timerID)
     }
 
-    private func handleWake(_ state: inout AppFeature.State) -> Effect<
-        AppFeature.Action
-    > {
-        if state.remindersStatus == .on {
-            if state.remainingTime <= 0 {
-                state.remainingTime = state.defaultReminderInterval
-            }
-            return makeStartTimerEffect(state)
-        }
-        return .none
-    }
-
     private func startReminders(_ state: inout AppFeature.State) -> Effect<
         AppFeature.Action
     > {
@@ -163,7 +189,7 @@ struct AppFeature {
             return .none
         }
         state.$remindersStatus.withLock { $0 = .on }
-        state.remainingTime = state.defaultReminderInterval
+        state.remainingTime = state.reminderInterval
         return makeStartTimerEffect(state)
     }
 
@@ -179,7 +205,7 @@ struct AppFeature {
         -> Effect<AppFeature.Action>
     {
         state.$remindersStatus.withLock { $0 = .on }
-        state.remainingTime = state.defaultReminderInterval
+        state.remainingTime = state.reminderInterval
         return .concatenate(
             .cancel(id: state.timerID),
             makeStartTimerEffect(state)
@@ -194,7 +220,7 @@ struct AppFeature {
         }
         state.$remindersStatus.withLock { $0 = .on }
         if state.remainingTime <= 0 {
-            state.remainingTime = state.defaultReminderInterval
+            state.remainingTime = state.reminderInterval
         }
         return makeStartTimerEffect(state)
     }
@@ -215,5 +241,17 @@ struct AppFeature {
             )
         }
         return .none
+    }
+}
+
+extension SharedReaderKey where Self == AppStorageKey<RemindersStatus> {
+    static var remindersStatus: Self {
+        .appStorage("RemindersStatus")
+    }
+}
+
+extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
+    static var reminderInterval: Self {
+        .appStorage("ReminderInterval")
     }
 }

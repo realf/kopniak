@@ -5,17 +5,99 @@
 //  Created by alf on 02.10.2025.
 //
 
-import AppKit
+import ComposableArchitecture
+import ServiceManagement
 import SwiftUI
 
+@Reducer
+struct SettingsFeature {
+    @Dependency(\.smAppService) var smAppService
+
+    @ObservableState
+    struct State {
+        var launchAtLogin: Bool = false
+        @Shared var reminderInterval: TimeInterval
+        @Shared var showMissionBriefingAtLaunch: Bool
+    }
+
+    enum Action: BindableAction {
+        case binding(BindingAction<State>)
+        case delegate(Delegate)
+        case onAppear
+        case updateLaunchAtLogin(Bool)
+
+        enum Delegate {
+            case reminderIntervalChanged
+        }
+    }
+
+    var body: some Reducer<State, Action> {
+        BindingReducer()
+            .onChange(of: \.reminderInterval) { _, _ in
+                Reduce { state, action in
+                    .run { send in
+                        await send(.delegate(.reminderIntervalChanged))
+                    }
+                }
+            }
+            .onChange(of: \.launchAtLogin) { _, enabled in
+                Reduce { state, action in
+                    .run { send in
+                        await updateLaunchAtLogin(enabled: enabled, send: send)
+                    }
+                }
+            }
+
+        Reduce { state, action in
+            switch action {
+            case .binding, .delegate:
+                return .none
+
+            case .onAppear:
+                // Initialize launch at login state from system
+                state.launchAtLogin = smAppService.isEnabled()
+                return .none
+                
+            case .updateLaunchAtLogin(let enabled):
+                state.launchAtLogin = enabled
+                return .none
+            }
+        }
+    }
+
+    // MARK: - Launch at Login Implementation
+    private nonisolated func updateLaunchAtLogin(
+        enabled: Bool,
+        send: Send<Action>
+    ) async {
+        do {
+            if enabled {
+                try await smAppService.register()
+            } else {
+                try await smAppService.unregister()
+            }
+
+            // Update cached state after successful operation
+            await send(.updateLaunchAtLogin(enabled))
+        } catch {
+            NSLog(
+                "Failed to \(enabled ? "enable" : "disable") launch at login: \(error)"
+            )
+
+            // Revert cached state on failure and refresh UI
+            let isEnabled = await smAppService.isEnabled()
+            await send(.updateLaunchAtLogin(isEnabled))
+        }
+    }
+}
+
 struct SettingsView: View {
-    @Environment(SettingsManager.self) private var settingsManager
-    @Environment(ReminderManager.self) private var reminderManager
+    @Bindable var store: StoreOf<SettingsFeature>
 
     // MARK: - Constants
 
-    private let minIntervalMinutes = 15
-    private let maxIntervalMinutes = 120
+    private let minIntervalMinutes = 15.0
+    private let maxIntervalMinutes = 120.0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -38,33 +120,31 @@ struct SettingsView: View {
                             Text("Reminder Interval:")
                             Spacer()
                             Text(
-                                "\(settingsManager.reminderIntervalMinutes) minutes"
+                                "\(Int(store.reminderInterval / 60.0)) minutes"
                             )
                             .foregroundColor(.secondary)
                         }
 
                         Slider(
                             value: Binding(
-                                get: { Double(settingsManager.reminderIntervalMinutes) },
+                                get: {
+                                    Double(store.reminderInterval / 60.0)
+                                },
                                 set: { newValue in
-                                    settingsManager.reminderIntervalMinutes = Int(newValue.rounded())
-                                    // If reminders are active, restart them with new interval
-                                    if reminderManager.isActive {
-                                        reminderManager.stopReminders()
-                                        reminderManager.startReminders()
-                                    }
+                                    store.reminderInterval =
+                                        newValue.rounded() * 60.0
                                 }
                             ),
-                            in: Double(minIntervalMinutes)...Double(maxIntervalMinutes),
+                            in: minIntervalMinutes...maxIntervalMinutes,
                             step: 5
                         )
 
                         HStack {
-                            Text("\(minIntervalMinutes) min")
+                            Text("\(Int(minIntervalMinutes)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("\(maxIntervalMinutes) min")
+                            Text("\(Int(maxIntervalMinutes)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -76,15 +156,14 @@ struct SettingsView: View {
 
                 // Launch Behavior Section
                 Section {
-                    @Bindable var settingsManager = settingsManager
                     Toggle(
-                        "Show Mission Briefing when app launches",
-                        isOn: $settingsManager.showMainWindowOnLaunch
+                        "Launch Sergeant Kopniak at login",
+                        isOn: $store.launchAtLogin
                     )
 
                     Toggle(
-                        "Launch Sergeant Kopniak at login",
-                        isOn: $settingsManager.launchAtLogin
+                        "Show Mission Briefing when app launches",
+                        isOn: $store.showMissionBriefingAtLaunch
                     )
                 } header: {
                     Label("Launch Behavior", systemImage: "macwindow")
@@ -93,14 +172,63 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
         }
-        .padding(20)
-        .frame(width: 450, height: 450)
+        .padding()
+        .frame(width: 500)
+        .onAppear {
+            store.send(.onAppear)
+        }
+    }
+}
+
+// MARK: - SMAppService dependency.
+nonisolated struct SMAppServiceDependency {
+    var register: () throws -> Void
+    var unregister: () async throws -> Void
+    var isEnabled: () -> Bool
+}
+
+// Conform to DependencyKey to provide a live and preview implementation of the interface.
+extension SMAppServiceDependency: DependencyKey {
+    static let liveValue = Self {
+        try SMAppService.mainApp.register()
+    } unregister: {
+        try await SMAppService.mainApp.unregister()
+    } isEnabled: {
+        SMAppService.mainApp.status == .enabled
+    }
+
+    static let previewValue = Self(
+        register: {
+            print("register")
+        },
+        unregister: {
+            print("unregister")
+        },
+        isEnabled: {
+            true
+        }
+    )
+}
+
+// Register the dependency within DependencyValues.
+extension DependencyValues {
+    var smAppService: SMAppServiceDependency {
+        get { self[SMAppServiceDependency.self] }
+        set { self[SMAppServiceDependency.self] = newValue }
     }
 }
 
 #Preview {
-    let settingsManager = SettingsManager()
-    SettingsView()
-        .environment(settingsManager)
-        .environment(ReminderManager(settingsManager: settingsManager))
+    let showMissionBriefingAtLaunch = Shared(value: true)
+    let reminderInterval = Shared(value: 45.0 * 60)
+    let store = Store(
+        initialState: SettingsFeature.State(
+            reminderInterval: reminderInterval,
+            showMissionBriefingAtLaunch: showMissionBriefingAtLaunch
+        ),
+        reducer: {
+            SettingsFeature()
+        }
+    )
+    SettingsView(store: store)
 }

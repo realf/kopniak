@@ -13,11 +13,13 @@ struct AppMenuIconFeature {
     @ObservableState
     struct State {
         @Shared var remindersStatus: RemindersStatus
+        var openWindow: WindowID?
     }
 
     enum Action {
         case delegate(Delegate)
         case onAppear
+        case openWindow(WindowID)
 
         enum Delegate {
             case onAppear
@@ -33,12 +35,18 @@ struct AppMenuIconFeature {
                 return .run { send in
                     await send(.delegate(.onAppear))
                 }
+            case .openWindow(let windowID):
+                state.openWindow = windowID
+                return .none
             }
         }
     }
 }
 
 struct AppMenuIconView: View {
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.openSettings) private var openSettings
+
     let store: StoreOf<AppMenuIconFeature>
 
     private var menuBarIcon: String {
@@ -53,6 +61,17 @@ struct AppMenuIconView: View {
         Image(systemName: menuBarIcon)
             .onAppear {
                 store.send(.onAppear)
+            }
+            .onChange(of: store.openWindow) { _, windowID in
+                if let windowID {
+                    switch windowID.destination {
+                    case .settings:
+                        openSettings()
+                    case .window(id: let id):
+                        openWindow(id: id)
+                    }
+                    NSApp.activate(ignoringOtherApps: true)
+                }
             }
     }
 }
