@@ -40,7 +40,7 @@ struct AppFeature {
 
         var briefing: BriefingFeature.State
         var menuIcon: AppMenuIconFeature.State
-        var remainingTime: TimeInterval = 0
+        @Shared var remainingTime: TimeInterval
         var reminder: ReminderFeature.State
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
@@ -56,7 +56,13 @@ struct AppFeature {
             )
             _remindersStatus = status
 
-            menuIcon = AppMenuIconFeature.State(remindersStatus: status)
+            let remainingTime = Shared(
+                wrappedValue: 0.0,
+                .remainingTime
+            )
+            _remainingTime = remainingTime
+
+            menuIcon = AppMenuIconFeature.State(remindersStatus: status, remainingTime: remainingTime)
             reminder = ReminderFeature.State(title: "", message: "")
 
             let showMissionBriefingAtLaunch = Shared(
@@ -134,7 +140,7 @@ struct AppFeature {
                 return showWindow(&state, window: window)
 
             case .reminder(.delegate(.dismissTapped)):
-                state.remainingTime = state.reminderInterval
+                state.$remainingTime.withLock { $0 = state.reminderInterval }
                 return .merge(
                     dismissWindow(
                         &state,
@@ -144,7 +150,7 @@ struct AppFeature {
                 )
 
             case .reminder(.delegate(.snoozeTapped)):
-                state.remainingTime = State.snoozeReminderInterval
+                state.$remainingTime.withLock { $0 = State.snoozeReminderInterval }
                 return .merge(
                     dismissWindow(
                         &state,
@@ -217,7 +223,7 @@ struct AppFeature {
 
         if state.remindersStatus == .on {
             if state.remainingTime <= 0 {
-                state.remainingTime = state.reminderInterval
+                state.$remainingTime.withLock { $0 = state.reminderInterval }
             }
             effects.append(startTimer(state))
         }
@@ -243,14 +249,14 @@ struct AppFeature {
             return .none
         }
         state.$remindersStatus.withLock { $0 = .on }
-        state.remainingTime = state.reminderInterval
+        state.$remainingTime.withLock { $0 = state.reminderInterval }
         return startTimer(state)
     }
 
     private func stopReminders(_ state: inout AppFeature.State) -> Effect<
         AppFeature.Action
     > {
-        state.remainingTime = 0.0
+        state.$remainingTime.withLock { $0 = 0.0 }
         state.$remindersStatus.withLock { $0 = .off }
         return .cancel(id: state.timerID)
     }
@@ -259,7 +265,7 @@ struct AppFeature {
         -> Effect<AppFeature.Action>
     {
         state.$remindersStatus.withLock { $0 = .on }
-        state.remainingTime = state.reminderInterval
+        state.$remainingTime.withLock { $0 = state.reminderInterval }
         return .concatenate(
             .cancel(id: state.timerID),
             startTimer(state)
@@ -274,7 +280,7 @@ struct AppFeature {
         }
         state.$remindersStatus.withLock { $0 = .on }
         if state.remainingTime <= 0 {
-            state.remainingTime = state.reminderInterval
+            state.$remainingTime.withLock { $0 = state.reminderInterval }
         }
         return startTimer(state)
     }
@@ -282,9 +288,9 @@ struct AppFeature {
     private func processTimerTick(_ state: inout AppFeature.State)
         -> Effect<AppFeature.Action>
     {
-        state.remainingTime -= 1.0
+        state.$remainingTime.withLock { $0 -= 1.0 }
         if state.remainingTime <= 0 {
-            state.remainingTime = 0
+            state.$remainingTime.withLock { $0 = 0.0 }
 
             return .merge(
                 .cancel(id: state.timerID),
@@ -316,5 +322,11 @@ extension SharedReaderKey where Self == AppStorageKey<RemindersStatus> {
 extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
     static var reminderInterval: Self {
         .appStorage("ReminderInterval")
+    }
+}
+
+extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
+    static var remainingTime: Self {
+        .appStorage("RemainingTimeInterval")
     }
 }

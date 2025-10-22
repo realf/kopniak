@@ -13,6 +13,7 @@ struct AppMenuIconFeature {
     @ObservableState
     struct State {
         @Shared var remindersStatus: RemindersStatus
+        @Shared var remainingTime: TimeInterval
         var openWindow: WindowID?
         var dismissWindow: WindowID?
     }
@@ -58,7 +59,10 @@ struct AppMenuIconView: View {
     let reminderStore: StoreOf<ReminderFeature>
     let reminderController: ReminderController
 
-    init(store: StoreOf<AppMenuIconFeature>, reminderStore: StoreOf<ReminderFeature>) {
+    init(
+        store: StoreOf<AppMenuIconFeature>,
+        reminderStore: StoreOf<ReminderFeature>
+    ) {
         self.store = store
         self.reminderStore = reminderStore
         self.reminderController = ReminderController(store: reminderStore)
@@ -72,37 +76,48 @@ struct AppMenuIconView: View {
         }
     }
 
+    private func formatted(remainingTime: TimeInterval) -> String {
+        let totalSeconds = Int(remainingTime)
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
     var body: some View {
-        Image(systemName: menuBarIcon)
-            .onAppear {
-                store.send(.onAppear)
-            }
-            .onChange(of: store.openWindow) { _, windowID in
-                if let windowID {
-                    switch windowID.destination {
-                    case .reminder:
-                        showReminder()
-                    case .settings:
-                        openSettings()
-                        NSApp.activate(ignoringOtherApps: true)
-                    case .window(id: let id):
-                        openWindow(id: id)
-                        NSApp.activate(ignoringOtherApps: true)
-                    }
+        HStack {
+            Image(systemName: menuBarIcon)
+            Text(formatted(remainingTime: store.remainingTime))
+                .font(.system(.body, design: .monospaced))
+        }
+        .onAppear {
+            store.send(.onAppear)
+        }
+        .onChange(of: store.openWindow) { _, windowID in
+            if let windowID {
+                switch windowID.destination {
+                case .reminder:
+                    showReminder()
+                case .settings:
+                    openSettings()
+                    NSApp.activate(ignoringOtherApps: true)
+                case .window(let id):
+                    openWindow(id: id)
+                    NSApp.activate(ignoringOtherApps: true)
                 }
             }
-            .onChange(of: store.dismissWindow) { _, windowID in
-                if let windowID {
-                    switch windowID.destination {
-                    case .reminder:
-                        dismissReminder()
-                    case .settings:
-                        break
-                    case .window(id: let id):
-                        dismissWindow(id: id)
-                    }
+        }
+        .onChange(of: store.dismissWindow) { _, windowID in
+            if let windowID {
+                switch windowID.destination {
+                case .reminder:
+                    dismissReminder()
+                case .settings:
+                    break
+                case .window(let id):
+                    dismissWindow(id: id)
                 }
             }
+        }
     }
 
     private func showReminder() {
@@ -118,13 +133,22 @@ struct AppMenuIconView: View {
     let status = Shared<RemindersStatus>(value: .on)
     AppMenuIconView(
         store: Store(
-            initialState: AppMenuIconFeature.State(remindersStatus: status)
+            initialState: AppMenuIconFeature.State(
+                remindersStatus: status,
+                remainingTime: Shared(value: 90.0)
+            )
         ) {
             AppMenuIconFeature()
         },
-        reminderStore: Store(initialState: ReminderFeature.State(title: "Title", message: "Message"), reducer: {
-            ReminderFeature()
-        })
+        reminderStore: Store(
+            initialState: ReminderFeature.State(
+                title: "Title",
+                message: "Message"
+            ),
+            reducer: {
+                ReminderFeature()
+            }
+        )
     )
     .frame(width: 400, height: 300)
 }
