@@ -14,12 +14,14 @@ struct AppMenuIconFeature {
     struct State {
         @Shared var remindersStatus: RemindersStatus
         var openWindow: WindowID?
+        var dismissWindow: WindowID?
     }
 
     enum Action {
         case delegate(Delegate)
         case onAppear
         case openWindow(WindowID)
+        case dismissWindow(WindowID)
 
         enum Delegate {
             case onAppear
@@ -27,7 +29,7 @@ struct AppMenuIconFeature {
     }
 
     var body: some Reducer<State, Action> {
-        Reduce.init { state, action in
+        Reduce { state, action in
             switch action {
             case .delegate:
                 return .none
@@ -38,6 +40,10 @@ struct AppMenuIconFeature {
             case .openWindow(let windowID):
                 state.openWindow = windowID
                 return .none
+
+            case .dismissWindow(let windowID):
+                state.dismissWindow = windowID
+                return .none
             }
         }
     }
@@ -45,9 +51,18 @@ struct AppMenuIconFeature {
 
 struct AppMenuIconView: View {
     @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
     @Environment(\.openSettings) private var openSettings
 
     let store: StoreOf<AppMenuIconFeature>
+    let reminderStore: StoreOf<ReminderFeature>
+    let reminderController: ReminderController
+
+    init(store: StoreOf<AppMenuIconFeature>, reminderStore: StoreOf<ReminderFeature>) {
+        self.store = store
+        self.reminderStore = reminderStore
+        self.reminderController = ReminderController(store: reminderStore)
+    }
 
     private var menuBarIcon: String {
         if store.remindersStatus == .on {
@@ -65,14 +80,38 @@ struct AppMenuIconView: View {
             .onChange(of: store.openWindow) { _, windowID in
                 if let windowID {
                     switch windowID.destination {
+                    case .reminder:
+                        // TODO: pick random message
+                        showReminder(title: "Boo!", message: "Gotcha")
                     case .settings:
                         openSettings()
+                        NSApp.activate(ignoringOtherApps: true)
                     case .window(id: let id):
                         openWindow(id: id)
+                        NSApp.activate(ignoringOtherApps: true)
                     }
-                    NSApp.activate(ignoringOtherApps: true)
                 }
             }
+            .onChange(of: store.dismissWindow) { _, windowID in
+                if let windowID {
+                    switch windowID.destination {
+                    case .reminder:
+                        dismissReminder()
+                    case .settings:
+                        break
+                    case .window(id: let id):
+                        dismissWindow(id: id)
+                    }
+                }
+            }
+    }
+
+    private func showReminder(title: String, message: String) {
+        reminderController.showReminder()
+    }
+
+    private func dismissReminder() {
+        reminderController.hideReminder()
     }
 }
 
@@ -83,7 +122,10 @@ struct AppMenuIconView: View {
             initialState: AppMenuIconFeature.State(remindersStatus: status)
         ) {
             AppMenuIconFeature()
-        }
+        },
+        reminderStore: Store(initialState: ReminderFeature.State(title: "Title", message: "Message"), reducer: {
+            ReminderFeature()
+        })
     )
     .frame(width: 400, height: 300)
 }

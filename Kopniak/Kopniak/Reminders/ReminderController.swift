@@ -6,13 +6,16 @@
 //
 
 import AppKit
+import ComposableArchitecture
 import SwiftUI
 
 /// Window controller to manage the floating reminder window
 class ReminderController: NSWindowController {
+    let store: StoreOf<ReminderFeature>
     // MARK: - Initialization
 
-    init() {
+    init(store: StoreOf<ReminderFeature>) {
+        self.store = store
         super.init(window: FloatingWindow())
     }
 
@@ -22,21 +25,11 @@ class ReminderController: NSWindowController {
 
     // MARK: - Public Methods
 
-    func showReminder(
-        title: String,
-        message: String,
-        onDismiss: @escaping () -> Void,
-        onSnooze: @escaping () -> Void
-    ) {
+    func showReminder() {
         guard let window = window else { return }
 
         // Create SwiftUI view and set as window content
-        let reminderView = ReminderView(
-            title: title,
-            message: message,
-            onDismiss: onDismiss,
-            onSnooze: onSnooze
-        )
+        let reminderView = ReminderView(store: self.store)
 
         let hostingView = NSHostingView(rootView: reminderView)
         hostingView.frame = window.contentView?.bounds ?? NSRect.zero

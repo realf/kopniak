@@ -49,17 +49,17 @@ struct KopniakApp: App {
 
         // Status bar menu
         MenuBarExtra {
-            //            StatusBarMenu()
             AppMenuView(store: KopniakApp.store)
-                .environment(reminderManager)
-                .environment(settingsManager)
         } label: {
-            //            Image(systemName: menuBarIcon)
             let store = KopniakApp.store.scope(
                 state: \.menuIcon,
                 action: \.menuIcon
             )
-            AppMenuIconView(store: store)
+            let reminderStore = KopniakApp.store.scope(
+                state: \.reminder,
+                action: \.reminder
+            )
+            AppMenuIconView(store: store, reminderStore: reminderStore)
                 .task {
                     // Create OnboardingManager now that openWindow is available
                     if onboardingManager == nil {

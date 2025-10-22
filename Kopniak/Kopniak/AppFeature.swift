@@ -23,6 +23,7 @@ struct WindowID: Equatable {
     let uniqueID = UUID()
 
     enum Destination: Equatable {
+        case reminder
         case settings
         case window(id: String)
     }
@@ -35,9 +36,11 @@ struct AppFeature {
     @ObservableState
     struct State {
         static let defaultReminderInterval: TimeInterval = 45.0 * 60
+        static let snoozeReminderInterval: TimeInterval = 10.0 * 60
 
         var menuIcon: AppMenuIconFeature.State
         var remainingTime: TimeInterval = 0
+        var reminder: ReminderFeature.State
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
         var settings: SettingsFeature.State
@@ -51,7 +54,9 @@ struct AppFeature {
                 .remindersStatus
             )
             _remindersStatus = status
+
             menuIcon = AppMenuIconFeature.State(remindersStatus: status)
+            reminder = ReminderFeature.State(title: "", message: "")
 
             let showMissionBriefingAtLaunch = Shared(
                 wrappedValue: true,
@@ -78,10 +83,14 @@ struct AppFeature {
         case menuIcon(AppMenuIconFeature.Action)
         case missionBriefingTapped
         case pauseRemindersTapped
+        case reminder(ReminderFeature.Action)
         case restartRemindersTapped
         case resumeRemindersTapped
         case settings(SettingsFeature.Action)
         case settingsTapped
+        #if DEBUG
+            case testReminderTapped
+        #endif
         case startRemindersTapped
         case stopRemindersTapped
         case timerTicked
@@ -97,12 +106,43 @@ struct AppFeature {
             SettingsFeature()
         }
 
+        Scope(state: \.reminder, action: \.reminder) {
+            ReminderFeature()
+        }
+
         Reduce { state, action in
             switch action {
             case .menuIcon(.delegate(.onAppear)):
                 return handleMenuIconOnAppear(&state)
 
             case .menuIcon:
+                return .none
+
+            case .missionBriefingTapped:
+                let window = WindowID(destination: .window(id: "main"))
+                return showWindow(&state, window: window)
+
+            case .reminder(.delegate(.dismissTapped)):
+                state.remainingTime = state.reminderInterval
+                return .merge(
+                    dismissWindow(
+                        &state,
+                        window: WindowID(destination: .reminder)
+                    ),
+                    startTimer(state)
+                )
+
+            case .reminder(.delegate(.snoozeTapped)):
+                state.remainingTime = State.snoozeReminderInterval
+                return .merge(
+                    dismissWindow(
+                        &state,
+                        window: WindowID(destination: .reminder)
+                    ),
+                    startTimer(state)
+                )
+
+            case .reminder:
                 return .none
 
             case .pauseRemindersTapped:
@@ -115,9 +155,6 @@ struct AppFeature {
             case .resumeRemindersTapped:
                 return resumeReminders(&state)
 
-            case .missionBriefingTapped:
-                return showMissionBriefing(&state)
-
             case .settings(.delegate(.reminderIntervalChanged)):
                 return restartReminders(&state)
 
@@ -126,16 +163,25 @@ struct AppFeature {
 
             case .settingsTapped:
                 let window = WindowID(destination: .settings)
-                return reduce(
-                    into: &state,
-                    action: .menuIcon(.openWindow(window))
-                )
+                return showWindow(&state, window: window)
 
             case .startRemindersTapped:
                 return startReminders(&state)
 
             case .stopRemindersTapped:
-                return stopReminders(&state)
+                return .merge(
+                    stopReminders(&state),
+                    dismissWindow(
+                        &state,
+                        window: WindowID(destination: .reminder)
+                    )
+                )
+
+            #if DEBUG
+                case .testReminderTapped:
+                    let window = WindowID(destination: .reminder)
+                    return showWindow(&state, window: window)
+            #endif
 
             case .timerTicked:
                 return processTimerTick(&state)
@@ -149,29 +195,26 @@ struct AppFeature {
     }
 
     private func handleMenuIconOnAppear(_ state: inout AppFeature.State)
-        -> Effect<
-            AppFeature.Action
-        >
+        -> Effect<AppFeature.Action>
     {
         var effects: [Effect<Action>] = []
+
         if state.showMissionBriefingAtLaunch {
-            effects.append(showMissionBriefing(&state))
+            let window = WindowID(destination: .window(id: "main"))
+            effects.append(showWindow(&state, window: window))
         }
+
         if state.remindersStatus == .on {
             if state.remainingTime <= 0 {
                 state.remainingTime = state.reminderInterval
             }
-            effects.append(makeStartTimerEffect(state))
+            effects.append(startTimer(state))
         }
+
         return .merge(effects)
     }
 
-    private func showMissionBriefing(_ state: inout State) -> Effect<Action> {
-        let window = WindowID(destination: .window(id: "main"))
-        return reduce(into: &state, action: .menuIcon(.openWindow(window)))
-    }
-
-    private func makeStartTimerEffect(_ state: AppFeature.State) -> Effect<
+    private func startTimer(_ state: AppFeature.State) -> Effect<
         AppFeature.Action
     > {
         return .run { @MainActor [clock] send in
@@ -190,7 +233,7 @@ struct AppFeature {
         }
         state.$remindersStatus.withLock { $0 = .on }
         state.remainingTime = state.reminderInterval
-        return makeStartTimerEffect(state)
+        return startTimer(state)
     }
 
     private func stopReminders(_ state: inout AppFeature.State) -> Effect<
@@ -208,7 +251,7 @@ struct AppFeature {
         state.remainingTime = state.reminderInterval
         return .concatenate(
             .cancel(id: state.timerID),
-            makeStartTimerEffect(state)
+            startTimer(state)
         )
     }
 
@@ -222,7 +265,7 @@ struct AppFeature {
         if state.remainingTime <= 0 {
             state.remainingTime = state.reminderInterval
         }
-        return makeStartTimerEffect(state)
+        return startTimer(state)
     }
 
     private func processTimerTick(_ state: inout AppFeature.State)
@@ -232,15 +275,24 @@ struct AppFeature {
         if state.remainingTime <= 0 {
             state.remainingTime = 0
 
-            return .concatenate(
+            return .merge(
                 .cancel(id: state.timerID),
-                .run { _ in
-                    print("show reminder")
-                    // TODO: Show reminder
-                }
+                showWindow(&state, window: WindowID(destination: .reminder))
             )
         }
         return .none
+    }
+
+    private func showWindow(_ state: inout State, window: WindowID) -> Effect<
+        Action
+    > {
+        return reduce(into: &state, action: .menuIcon(.openWindow(window)))
+    }
+
+    private func dismissWindow(_ state: inout State, window: WindowID)
+        -> Effect<Action>
+    {
+        return reduce(into: &state, action: .menuIcon(.dismissWindow(window)))
     }
 }
 

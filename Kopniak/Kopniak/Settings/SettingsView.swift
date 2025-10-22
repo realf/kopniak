@@ -96,8 +96,13 @@ struct SettingsView: View {
 
     // MARK: - Constants
 
-    private let minIntervalMinutes = 15.0
-    private let maxIntervalMinutes = 120.0
+    #if DEBUG
+    private let intervalRange = 0.1...1.0
+    private let intervalStep = 0.1
+    #else
+    private let intervalRange = 15.0...120.0
+    private let intervalStep = 5.0
+    #endif
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -132,19 +137,19 @@ struct SettingsView: View {
                                 },
                                 set: { newValue in
                                     store.reminderInterval =
-                                        newValue.rounded() * 60.0
+                                        newValue * 60.0
                                 }
                             ),
-                            in: minIntervalMinutes...maxIntervalMinutes,
-                            step: 5
+                            in: intervalRange,
+                            step: intervalStep
                         )
 
                         HStack {
-                            Text("\(Int(minIntervalMinutes)) min")
+                            Text("\(Int(intervalRange.lowerBound)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("\(Int(maxIntervalMinutes)) min")
+                            Text("\(Int(intervalRange.upperBound)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }

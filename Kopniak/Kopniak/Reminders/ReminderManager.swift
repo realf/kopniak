@@ -144,7 +144,7 @@ class ReminderManager {
     func startReminders() {
         // Initialize reminder window controller
         if reminderWindowController == nil {
-            reminderWindowController = ReminderController()
+//            reminderWindowController = ReminderController()
         }
 
         // Increment activation count (observed by OnboardingManager)
@@ -237,13 +237,13 @@ class ReminderManager {
 
     // MARK: - Presentation logic
     private func showFloatingReminder(title: String, message: String) {
-        reminderWindowController?.showReminder(title: title, message: message, onDismiss: {
-            [weak self] in
-            self?.dismissReminder()
-        }, onSnooze: {
-            [weak self] in
-            self?.snoozeReminder()
-        })
+//        reminderWindowController?.showReminder(title: title, message: message, onDismiss: {
+//            [weak self] in
+//            self?.dismissReminder()
+//        }, onSnooze: {
+//            [weak self] in
+//            self?.snoozeReminder()
+//        })
     }
 
     private func hideFloatingReminder() {
