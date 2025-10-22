@@ -15,7 +15,9 @@ struct KopniakApp: App {
         initialState: AppFeature.State(remindersStatus: .on)
     ) {
         AppFeature()
+        #if DEBUG
             ._printChanges()
+        #endif
     }
 
     @State private var settingsManager: SettingsManager
