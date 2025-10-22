@@ -111,7 +111,7 @@ struct AppMenuView: View {
             } label: {
                 HStack {
                     Image(systemName: "gear")
-                    Text("Settings...")
+                    Text("Settings…")
                 }
             }
             .keyboardShortcut(",", modifiers: .command)

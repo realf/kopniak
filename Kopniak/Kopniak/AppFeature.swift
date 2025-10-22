@@ -62,7 +62,10 @@ struct AppFeature {
             )
             _remainingTime = remainingTime
 
-            menuIcon = AppMenuIconFeature.State(remindersStatus: status, remainingTime: remainingTime)
+            menuIcon = AppMenuIconFeature.State(
+                remindersStatus: status,
+                remainingTime: remainingTime
+            )
             reminder = ReminderFeature.State(title: "", message: "")
 
             let showMissionBriefingAtLaunch = Shared(
@@ -150,7 +153,9 @@ struct AppFeature {
                 )
 
             case .reminder(.delegate(.snoozeTapped)):
-                state.$remainingTime.withLock { $0 = State.snoozeReminderInterval }
+                state.$remainingTime.withLock {
+                    $0 = State.snoozeReminderInterval
+                }
                 return .merge(
                     dismissWindow(
                         &state,
@@ -162,14 +167,17 @@ struct AppFeature {
             case .reminder:
                 return .none
 
-            case .pauseRemindersTapped, .briefing(.delegate(.pauseRemindersTapped)):
+            case .pauseRemindersTapped,
+                .briefing(.delegate(.pauseRemindersTapped)):
                 state.$remindersStatus.withLock { $0 = .paused }
                 return .cancel(id: state.timerID)
 
-            case .restartRemindersTapped, .briefing(.delegate(.restartRemindersTapped)):
+            case .restartRemindersTapped,
+                .briefing(.delegate(.restartRemindersTapped)):
                 return restartReminders(&state)
 
-            case .resumeRemindersTapped, .briefing(.delegate(.resumeRemindersTapped)):
+            case .resumeRemindersTapped,
+                .briefing(.delegate(.resumeRemindersTapped)):
                 return resumeReminders(&state)
 
             case .settings(.delegate(.reminderIntervalChanged)):
@@ -178,14 +186,16 @@ struct AppFeature {
             case .settings:
                 return .none
 
-            case .settingsTapped:
+            case .settingsTapped, .briefing(.delegate(.settingsTapped)):
                 let window = WindowID(destination: .settings)
                 return showWindow(&state, window: window)
 
-            case .startRemindersTapped, .briefing(.delegate(.startRemindersTapped)):
+            case .startRemindersTapped,
+                .briefing(.delegate(.startRemindersTapped)):
                 return startReminders(&state)
 
-            case .stopRemindersTapped, .briefing(.delegate(.stopRemindersTapped)):
+            case .stopRemindersTapped,
+                .briefing(.delegate(.stopRemindersTapped)):
                 return .merge(
                     stopReminders(&state),
                     dismissWindow(

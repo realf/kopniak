@@ -25,6 +25,7 @@ struct BriefingFeature {
             case resumeRemindersTapped
             case startRemindersTapped
             case stopRemindersTapped
+            case settingsTapped
         }
     }
 
@@ -55,6 +56,11 @@ struct BriefingView: View {
             .fontWeight(.semibold)
     }
 
+    private var chevron: Text {
+        Text("\(Image(systemName: "chevron.up.2"))")
+            .fontWeight(.semibold)
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "chevron.up.2")
@@ -70,7 +76,7 @@ struct BriefingView: View {
 
                     Text(
                         """
-                        Look for my chevron in your status bar — those twin stripes mean I'm watching. Click it to access your orders.
+                        Look for my chevron \(chevron) in your status bar — those twin stripes mean I'm watching. Click it to access your orders.
                         """
                     )
                     .font(.headline)
@@ -111,7 +117,9 @@ struct BriefingView: View {
             switch store.remindersStatus {
             case .on:
                 HStack(spacing: 12) {
-                    Button(action: { store.send(.delegate(.stopRemindersTapped)) }) {
+                    Button(action: {
+                        store.send(.delegate(.stopRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "stop.fill")
                                 .foregroundStyle(Color.red)
@@ -119,7 +127,9 @@ struct BriefingView: View {
                         }
                     }
 
-                    Button(action: { store.send(.delegate(.pauseRemindersTapped)) }) {
+                    Button(action: {
+                        store.send(.delegate(.pauseRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "pause.fill")
                                 .foregroundStyle(Color.orange)
@@ -127,7 +137,9 @@ struct BriefingView: View {
                         }
                     }
 
-                    Button(action: { store.send(.delegate(.restartRemindersTapped)) }) {
+                    Button(action: {
+                        store.send(.delegate(.restartRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "restart.circle.fill")
                                 .foregroundStyle(Color.orange)
@@ -137,7 +149,9 @@ struct BriefingView: View {
                 }
             case .paused:
                 HStack(spacing: 12) {
-                    Button(action: { store.send(.delegate(.stopRemindersTapped)) }) {
+                    Button(action: {
+                        store.send(.delegate(.stopRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "stop.fill")
                                 .foregroundStyle(Color.red)
@@ -145,7 +159,9 @@ struct BriefingView: View {
                         }
                     }
 
-                    Button(action: { store.send(.delegate(.resumeRemindersTapped)) }) {
+                    Button(action: {
+                        store.send(.delegate(.resumeRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "play.fill")
                                 .foregroundStyle(Color.green)
@@ -153,7 +169,9 @@ struct BriefingView: View {
                         }
                     }
 
-                    Button(action: { store.send(.delegate(.restartRemindersTapped)) }) {
+                    Button(action: {
+                        store.send(.delegate(.restartRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "restart.circle.fill")
                                 .foregroundStyle(Color.orange)
@@ -162,11 +180,24 @@ struct BriefingView: View {
                     }
                 }
             case .off:
-                Button(action: { store.send(.delegate(.startRemindersTapped)) }) {
+                Button(action: { store.send(.delegate(.startRemindersTapped)) })
+                {
                     HStack {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.blue)
                         Text("Report for Duty")
+                    }
+                }
+            }
+            Divider()
+            HStack {
+                Spacer()
+                Button {
+                    store.send(.delegate(.settingsTapped))
+                } label: {
+                    HStack {
+                        Image(systemName: "gear")
+                        Text("Settings…")
                     }
                 }
             }
