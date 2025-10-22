@@ -99,10 +99,14 @@ struct AppMenuIconView: View {
                     showReminder()
                 case .settings:
                     openSettings()
-                    NSApp.activate(ignoringOtherApps: true)
+                    DispatchQueue.main.async {
+                        NSApp.activate(ignoringOtherApps: true)
+                    }
                 case .window(let id):
                     openWindow(id: id)
-                    NSApp.activate(ignoringOtherApps: true)
+                    DispatchQueue.main.async {
+                        NSApp.activate(ignoringOtherApps: true)
+                    }
                 }
             }
         }
