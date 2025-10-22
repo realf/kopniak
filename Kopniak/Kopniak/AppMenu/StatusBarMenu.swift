@@ -16,7 +16,7 @@ struct StatusBarMenu: View {
         VStack(spacing: 0) {
             Button {
                 // Activate the app and show the window
-                openWindow(id: "main")
+                openWindow(id: "briefing")
                 NSApp.activate(ignoringOtherApps: true)
             } label: {
                 HStack {

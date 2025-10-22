@@ -125,7 +125,7 @@ struct SettingsView: View {
                             Text("Reminder Interval:")
                             Spacer()
                             Text(
-                                "\(Int(store.reminderInterval / 60.0)) minutes"
+                                "\(Int((store.reminderInterval / 60.0).rounded())) minutes"
                             )
                             .foregroundColor(.secondary)
                         }
@@ -137,7 +137,7 @@ struct SettingsView: View {
                                 },
                                 set: { newValue in
                                     store.reminderInterval =
-                                        newValue * 60.0
+                                    (newValue * 60.0).rounded()
                                 }
                             ),
                             in: intervalRange,

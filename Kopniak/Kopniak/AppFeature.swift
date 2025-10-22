@@ -38,6 +38,7 @@ struct AppFeature {
         static let defaultReminderInterval: TimeInterval = 45.0 * 60
         static let snoozeReminderInterval: TimeInterval = 10.0 * 60
 
+        var briefing: BriefingFeature.State
         var menuIcon: AppMenuIconFeature.State
         var remainingTime: TimeInterval = 0
         var reminder: ReminderFeature.State
@@ -76,10 +77,16 @@ struct AppFeature {
                 reminderInterval: reminderInterval,
                 showMissionBriefingAtLaunch: showMissionBriefingAtLaunch
             )
+
+            briefing = BriefingFeature.State(
+                reminderInterval: reminderInterval,
+                remindersStatus: status
+            )
         }
     }
 
     enum Action {
+        case briefing(BriefingFeature.Action)
         case menuIcon(AppMenuIconFeature.Action)
         case missionBriefingTapped
         case pauseRemindersTapped
@@ -98,16 +105,20 @@ struct AppFeature {
     }
 
     var body: some Reducer<State, Action> {
+        Scope(state: \.briefing, action: \.briefing) {
+            BriefingFeature()
+        }
+
         Scope(state: \.menuIcon, action: \.menuIcon) {
             AppMenuIconFeature()
         }
 
-        Scope(state: \.settings, action: \.settings) {
-            SettingsFeature()
-        }
-
         Scope(state: \.reminder, action: \.reminder) {
             ReminderFeature()
+        }
+
+        Scope(state: \.settings, action: \.settings) {
+            SettingsFeature()
         }
 
         Reduce { state, action in
@@ -119,7 +130,7 @@ struct AppFeature {
                 return .none
 
             case .missionBriefingTapped:
-                let window = WindowID(destination: .window(id: "main"))
+                let window = WindowID(destination: .window(id: "briefing"))
                 return showWindow(&state, window: window)
 
             case .reminder(.delegate(.dismissTapped)):
@@ -145,14 +156,14 @@ struct AppFeature {
             case .reminder:
                 return .none
 
-            case .pauseRemindersTapped:
+            case .pauseRemindersTapped, .briefing(.delegate(.pauseRemindersTapped)):
                 state.$remindersStatus.withLock { $0 = .paused }
                 return .cancel(id: state.timerID)
 
-            case .restartRemindersTapped:
+            case .restartRemindersTapped, .briefing(.delegate(.restartRemindersTapped)):
                 return restartReminders(&state)
 
-            case .resumeRemindersTapped:
+            case .resumeRemindersTapped, .briefing(.delegate(.resumeRemindersTapped)):
                 return resumeReminders(&state)
 
             case .settings(.delegate(.reminderIntervalChanged)):
@@ -165,10 +176,10 @@ struct AppFeature {
                 let window = WindowID(destination: .settings)
                 return showWindow(&state, window: window)
 
-            case .startRemindersTapped:
+            case .startRemindersTapped, .briefing(.delegate(.startRemindersTapped)):
                 return startReminders(&state)
 
-            case .stopRemindersTapped:
+            case .stopRemindersTapped, .briefing(.delegate(.stopRemindersTapped)):
                 return .merge(
                     stopReminders(&state),
                     dismissWindow(
@@ -200,7 +211,7 @@ struct AppFeature {
         var effects: [Effect<Action>] = []
 
         if state.showMissionBriefingAtLaunch {
-            let window = WindowID(destination: .window(id: "main"))
+            let window = WindowID(destination: .window(id: "briefing"))
             effects.append(showWindow(&state, window: window))
         }
 

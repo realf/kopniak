@@ -160,7 +160,7 @@ struct ReminderView: View {
                     store.send(.delegate(.snoozeTapped))
                 }) {
                     HStack {
-                        Image(systemName: "pause.fill")
+                        Image(systemName: "10.arrow.trianglehead.clockwise")
                         Text("At Ease for 10")
                             .fontWeight(.semibold)
                     }
@@ -171,7 +171,7 @@ struct ReminderView: View {
                     store.send(.delegate(.dismissTapped))
                 }) {
                     HStack {
-                        Image(systemName: "checkmark.shield")
+                        Image(systemName: "checkmark.square.fill")
                         Text("Yes Sir!")
                             .fontWeight(.semibold)
                     }

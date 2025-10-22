@@ -81,8 +81,7 @@ struct AppMenuIconView: View {
                 if let windowID {
                     switch windowID.destination {
                     case .reminder:
-                        // TODO: pick random message
-                        showReminder(title: "Boo!", message: "Gotcha")
+                        showReminder()
                     case .settings:
                         openSettings()
                         NSApp.activate(ignoringOtherApps: true)
@@ -106,7 +105,7 @@ struct AppMenuIconView: View {
             }
     }
 
-    private func showReminder(title: String, message: String) {
+    private func showReminder() {
         reminderController.showReminder()
     }
 

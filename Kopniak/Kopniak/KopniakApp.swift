@@ -37,10 +37,12 @@ struct KopniakApp: App {
 
     var body: some Scene {
         // Main app window
-        Window("Sergeant Kopniak", id: "main") {
-            ContentView()
-                .environment(reminderManager)
-                .environment(settingsManager)
+        Window("Sergeant Kopniak", id: "briefing") {
+            let store = KopniakApp.store.scope(
+                state: \.briefing,
+                action: \.briefing
+            )
+            BriefingView(store: store)
         }
         .defaultSize(width: 400, height: 500)
         .defaultPosition(.center)
