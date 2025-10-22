@@ -40,16 +40,6 @@ struct BriefingView: View {
 
     // MARK: - Computed Properties
 
-    private var yesSirText: Text {
-        Text("\(Image(systemName: "checkmark.shield")) Yes Sir!")
-            .fontWeight(.semibold)
-    }
-
-    private var atEaseText: Text {
-        Text("\(Image(systemName: "pause.fill")) At Ease for 10")
-            .fontWeight(.semibold)
-    }
-
     private var holdPositionText: Text {
         Text("\(Image(systemName: "pause.fill")) At Ease")
             .fontWeight(.semibold)
