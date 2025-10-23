@@ -144,25 +144,27 @@ struct AppFeature {
 
             case .reminder(.delegate(.dismissTapped)):
                 state.$remainingTime.withLock { $0 = state.reminderInterval }
-                return .merge(
-                    dismissWindow(
-                        &state,
-                        window: WindowID(destination: .reminder)
-                    ),
-                    startTimer(state)
-                )
+
+                var effects: [Effect<Action>] = [
+                    dismissReminder(&state)
+                ]
+                if state.remindersStatus == .on {
+                    effects.append(startTimer(state))
+                }
+
+                return .merge(effects)
 
             case .reminder(.delegate(.snoozeTapped)):
                 state.$remainingTime.withLock {
                     $0 = State.snoozeReminderInterval
                 }
-                return .merge(
-                    dismissWindow(
-                        &state,
-                        window: WindowID(destination: .reminder)
-                    ),
-                    startTimer(state)
-                )
+                var effects: [Effect<Action>] = [
+                    dismissReminder(&state)
+                ]
+                if state.remindersStatus == .on {
+                    effects.append(startTimer(state))
+                }
+                return .merge(effects)
 
             case .reminder:
                 return .none
@@ -170,11 +172,17 @@ struct AppFeature {
             case .pauseRemindersTapped,
                 .briefing(.delegate(.pauseRemindersTapped)):
                 state.$remindersStatus.withLock { $0 = .paused }
-                return .cancel(id: state.timerID)
+                return .merge(
+                    .cancel(id: state.timerID),
+                    dismissReminder(&state)
+                )
 
             case .restartRemindersTapped,
                 .briefing(.delegate(.restartRemindersTapped)):
-                return restartReminders(&state)
+                return .merge(
+                    restartReminders(&state),
+                    dismissReminder(&state)
+                )
 
             case .resumeRemindersTapped,
                 .briefing(.delegate(.resumeRemindersTapped)):
@@ -198,10 +206,7 @@ struct AppFeature {
                 .briefing(.delegate(.stopRemindersTapped)):
                 return .merge(
                     stopReminders(&state),
-                    dismissWindow(
-                        &state,
-                        window: WindowID(destination: .reminder)
-                    )
+                    dismissReminder(&state)
                 )
 
             #if DEBUG
@@ -320,6 +325,13 @@ struct AppFeature {
         -> Effect<Action>
     {
         return reduce(into: &state, action: .menuIcon(.dismissWindow(window)))
+    }
+
+    private func dismissReminder(_ state: inout State) -> Effect<Action> {
+        dismissWindow(
+            &state,
+            window: WindowID(destination: .reminder)
+        )
     }
 }
 
