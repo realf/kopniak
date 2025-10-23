@@ -100,12 +100,16 @@ struct AppMenuIconView: View {
                 case .settings:
                     openSettings()
                     DispatchQueue.main.async {
-                        NSApp.activate(ignoringOtherApps: true)
+                        NSRunningApplication.current.activate(
+                            options: .activateAllWindows
+                        )
                     }
                 case .window(let id):
                     openWindow(id: id)
                     DispatchQueue.main.async {
-                        NSApp.activate(ignoringOtherApps: true)
+                        NSRunningApplication.current.activate(
+                            options: .activateAllWindows
+                        )
                     }
                 }
             }

@@ -19,7 +19,6 @@ struct AppMenuView: View {
             }
             #endif
             Button {
-                // Activate the app and show the window
                 store.send(.missionBriefingTapped)
             } label: {
                 HStack {
