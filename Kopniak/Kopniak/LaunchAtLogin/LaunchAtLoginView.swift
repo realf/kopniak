@@ -38,6 +38,8 @@ struct LaunchAtLoginView: View {
 
             // Buttons
             HStack(spacing: 12) {
+                Spacer()
+
                 Button("No, Sir!") {
                     store.send(.noTapped)
                 }
