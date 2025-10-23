@@ -79,7 +79,9 @@ struct KopniakApp: App {
 
                     DispatchQueue.main.async {
                         // Activate the app to bring it to front
-                        NSRunningApplication.current.activate(options: .activateAllWindows)
+                        NSRunningApplication.current.activate(
+                            options: .activateAllWindows
+                        )
                     }
                 }
         }
@@ -95,16 +97,12 @@ struct KopniakApp: App {
         .defaultPosition(.center)
 
         // Launch at login dialog
-        Window("Launch at Login", id: "launch-at-login-dialog") {
-            LaunchAtLoginDialog { response in
-                if let onboardingManager {
-                    onboardingManager.handleLaunchAtLoginDialogResponse(
-                        response
-                    )
-                    // Close the window after response
-                    dismissWindow(id: "launch-at-login-dialog")
-                }
-            }
+        Window("Launch at Login", id: "launchAtLogin") {
+            let store = KopniakApp.store.scope(
+                state: \.launchAtLogin,
+                action: \.launchAtLogin
+            )
+            LaunchAtLoginDialog(store: store)
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)

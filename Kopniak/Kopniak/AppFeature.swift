@@ -25,7 +25,8 @@ struct WindowID: Equatable {
     enum Destination: Equatable {
         case reminder
         case settings
-        case window(id: String)
+        case briefing
+        case launchAtLogin
     }
 }
 
@@ -39,6 +40,7 @@ struct AppFeature {
         static let snoozeReminderInterval: TimeInterval = 10.0 * 60
 
         var briefing: BriefingFeature.State
+        var launchAtLogin: LaunchAtLoginFeature.State
         var menuIcon: AppMenuIconFeature.State
         @Shared var remainingTime: TimeInterval
         var reminder: ReminderFeature.State
@@ -62,6 +64,8 @@ struct AppFeature {
             )
             _remainingTime = remainingTime
 
+            launchAtLogin = LaunchAtLoginFeature.State()
+
             menuIcon = AppMenuIconFeature.State(
                 remindersStatus: status,
                 remainingTime: remainingTime
@@ -70,7 +74,7 @@ struct AppFeature {
 
             let showMissionBriefingAtLaunch = Shared(
                 wrappedValue: true,
-                .appStorage("ShowMissionBriefingAtLaunch")
+                .appStorage("showMissionBriefingAtLaunch")
             )
 
             _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
@@ -96,6 +100,7 @@ struct AppFeature {
 
     enum Action {
         case briefing(BriefingFeature.Action)
+        case launchAtLogin(LaunchAtLoginFeature.Action)
         case menuIcon(AppMenuIconFeature.Action)
         case missionBriefingTapped
         case pauseRemindersTapped
@@ -122,6 +127,10 @@ struct AppFeature {
             AppMenuIconFeature()
         }
 
+        Scope(state: \.launchAtLogin, action: \.launchAtLogin) {
+            LaunchAtLoginFeature()
+        }
+
         Scope(state: \.reminder, action: \.reminder) {
             ReminderFeature()
         }
@@ -132,6 +141,20 @@ struct AppFeature {
 
         Reduce { state, action in
             switch action {
+            case .launchAtLogin(.delegate(.dismissLaunchAtLogin)):
+                return dismissWindow(
+                    &state,
+                    window: WindowID(destination: .launchAtLogin)
+                )
+            case .launchAtLogin(.delegate(.showLaunchAtLogin)):
+                return showWindow(
+                    &state,
+                    window: WindowID(destination: .launchAtLogin)
+                )
+
+            case .launchAtLogin:
+                return .none
+
             case .menuIcon(.delegate(.onAppear)):
                 return handleMenuIconOnAppear(&state)
 
@@ -139,7 +162,7 @@ struct AppFeature {
                 return .none
 
             case .missionBriefingTapped:
-                let window = WindowID(destination: .window(id: "briefing"))
+                let window = WindowID(destination: .briefing)
                 return showWindow(&state, window: window)
 
             case .reminder(.delegate(.dismissTapped)):
@@ -232,7 +255,7 @@ struct AppFeature {
         var effects: [Effect<Action>] = []
 
         if state.showMissionBriefingAtLaunch {
-            let window = WindowID(destination: .window(id: "briefing"))
+            let window = WindowID(destination: .briefing)
             effects.append(showWindow(&state, window: window))
         }
 
@@ -265,7 +288,10 @@ struct AppFeature {
         }
         state.$remindersStatus.withLock { $0 = .on }
         state.$remainingTime.withLock { $0 = state.reminderInterval }
-        return startTimer(state)
+        return .merge(
+            startTimer(state),
+            reduce(into: &state, action: .launchAtLogin(.startRemindersTapped))
+        )
     }
 
     private func stopReminders(_ state: inout AppFeature.State) -> Effect<
@@ -337,18 +363,18 @@ struct AppFeature {
 
 extension SharedReaderKey where Self == AppStorageKey<RemindersStatus> {
     static var remindersStatus: Self {
-        .appStorage("RemindersStatus")
+        .appStorage("remindersStatus")
     }
 }
 
 extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
     static var reminderInterval: Self {
-        .appStorage("ReminderInterval")
+        .appStorage("reminderInterval")
     }
 }
 
 extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
     static var remainingTime: Self {
-        .appStorage("RemainingTimeInterval")
+        .appStorage("remainingTime")
     }
 }

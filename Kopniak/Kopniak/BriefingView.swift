@@ -76,7 +76,7 @@ struct BriefingView: View {
 
                     Text(
                         """
-                        Look for my chevron \(chevron) in your status bar — those twin stripes mean I'm watching. Click it to access your orders.
+                        Look for my chevron \(chevron) in your menu bar — those twin stripes mean I'm watching. Click it to access your orders.
                         """
                     )
                     .font(.headline)

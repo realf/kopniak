@@ -97,17 +97,24 @@ struct AppMenuIconView: View {
         .onChange(of: store.openWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
-                case .reminder:
-                    showReminder()
-                case .settings:
-                    openSettings()
+                case .briefing:
+                    openWindow(id: "briefing")
                     DispatchQueue.main.async {
                         NSRunningApplication.current.activate(
                             options: .activateAllWindows
                         )
                     }
-                case .window(let id):
-                    openWindow(id: id)
+                case .launchAtLogin:
+                    openWindow(id: "launchAtLogin")
+                    DispatchQueue.main.async {
+                        NSRunningApplication.current.activate(
+                            options: .activateAllWindows
+                        )
+                    }
+                case .reminder:
+                    showReminder()
+                case .settings:
+                    openSettings()
                     DispatchQueue.main.async {
                         NSRunningApplication.current.activate(
                             options: .activateAllWindows
@@ -119,12 +126,14 @@ struct AppMenuIconView: View {
         .onChange(of: store.dismissWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
+                case .briefing:
+                    dismissWindow(id: "briefing")
+                case .launchAtLogin:
+                    dismissWindow(id: "launchAtLogin")
                 case .reminder:
                     dismissReminder()
                 case .settings:
                     break
-                case .window(let id):
-                    dismissWindow(id: id)
                 }
             }
         }
