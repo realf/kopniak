@@ -12,7 +12,7 @@ import SwiftUI
 @main
 struct KopniakApp: App {
     private static let store = Store(
-        initialState: AppFeature.State(remindersStatus: .on)
+        initialState: AppFeature.State(remindersStatus: .off)
     ) {
         AppFeature()
             #if DEBUG
@@ -20,22 +20,8 @@ struct KopniakApp: App {
             #endif
     }
 
-    @State private var settingsManager: SettingsManager
-    @State private var reminderManager: ReminderManager
-    @State private var onboardingManager: OnboardingManager?
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
-
-    init() {
-        // Initialize managers with dependencies
-        let settings = SettingsManager()
-        let reminders = ReminderManager(settingsManager: settings)
-
-        self._settingsManager = State(wrappedValue: settings)
-        self._reminderManager = State(wrappedValue: reminders)
-
-        // Don't restore state here - wait until OnboardingManager is ready
-    }
 
     var body: some Scene {
         // Main app window
@@ -64,26 +50,6 @@ struct KopniakApp: App {
                 action: \.reminder
             )
             AppMenuIconView(store: store, reminderStore: reminderStore)
-                .task {
-                    // Create OnboardingManager now that openWindow is available
-                    if onboardingManager == nil {
-                        onboardingManager = OnboardingManager(
-                            settingsManager: settingsManager,
-                            reminderManager: reminderManager,
-                            openWindow: openWindow
-                        )
-                    }
-
-                    // Restore the persisted state
-                    reminderManager.restorePersistedState()
-
-                    DispatchQueue.main.async {
-                        // Activate the app to bring it to front
-                        NSRunningApplication.current.activate(
-                            options: .activateAllWindows
-                        )
-                    }
-                }
         }
 
         // Settings

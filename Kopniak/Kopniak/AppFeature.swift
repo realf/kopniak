@@ -109,9 +109,6 @@ struct AppFeature {
         case resumeRemindersTapped
         case settings(SettingsFeature.Action)
         case settingsTapped
-        #if DEBUG
-            case testReminderTapped
-        #endif
         case startRemindersTapped
         case stopRemindersTapped
         case timerTicked
@@ -231,12 +228,6 @@ struct AppFeature {
                     stopReminders(&state),
                     dismissReminder(&state)
                 )
-
-            #if DEBUG
-                case .testReminderTapped:
-                    let window = WindowID(destination: .reminder)
-                    return showWindow(&state, window: window)
-            #endif
 
             case .timerTicked:
                 return processTimerTick(&state)

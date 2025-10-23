@@ -8,48 +8,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-@Reducer
-struct AppMenuIconFeature {
-    @ObservableState
-    struct State {
-        @Shared var remindersStatus: RemindersStatus
-        @Shared var remainingTime: TimeInterval
-        var openWindow: WindowID?
-        var dismissWindow: WindowID?
-    }
-
-    enum Action {
-        case delegate(Delegate)
-        case onAppear
-        case openWindow(WindowID)
-        case dismissWindow(WindowID)
-
-        enum Delegate {
-            case onAppear
-        }
-    }
-
-    var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .delegate:
-                return .none
-            case .onAppear:
-                return .run { send in
-                    await send(.delegate(.onAppear))
-                }
-            case .openWindow(let windowID):
-                state.openWindow = windowID
-                return .none
-
-            case .dismissWindow(let windowID):
-                state.dismissWindow = windowID
-                return .none
-            }
-        }
-    }
-}
-
 struct AppMenuIconView: View {
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
@@ -93,33 +51,25 @@ struct AppMenuIconView: View {
         }
         .onAppear {
             store.send(.onAppear)
+            DispatchQueue.main.async {
+                // Activate the app to bring it to front
+                activateApp()
+            }
         }
         .onChange(of: store.openWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
                 case .briefing:
                     openWindow(id: "briefing")
-                    DispatchQueue.main.async {
-                        NSRunningApplication.current.activate(
-                            options: .activateAllWindows
-                        )
-                    }
+                    activateApp()
                 case .launchAtLogin:
                     openWindow(id: "launchAtLogin")
-                    DispatchQueue.main.async {
-                        NSRunningApplication.current.activate(
-                            options: .activateAllWindows
-                        )
-                    }
+                    activateApp()
                 case .reminder:
                     showReminder()
                 case .settings:
                     openSettings()
-                    DispatchQueue.main.async {
-                        NSRunningApplication.current.activate(
-                            options: .activateAllWindows
-                        )
-                    }
+                    activateApp()
                 }
             }
         }
@@ -145,6 +95,15 @@ struct AppMenuIconView: View {
 
     private func dismissReminder() {
         reminderController.hideReminder()
+    }
+
+    private func activateApp() {
+        DispatchQueue.main.async {
+            // Activate the app to bring it to front
+            NSRunningApplication.current.activate(
+                options: .activateAllWindows
+            )
+        }
     }
 }
 

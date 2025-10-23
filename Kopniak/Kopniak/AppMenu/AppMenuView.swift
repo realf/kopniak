@@ -13,11 +13,6 @@ struct AppMenuView: View {
 
     var body: some View {
         VStack {
-            #if DEBUG
-            Button("Test Reminder") {
-                store.send(.testReminderTapped)
-            }
-            #endif
             Button {
                 store.send(.missionBriefingTapped)
             } label: {
