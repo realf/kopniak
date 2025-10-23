@@ -1,5 +1,5 @@
 //
-//  LaunchAtLoginDialog.swift
+//  LaunchAtLoginView.swift
 //  Sergeant Kopniak
 //
 //  Created by alf on 03.10.2025.
@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct LaunchAtLoginDialog: View {
+struct LaunchAtLoginView: View {
     var store: StoreOf<LaunchAtLoginFeature>
 
     var body: some View {
@@ -55,7 +55,7 @@ struct LaunchAtLoginDialog: View {
 }
 
 #Preview {
-    LaunchAtLoginDialog(
+    LaunchAtLoginView(
         store: Store(
             initialState: LaunchAtLoginFeature.State(),
             reducer: {

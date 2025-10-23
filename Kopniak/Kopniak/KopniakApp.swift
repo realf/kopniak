@@ -68,7 +68,7 @@ struct KopniakApp: App {
                 state: \.launchAtLogin,
                 action: \.launchAtLogin
             )
-            LaunchAtLoginDialog(store: store)
+            LaunchAtLoginView(store: store)
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
