@@ -86,8 +86,10 @@ struct AppMenuIconView: View {
     var body: some View {
         HStack {
             Image(systemName: menuBarIcon)
-            Text(formatted(remainingTime: store.remainingTime))
-                .font(.system(.body, design: .monospaced))
+            if store.remindersStatus != .off {
+                Text(formatted(remainingTime: store.remainingTime))
+                    .font(.system(.body, design: .monospaced))
+            }
         }
         .onAppear {
             store.send(.onAppear)
