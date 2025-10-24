@@ -104,12 +104,10 @@ struct SettingsView: View {
 }
 
 #Preview {
-    let showMissionBriefingAtLaunch = Shared(value: true)
     let reminderInterval = Shared(value: 45.0 * 60)
     let store = Store(
         initialState: SettingsFeature.State(
-            reminderInterval: reminderInterval,
-            showMissionBriefingAtLaunch: showMissionBriefingAtLaunch
+            reminderInterval: reminderInterval
         ),
         reducer: {
             SettingsFeature()

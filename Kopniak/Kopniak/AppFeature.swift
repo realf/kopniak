@@ -35,7 +35,6 @@ struct AppFeature {
         var reminder: ReminderFeature.State
         var reminders: RemindersFeature.State
         var settings: SettingsFeature.State
-        @Shared var showMissionBriefingAtLaunch: Bool
 
         init(remindersStatus: @autoclosure () -> RemindersStatus) {
             launchAtLogin = LaunchAtLoginFeature.State()
@@ -49,16 +48,9 @@ struct AppFeature {
             )
 
             reminder = ReminderFeature.State(title: "", message: "")
-            let showMissionBriefingAtLaunch = Shared(
-                wrappedValue: true,
-                .appStorage("showMissionBriefingAtLaunch")
-            )
-
-            _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
 
             settings = SettingsFeature.State(
-                reminderInterval: reminders.$reminderInterval,
-                showMissionBriefingAtLaunch: showMissionBriefingAtLaunch
+                reminderInterval: reminders.$reminderInterval
             )
 
             briefing = BriefingFeature.State(
@@ -149,7 +141,7 @@ extension AppFeature {
         -> Effect<Action>
     {
         var effects: [Effect<Action>] = []
-        if state.showMissionBriefingAtLaunch {
+        if state.settings.showMissionBriefingAtLaunch {
             let window = WindowID(destination: .briefing)
             effects.append(showWindow(&state, window: window))
         }

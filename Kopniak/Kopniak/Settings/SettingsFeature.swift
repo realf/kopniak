@@ -17,6 +17,15 @@ struct SettingsFeature {
         var launchAtLogin: Bool = false
         @Shared var reminderInterval: TimeInterval
         @Shared var showMissionBriefingAtLaunch: Bool
+
+        init(reminderInterval: Shared<TimeInterval>) {
+            let showMissionBriefingAtLaunch = Shared(
+                wrappedValue: true,
+                .appStorage("showMissionBriefingAtLaunch")
+            )
+            _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
+            _reminderInterval = reminderInterval
+        }
     }
 
     enum Action: BindableAction {
