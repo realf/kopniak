@@ -12,7 +12,7 @@ struct ReminderView: View {
     let store: StoreOf<ReminderFeature>
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 18) {
             // Title with military styling
             Text(store.title)
                 .font(.title2)
@@ -22,44 +22,56 @@ struct ReminderView: View {
 
             // Message
             Text(store.message)
-                .font(.body)
+                .font(.title3)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 8)
                 .fixedSize(horizontal: false, vertical: true)
 
             // Buttons
-            HStack(spacing: 12) {
-                Spacer()
+            HStack(spacing: 0) {
+                Group {
+                    // "At Ease for 10" button
+                    Spacer()
 
-                // "At Ease for 10" button
-                Button(action: {
-                    store.send(.delegate(.snoozeTapped))
-                }) {
-                    HStack {
-                        Image(
-                            systemName: "10.arrow.trianglehead.counterclockwise"
-                        )
-                        Text("At Ease for 10")
-                            .fontWeight(.semibold)
+                    Button(action: {
+                        store.send(.delegate(.snoozeTapped))
+                    }) {
+                        HStack {
+                            Image(
+                                systemName: "10.arrow.trianglehead.counterclockwise"
+                            )
+                            .imageScale(.large)
+                            Text("At Ease for 10")
+                                .font(.title3)
+                        }
+                        .frame(width: 150, height: 32)
                     }
-                }
 
-                // "Yes Sir!" button
-                Button(action: {
-                    store.send(.delegate(.dismissTapped))
-                }) {
-                    HStack {
-                        Image(systemName: "checkmark.square")
-                        Text("Yes Sir!")
-                            .fontWeight(.semibold)
+                    Spacer()
+
+                    // "Yes Sir!" button
+                    Button(action: {
+                        store.send(.delegate(.dismissTapped))
+                    }) {
+                        HStack {
+                            Image(systemName: "checkmark.square")
+                                .imageScale(.large)
+                            Text("Yes Sir!")
+                                .font(.title3)
+                        }
+                        .frame(width: 150, height: 32)
                     }
+                    .buttonStyle(.borderedProminent)
+
+                    Spacer()
                 }
-                .buttonStyle(.borderedProminent)
             }
+            .padding(.bottom, 20)
+            .padding(.top, 12)
         }
         .padding(20)
-        .frame(width: 400)
+        .frame(width: 470)
         .onAppear {
             store.send(.onAppear)
         }

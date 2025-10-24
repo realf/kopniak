@@ -20,7 +20,6 @@ struct AppMenuIconFeature {
 
     enum Action {
         case delegate(Delegate)
-        case onAppear
         case openWindow(WindowID)
         case dismissWindow(WindowID)
 
@@ -34,10 +33,7 @@ struct AppMenuIconFeature {
             switch action {
             case .delegate:
                 return .none
-            case .onAppear:
-                return .run { send in
-                    await send(.delegate(.onAppear))
-                }
+
             case .openWindow(let windowID):
                 state.openWindow = windowID
                 return .none

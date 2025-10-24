@@ -50,7 +50,7 @@ struct AppMenuIconView: View {
             }
         }
         .onAppear {
-            store.send(.onAppear)
+            store.send(.delegate(.onAppear))
             DispatchQueue.main.async {
                 // Activate the app to bring it to front
                 activateApp()

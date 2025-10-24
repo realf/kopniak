@@ -9,12 +9,12 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AppMenuView: View {
-    let store: StoreOf<AppFeature>
+    let store: StoreOf<AppMenuFeature>
 
     var body: some View {
         VStack {
             Button {
-                store.send(.missionBriefingTapped)
+                store.send(.delegate(.missionBriefingTapped))
             } label: {
                 HStack {
                     Image(systemName: "chevron.up.2")
@@ -28,7 +28,7 @@ struct AppMenuView: View {
             switch store.remindersStatus {
             case .off:
                 Button {
-                    store.send(.startRemindersTapped)
+                    store.send(.delegate(.startRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "play.fill")
@@ -38,7 +38,7 @@ struct AppMenuView: View {
                 .keyboardShortcut("r", modifiers: .command)
             case .on:
                 Button {
-                    store.send(.stopRemindersTapped)
+                    store.send(.delegate(.stopRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "stop.fill")
@@ -48,7 +48,7 @@ struct AppMenuView: View {
                 .keyboardShortcut("s", modifiers: .command)
 
                 Button {
-                    store.send(.pauseRemindersTapped)
+                    store.send(.delegate(.pauseRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "pause.fill")
@@ -58,7 +58,7 @@ struct AppMenuView: View {
                 .keyboardShortcut("p", modifiers: .command)
 
                 Button {
-                    store.send(.restartRemindersTapped)
+                    store.send(.delegate(.restartRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "restart.circle.fill")
@@ -68,7 +68,7 @@ struct AppMenuView: View {
                 .keyboardShortcut("o", modifiers: .command)
             case .paused:
                 Button {
-                    store.send(.stopRemindersTapped)
+                    store.send(.delegate(.stopRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "stop.fill")
@@ -78,7 +78,7 @@ struct AppMenuView: View {
                 .keyboardShortcut("s", modifiers: .command)
 
                 Button {
-                    store.send(.resumeRemindersTapped)
+                    store.send(.delegate(.resumeRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "play.fill")
@@ -88,7 +88,7 @@ struct AppMenuView: View {
                 .keyboardShortcut("r", modifiers: .command)
 
                 Button {
-                    store.send(.restartRemindersTapped)
+                    store.send(.delegate(.restartRemindersTapped))
                 } label: {
                     HStack {
                         Image(systemName: "restart.circle.fill")
@@ -101,7 +101,7 @@ struct AppMenuView: View {
             Divider()
 
             Button {
-                store.send(.settingsTapped)
+                store.send(.delegate(.settingsTapped))
             } label: {
                 HStack {
                     Image(systemName: "gear")
@@ -113,7 +113,7 @@ struct AppMenuView: View {
             Divider()
 
             Button("Quit Sergeant Kopniak") {
-                store.send(.quitTapped)
+                store.send(.delegate(.quitTapped))
             }
             .keyboardShortcut("q", modifiers: .command)
         }
@@ -123,9 +123,11 @@ struct AppMenuView: View {
 #Preview {
     AppMenuView(
         store: Store(
-            initialState: AppFeature.State(remindersStatus: .on),
+            initialState: AppMenuFeature.State(
+                remindersStatus: Shared(value: .on)
+            ),
             reducer: {
-                AppFeature()
+                AppMenuFeature()
             }
         )
     )

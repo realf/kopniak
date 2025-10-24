@@ -39,7 +39,12 @@ struct KopniakApp: App {
 
         // Status bar menu
         MenuBarExtra {
-            AppMenuView(store: KopniakApp.store)
+            AppMenuView(
+                store: KopniakApp.store.scope(
+                    state: \.appMenu,
+                    action: \.appMenu
+                )
+            )
         } label: {
             let store = KopniakApp.store.scope(
                 state: \.menuIcon,

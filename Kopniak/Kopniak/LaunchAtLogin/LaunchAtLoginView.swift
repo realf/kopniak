@@ -40,8 +40,10 @@ struct LaunchAtLoginView: View {
             HStack(spacing: 12) {
                 Spacer()
 
-                Button("No, Sir!") {
+                Button {
                     store.send(.noTapped)
+                } label: {
+                    Text("No, Sir!")
                 }
 
                 Button("Yes, Sir!") {
