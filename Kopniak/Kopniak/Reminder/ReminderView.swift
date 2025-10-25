@@ -39,7 +39,8 @@ struct ReminderView: View {
                     }) {
                         HStack {
                             Image(
-                                systemName: "10.arrow.trianglehead.counterclockwise"
+                                systemName:
+                                    "10.arrow.trianglehead.counterclockwise"
                             )
                             .imageScale(.large)
                             Text("At Ease for 10")
@@ -80,12 +81,16 @@ struct ReminderView: View {
 
 #Preview {
     let store = Store(
-        initialState: ReminderFeature.State(
-            title: "Attention!",
-            message: "Give me 20!"
-        )
+        initialState: ReminderFeature.State(title: "", message: "")
     ) {
         ReminderFeature()
+    } withDependencies: {
+        $0.reminderContentSource = ReminderContentSourceDependency(
+            titles: ["Listen to my order!"],
+            messages: [
+                "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
+            ]
+        )
     }
     ReminderView(store: store)
 }

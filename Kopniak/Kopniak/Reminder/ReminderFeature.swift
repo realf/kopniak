@@ -8,10 +8,9 @@
 import ComposableArchitecture
 import Foundation
 
-@Reducer
-struct ReminderFeature {
+struct ReminderContentSource {
     // Military-style titles
-    private let militaryTitles = [
+    static let militaryTitles = [
         "Listen to my order!",
         "Drop and Give Me Twenty!",
         "On Your Feet, Recruit!",
@@ -32,7 +31,7 @@ struct ReminderFeature {
     ]
 
     // Military-style exercise messages
-    private let militaryMessages = [
+    static let militaryMessages = [
         "Listen up, recruit!\nDrop that mouse and march in place!",
         "Stand up and stretch, soldier!",
         "At ease… but only for a second\nMove it, move it!",
@@ -63,6 +62,12 @@ struct ReminderFeature {
         "Take a walk around the perimeter\nMovement keeps the mind sharp!",
         "Stretch those legs, private\nBlood flow is essential for peak performance!",
     ]
+}
+
+@Reducer
+struct ReminderFeature {
+    @Dependency(\.withRandomNumberGenerator) var withRandomNumberGenerator
+    @Dependency(\.reminderContentSource) var reminderContentSource
 
     let maxRecent = 10
 
@@ -105,23 +110,28 @@ struct ReminderFeature {
 
     // MARK: - Picking logic that avoids recent repeats
     private func pickRandomTitle(_ state: State) -> String {
-        let available = militaryTitles.filter {
+        let available = reminderContentSource.titles.filter {
             !state.recentTitles.contains($0)
         }
-        let choice =
-            available.isEmpty
-            ? militaryTitles.randomElement() : available.randomElement()
-        return choice ?? "Attention Soldier!"
+
+        return withRandomNumberGenerator { [reminderContentSource] generator in
+            (available.isEmpty
+                ? reminderContentSource.titles.randomElement()
+                : available.randomElement())
+                ?? "Time for Action, Trooper!"
+        }
     }
 
     private func pickRandomMessage(_ state: State) -> String {
-        let available = militaryMessages.filter {
+        let available = reminderContentSource.messages.filter {
             !state.recentMessages.contains($0)
         }
-        let choice =
-            available.isEmpty
-            ? militaryMessages.randomElement() : available.randomElement()
-        return choice ?? "Time to exercise, soldier!"
+        return withRandomNumberGenerator { [reminderContentSource] generator in
+            (available.isEmpty
+                ? reminderContentSource.titles.randomElement()
+                : available.randomElement())
+                ?? "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
+        }
     }
 
     private func updateRecentTitle(_ state: inout State, title: String) {
@@ -136,5 +146,27 @@ struct ReminderFeature {
         if state.recentMessages.count > maxRecent {
             state.recentMessages.removeFirst()
         }
+    }
+}
+
+// MARK: - ReminderContentSource dependency.
+nonisolated struct ReminderContentSourceDependency {
+    let titles: [String]
+    let messages: [String]
+}
+
+// Conform to DependencyKey to provide a live and preview implementation of the interface.
+extension ReminderContentSourceDependency: DependencyKey {
+    static let liveValue = Self(
+        titles: ReminderContentSource.militaryTitles,
+        messages: ReminderContentSource.militaryMessages
+    )
+}
+
+// Register the dependency within DependencyValues.
+extension DependencyValues {
+    var reminderContentSource: ReminderContentSourceDependency {
+        get { self[ReminderContentSourceDependency.self] }
+        set { self[ReminderContentSourceDependency.self] = newValue }
     }
 }
