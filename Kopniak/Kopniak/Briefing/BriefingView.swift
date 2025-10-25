@@ -33,6 +33,8 @@ struct BriefingView: View {
             .fontWeight(.semibold)
     }
 
+    let buttonWidth = 120.0
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "chevron.up.2")
@@ -98,6 +100,7 @@ struct BriefingView: View {
                                 .foregroundStyle(Color.red)
                             Text("Stand Down")
                         }
+                        .frame(width: buttonWidth)
                     }
 
                     Button(action: {
@@ -108,16 +111,18 @@ struct BriefingView: View {
                                 .foregroundStyle(Color.orange)
                             Text("At Ease")
                         }
+                        .frame(width: buttonWidth)
                     }
 
                     Button(action: {
                         store.send(.delegate(.restartRemindersTapped))
                     }) {
                         HStack {
-                            Image(systemName: "restart.circle.fill")
+                            Image(systemName: "restart")
                                 .foregroundStyle(Color.blue)
                             Text("Reissue Orders")
                         }
+                        .frame(width: buttonWidth)
                     }
                 }
                 .imageScale(.large)
@@ -131,6 +136,7 @@ struct BriefingView: View {
                                 .foregroundStyle(Color.red)
                             Text("Stand Down")
                         }
+                        .frame(width: buttonWidth)
                     }
 
                     Button(action: {
@@ -141,16 +147,18 @@ struct BriefingView: View {
                                 .foregroundStyle(Color.green)
                             Text("Resume Duty")
                         }
+                        .frame(width: buttonWidth)
                     }
 
                     Button(action: {
                         store.send(.delegate(.restartRemindersTapped))
                     }) {
                         HStack {
-                            Image(systemName: "restart.circle.fill")
+                            Image(systemName: "restart")
                                 .foregroundStyle(Color.blue)
                             Text("Reissue Orders")
                         }
+                        .frame(width: buttonWidth)
                     }
                 }
                 .imageScale(.large)
@@ -162,6 +170,7 @@ struct BriefingView: View {
                             .foregroundStyle(Color.blue)
                         Text("Report for Duty")
                     }
+                    .frame(width: buttonWidth)
                 }
                 .imageScale(.large)
             }
@@ -175,6 +184,7 @@ struct BriefingView: View {
                         Image(systemName: "gear")
                         Text("Settings…")
                     }
+                    .frame(width: buttonWidth)
                 }
             }
             .imageScale(.large)

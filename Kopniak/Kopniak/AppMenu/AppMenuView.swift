@@ -61,7 +61,7 @@ struct AppMenuView: View {
                     store.send(.delegate(.restartRemindersTapped))
                 } label: {
                     HStack {
-                        Image(systemName: "restart.circle.fill")
+                        Image(systemName: "restart")
                         Text("Reissue Orders")
                     }
                 }
@@ -91,7 +91,7 @@ struct AppMenuView: View {
                     store.send(.delegate(.restartRemindersTapped))
                 } label: {
                     HStack {
-                        Image(systemName: "restart.circle.fill")
+                        Image(systemName: "restart")
                         Text("Reissue Orders")
                     }
                 }
