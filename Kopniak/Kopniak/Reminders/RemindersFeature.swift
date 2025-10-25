@@ -148,9 +148,9 @@ struct RemindersFeature {
     }
 
     private func startTimer(_ state: State) -> Effect<Action> {
-        return .run { @MainActor [clock] send in
+        return .run { [clock] send in
             for await _ in clock.timer(interval: .seconds(1)) {
-                send(.timerTicked)
+                await send(.timerTicked)
             }
         }
         .cancellable(id: state.timerID)
