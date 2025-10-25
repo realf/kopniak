@@ -38,7 +38,7 @@ struct AppMenuIconView: View {
         let totalSeconds = Int(remainingTime)
         let minutes = totalSeconds / 60
         let seconds = totalSeconds % 60
-        return String(format: "%d:%02d", minutes, seconds)
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 
     var body: some View {
