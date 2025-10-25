@@ -36,10 +36,7 @@ struct RemindersFeature {
             )
             _remindersStatus = status
 
-            let remainingTime = Shared(
-                wrappedValue: 0.0,
-                .remainingTime
-            )
+            let remainingTime = Shared(value: 0.0)
             _remainingTime = remainingTime
 
             let reminderInterval = Shared(
