@@ -14,16 +14,14 @@ struct AppMenuIconView: View {
     @Environment(\.openSettings) private var openSettings
 
     let store: StoreOf<AppMenuIconFeature>
-    let reminderStore: StoreOf<ReminderFeature>
     let reminderController: ReminderController
 
     init(
         store: StoreOf<AppMenuIconFeature>,
-        reminderStore: StoreOf<ReminderFeature>
+        reminderController: ReminderController
     ) {
         self.store = store
-        self.reminderStore = reminderStore
-        self.reminderController = ReminderController(store: reminderStore)
+        self.reminderController = reminderController
     }
 
     private var menuBarIcon: String {
@@ -118,14 +116,17 @@ struct AppMenuIconView: View {
         ) {
             AppMenuIconFeature()
         },
-        reminderStore: Store(
-            initialState: ReminderFeature.State(
-                title: "Title",
-                message: "Message"
-            ),
-            reducer: {
-                ReminderFeature()
-            }
+        reminderController: ReminderController(
+            store:
+                Store(
+                    initialState: ReminderFeature.State(
+                        title: "Title",
+                        message: "Message"
+                    ),
+                    reducer: {
+                        ReminderFeature()
+                    }
+                )
         )
     )
     .frame(width: 400, height: 300)

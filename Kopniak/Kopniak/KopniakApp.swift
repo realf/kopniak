@@ -20,6 +20,10 @@ struct KopniakApp: App {
             #endif
     }
 
+    private static let reminderController = ReminderController(
+        store: store.scope(state: \.reminder, action: \.reminder)
+    )
+
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
 
@@ -50,11 +54,10 @@ struct KopniakApp: App {
                 state: \.menuIcon,
                 action: \.menuIcon
             )
-            let reminderStore = KopniakApp.store.scope(
-                state: \.reminder,
-                action: \.reminder
+            AppMenuIconView(
+                store: store,
+                reminderController: KopniakApp.reminderController
             )
-            AppMenuIconView(store: store, reminderStore: reminderStore)
         }
 
         // Settings
