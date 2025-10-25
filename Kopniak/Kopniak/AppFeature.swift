@@ -41,7 +41,7 @@ struct AppFeature {
             let reminders = RemindersFeature.State(
                 remindersStatus: remindersStatus()
             )
-            _reminders = reminders
+            self.reminders = reminders
 
             appMenu = AppMenuFeature.State(
                 remindersStatus: reminders.$remindersStatus
