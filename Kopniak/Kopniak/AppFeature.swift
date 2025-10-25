@@ -104,7 +104,7 @@ struct AppFeature {
                 return .none
 
             case .menuIcon(.delegate(.onAppear)):
-                return handleMenuIconOnAppear(&state)
+                return reduceMenuIconOnAppear(&state)
 
             case .menuIcon:
                 return .none
@@ -137,7 +137,7 @@ struct AppFeature {
 extension AppFeature {
     /// Handles menu icon appearance, effectively this is an application
     /// launch
-    fileprivate func handleMenuIconOnAppear(_ state: inout State)
+    fileprivate func reduceMenuIconOnAppear(_ state: inout State)
         -> Effect<Action>
     {
         var effects: [Effect<Action>] = []
