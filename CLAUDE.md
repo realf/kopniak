@@ -4,69 +4,245 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Kopniak (Sergeant Kopniak) is a macOS app that provides military-themed break reminders to prevent prolonged computer use. The app runs in the menu bar and shows floating reminder windows at configurable intervals.
-
-## Build and Test Commands
-
-```bash
-# Build the app
-xcodebuild -project Kopniak/Kopniak.xcodeproj -scheme Kopniak -configuration Debug build
-
-# Build for release
-xcodebuild -project Kopniak/Kopniak.xcodeproj -scheme Kopniak -configuration Release build
-
-# Run tests
-xcodebuild test -project Kopniak/Kopniak.xcodeproj -scheme Kopniak -destination 'platform=macOS'
-
-# Build and run (or open in Xcode)
-open Kopniak/Kopniak.xcodeproj
-```
+**Kopniak** (Sergeant Kopniak) is a native macOS menu bar utility that reminds users to take breaks from computer work. The app sends periodic reminders with military-themed motivational messages and allows customization of reminder intervals, pause/resume functionality, and launch-at-login behavior.
 
 ## Architecture
 
-### Core Components
+### Technology Stack
 
-**KopniakApp** (`KopniakApp.swift:12`)
-- Main app entry point with three scenes: main window, menu bar extra, and settings
-- Uses SwiftUI's `@Observable` environment pattern for state management
-- Critical: `ReminderManager` requires `SettingsManager` dependency at initialization (both must be initialized together in `init()` to avoid dependency issues)
+- **SwiftUI** - All UI implementation (modern declarative framework)
+- **The Composable Architecture (TCA)** - State management and application architecture (16/20 Swift files use this)
+- **AppKit** - macOS-specific APIs (menu bar, ServiceManagement for launch-at-login, custom NSPanel for floating windows)
+- **Swift 5.0** language version
+- **Testing frameworks** - Swift Testing (unit tests) and XCTest (UI tests)
 
-**State Management Pattern**
-- Two `@Observable` managers: `SettingsManager` and `ReminderManager`
-- Injected via `.environment()` to all views
-- `ReminderManager` depends on `SettingsManager` and must be initialized with it
+### Architectural Pattern: The Composable Architecture (TCA)
 
-**ReminderManager** (`Reminders/ReminderManager.swift:14`)
-- Orchestrates reminder scheduling and presentation using Timer-based intervals
-- Maintains reminder state persistence via UserDefaults
-- Manages anti-repetition logic with recent titles/messages tracking (last 10)
-- Controls reminder window lifecycle through `ReminderController`
+The entire app uses TCA's feature-based reducer pattern. Understanding this is essential:
 
-**ReminderController** (`Reminders/ReminderController.swift:12`)
-- NSWindowController wrapper for FloatingWindow
-- Bridges AppKit (NSPanel) with SwiftUI (ReminderView via NSHostingView)
-- Handles window animations and lifecycle
+**Core Concepts:**
+- Each feature is a `@Reducer` struct with:
+  - `@ObservableState var State` - App state for that feature
+  - `enum Action` - All possible events (often with nested `Delegate` cases for parent communication)
+  - `var body` - Reducer implementation using `Reduce`, `Scope`, and `Emit` operators
+- Root feature `AppFeature` orchestrates all child features
+- Delegate actions enable parent-child communication (e.g., `ReminderFeature.delegate(.snoozeTapped)` → `RemindersFeature` resets timer)
+- `@Shared` state with `AppStorage` for persistence (remindersStatus, reminderInterval, remainingTime, launchAtLoginResponseReceived)
 
-**FloatingWindow** (`Utils/FloatingWindow.swift:11`)
-- Custom NSPanel configured as non-activating, floating above all apps
-- Appears on all spaces, doesn't steal focus
-- Lives across all desktop spaces (`.canJoinAllSpaces`)
+**Feature Hierarchy:**
+```
+AppFeature (root reducer, manages windows and overall state)
+├── AppMenuFeature → menu bar menu
+├── AppMenuIconFeature → menu bar icon with timer display
+├── BriefingFeature → main information window
+├── ReminderFeature → reminder popup window
+├── RemindersFeature → core timer logic and reminder scheduling
+├── SettingsFeature → settings window
+└── LaunchAtLoginFeature → launch-at-login prompt
+```
 
-**SettingsManager** (`Settings/SettingsManager.swift:13`)
-- Manages user preferences with UserDefaults persistence
-- Provides reactive properties for interval timing and launch behavior
+**State Flow Example:**
+1. `RemindersFeature` timer ticks → updates `remainingTime` in `@Shared` state
+2. When timer reaches zero → sends `delegate(.showReminder)` action to AppFeature
+3. `AppFeature` handles delegate action → calls `showWindow()` to display reminder window with ReminderFeature
+4. User interacts (e.g., snooze) → `ReminderFeature.delegate(.snoozeTapped)` → `AppFeature` → `RemindersFeature` resets timer
 
-### Window Architecture
+**Dependency Injection:**
+- Features define dependencies (e.g., `ReminderContentSourceDependency`, `SMAppServiceDependency`)
+- Each dependency has `liveValue` and `previewValue` for testability
+- Injected via TCA's dependency system
 
-Three distinct window types:
-1. **Main Window**: Optional launch window (suppressible via settings)
-2. **Menu Bar Extra**: Always-visible status bar item with dropdown menu
-3. **Floating Panel**: Non-activating reminder window (via FloatingWindow)
+### Directory Structure
 
-The floating panel is intentionally non-activating to avoid disrupting user workflow while being visible and interactable.
+```
+Kopniak/                           # Main Xcode project directory
+├── Kopniak/                       # Source code
+│   ├── KopniakApp.swift           # SwiftUI app entry point
+│   ├── AppFeature.swift           # Root reducer (324 lines)
+│   ├── Assets.xcassets/           # App icons and color assets
+│   ├── AppMenu/                   # Menu bar menu feature
+│   │   ├── AppMenuFeature.swift
+│   │   └── AppMenuView.swift
+│   ├── AppMenuIcon/               # Menu bar icon feature (separate from menu)
+│   │   ├── AppMenuIconFeature.swift
+│   │   └── AppMenuIconView.swift
+│   ├── Briefing/                  # Main info window feature
+│   │   ├── BriefingFeature.swift
+│   │   └── BriefingView.swift
+│   ├── Reminder/                  # Reminder popup window feature
+│   │   ├── ReminderFeature.swift
+│   │   ├── ReminderView.swift
+│   │   ├── ReminderController.swift
+│   │   └── Utils/
+│   │       └── FloatingWindow.swift # Custom NSPanel for floating window
+│   ├── Reminders/                 # Core timer and reminder logic
+│   │   └── RemindersFeature.swift (243 lines)
+│   ├── Settings/                  # Settings window feature
+│   │   ├── SettingsFeature.swift
+│   │   └── SettingsView.swift
+│   └── LaunchAtLogin/             # Launch-at-login feature
+│       ├── LaunchAtLoginFeature.swift
+│       └── LaunchAtLoginView.swift
+├── KopniakTests/                  # Unit tests (mostly stubs)
+└── KopniakUITests/                # UI tests
+├── Kopniak.xcodeproj/             # Xcode project configuration
+├── README.md
+└── LICENSE (MIT)
+```
 
-### Key Patterns
+## Common Development Commands
 
-- All managers use `@MainActor` to ensure UI updates happen on main thread
-- State persistence pattern: changes to `@Observable` properties automatically sync to UserDefaults via `didSet`
-- Dependency injection: managers passed through SwiftUI environment rather than singletons
+### Building
+```bash
+# Build via Xcode
+xcodebuild build -scheme Kopniak
+
+# Build and run from command line
+xcodebuild run -scheme Kopniak
+```
+
+### Running Tests
+```bash
+# Run all tests (both unit and UI)
+xcodebuild test -scheme Kopniak
+
+# Run unit tests only
+xcodebuild test -scheme Kopniak -only-testing KopniakTests
+
+# Run UI tests only
+xcodebuild test -scheme Kopniak -only-testing KopniakUITests
+
+# Run single test from command line
+xcodebuild test -scheme Kopniak -only-testing "KopniakTests/TestClassName/testMethodName"
+```
+
+### Running in Xcode
+- **Build & Run:** Cmd+R
+- **Run Tests:** Cmd+U
+- **Build Only:** Cmd+B
+
+## Key Implementation Details
+
+### Menu Bar Implementation
+- `AppMenuIconFeature` manages the menu bar icon with live timer countdown display
+- Icon updates via `remainingTime` state from `@Shared` (persisted across app restarts)
+- Menu managed by `AppMenuFeature` with standard macOS menu items
+
+### Floating Reminder Window
+- Custom `FloatingWindow` utility (extends NSPanel) creates floating, non-activating reminder window
+- Located in `Reminder/Utils/FloatingWindow.swift`
+- Shows reminder popup without stealing focus from user's current task
+
+### Timer Logic
+- `RemindersFeature.swift` contains all timer scheduling and reminder generation
+- Uses `Effect` operators for continuous timer emission
+- Respects `remindersStatus` state (.off, .on, .paused)
+- `reminderInterval` is user-configurable (stored in AppStorage)
+
+### State Persistence
+- Key state persisted via `@Shared` + `AppStorage`:
+  - `remindersStatus` - current state of reminders
+  - `reminderInterval` - time between reminders (seconds)
+  - `remainingTime` - countdown display
+  - `launchAtLoginResponseReceived` - UI dialog state
+- AppStorage automatically syncs to UserDefaults
+
+### Launch-at-Login
+- `LaunchAtLoginFeature` wraps macOS ServiceManagement API via `SMAppServiceDependency`
+- Uses dependency injection for testability
+- Shows confirmation dialog after enabling/disabling
+
+### Reminder Content
+- Military-themed motivational messages provided by `ReminderContentSourceDependency`
+- Messages rotate through available quotes
+- Injected as a dependency for easy testing and customization
+
+## Working with TCA in This Codebase
+
+### When Adding a New Feature
+
+1. Create a new feature file (e.g., `MyFeature.swift`)
+2. Define the `@Reducer` struct with `@ObservableState State`
+3. Define `enum Action` with nested `Delegate` cases if communicating with parent
+4. Implement `var body` using `Reduce` to handle state changes
+5. Use `Scope` to compose child features
+6. Register in parent feature's reducer (usually `AppFeature`)
+7. Create corresponding `MyView.swift` for SwiftUI implementation
+
+### Dependency Injection Pattern
+
+```swift
+// Define dependency
+struct MyDependency {
+    var getValue: @Sendable () -> String
+
+    static let liveValue = Self(
+        getValue: { /* real implementation */ }
+    )
+
+    static let previewValue = Self(
+        getValue: { "preview" }
+    )
+}
+
+// Extend DependencyValues
+extension DependencyValues {
+    var myDependency: MyDependency {
+        get { self[MyDependency.self] }
+        set { self[MyDependency.self] = newValue }
+    }
+}
+
+// Use in feature
+@Dependency(\.myDependency) var myDep
+```
+
+### Handling Async Operations
+
+- Use `Effect` and `.run` for async work in reducers
+- Emit actions from async tasks to update state
+- Use `withDependencies` to inject dependencies into async contexts
+
+## Testing Notes
+
+- Unit tests currently exist as stubs in `KopniakTests.swift`
+- UI tests in `KopniakUITests/` directory
+- TCA makes testing easier via dependency injection (swap `liveValue` with `testValue`)
+- No linting or formatting tools currently configured (consider SwiftLint/SwiftFormat for future)
+
+## Git Context
+
+- Currently on branch `feature/tca-transition` - indicates recent or ongoing migration to TCA
+- Recent commits focus on:
+  - TCA migration and reducer refactoring
+  - Feature renaming
+  - UI/copy improvements
+  - Timer logic fixes
+
+## Platform Specifics
+
+- **macOS 15.0+** deployment target for the app
+- **macOS 26.0+** deployment target for tests (beta/latest)
+- Xcode project uses modern file system-synchronized build configuration
+- No cross-platform considerations
+
+## Gotchas and Tips
+
+1. **Delegate Actions:** When a child feature needs to communicate with parent, use nested `Delegate` cases in `Action` enum. Parent must explicitly handle these delegate actions.
+
+2. **Shared State:** State persisted with `@Shared` syncs to AppStorage automatically. Be careful with mutation - changes trigger re-renders.
+
+3. **Timer State:** The countdown timer in `AppMenuIconFeature` updates frequently. Performance is good but be mindful when adding computed properties that depend on `remainingTime`.
+
+4. **Window Management:** `AppFeature.showWindow()` is responsible for opening/closing windows. All window state lives in `AppFeature`, not in child features.
+
+5. **macOS App Delegate:** Since this is a menu bar app with no dock icon (typically), ensure any AppKit-level setup is in `KopniakApp.swift`.
+
+6. **Menu Bar Icon:** The icon displays the remaining time. This requires frequent state updates via `@Shared` - it's intentional and performant.
+
+## Debugging Tips
+
+- Use Xcode's debugger with breakpoints on actions in reducers
+- Print state changes in reducer's `Reduce` block for debugging
+- Use TCA's `.debugActions()` effect to log all actions in development
+- AppKit windows (reminder, briefing) can be debugged with Xcode's View Hierarchy debugger

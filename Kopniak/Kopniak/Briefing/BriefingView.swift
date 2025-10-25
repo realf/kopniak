@@ -1,26 +1,17 @@
 //
-//  ContentView.swift
+//  BriefingView.swift
 //  Sergeant Kopniak
 //
 //  Created by alf on 01.10.2025.
 //
 
+import ComposableArchitecture
 import SwiftUI
 
-struct ContentView: View {
-    @Environment(ReminderManager.self) private var reminderManager
+struct BriefingView: View {
+    var store: StoreOf<BriefingFeature>
 
     // MARK: - Computed Properties
-
-    private var yesSirText: Text {
-        Text("\(Image(systemName: "checkmark.shield")) Yes Sir!")
-            .fontWeight(.semibold)
-    }
-
-    private var atEaseText: Text {
-        Text("\(Image(systemName: "pause.fill")) At Ease for 10")
-            .fontWeight(.semibold)
-    }
 
     private var holdPositionText: Text {
         Text("\(Image(systemName: "pause.fill")) At Ease")
@@ -34,6 +25,11 @@ struct ContentView: View {
 
     private var reportForDutyText: Text {
         Text("\(Image(systemName: "play.fill")) Report for Duty")
+            .fontWeight(.semibold)
+    }
+
+    private var chevron: Text {
+        Text("\(Image(systemName: "chevron.up.2"))")
             .fontWeight(.semibold)
     }
 
@@ -52,7 +48,7 @@ struct ContentView: View {
 
                     Text(
                         """
-                        Look for my chevron in your status bar — those twin stripes mean I'm watching. Click it to access your orders.
+                        Look for my chevron \(chevron) in your menu bar — those twin stripes mean I'm watching. Click it to access your orders.
                         """
                     )
                     .font(.headline)
@@ -69,7 +65,7 @@ struct ContentView: View {
 
                     Text(
                         """
-                        • I'll bark orders every __\(reminderManager.reminderIntervalMinutes)__ minutes — time for a movement break!
+                        • I'll bark orders every __\(Int(store.reminderInterval / 60.0))__ minutes — time for a movement break!
                         • \(reportForDutyText) when you're ready to start your fitness regimen.
                         • \(holdPositionText) to temporarily pause reminders (keeps your place in line).
                         • \(standDownText) to completely stop and dismiss the drill sergeant.
@@ -89,29 +85,57 @@ struct ContentView: View {
                 }
                 .padding()
             }
+            .imageScale(.large)
 
-            if reminderManager.isActive {
+            switch store.remindersStatus {
+            case .on:
                 HStack(spacing: 12) {
-                    Button(action: { reminderManager.pauseReminders() }) {
-                        HStack {
-                            Image(systemName: "pause.fill")
-                                .foregroundStyle(Color.orange)
-                            Text("At Ease")
-                        }
-                    }
-                    .disabled(!reminderManager.canPause)
-
-                    Button(action: { reminderManager.stopReminders() }) {
+                    Button(action: {
+                        store.send(.delegate(.stopRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "stop.fill")
                                 .foregroundStyle(Color.red)
                             Text("Stand Down")
                         }
                     }
+
+                    Button(action: {
+                        store.send(.delegate(.pauseRemindersTapped))
+                    }) {
+                        HStack {
+                            Image(systemName: "pause.fill")
+                                .foregroundStyle(Color.orange)
+                            Text("At Ease")
+                        }
+                    }
+
+                    Button(action: {
+                        store.send(.delegate(.restartRemindersTapped))
+                    }) {
+                        HStack {
+                            Image(systemName: "restart.circle.fill")
+                                .foregroundStyle(Color.blue)
+                            Text("Reissue Orders")
+                        }
+                    }
                 }
-            } else if reminderManager.canResume {
+                .imageScale(.large)
+            case .paused:
                 HStack(spacing: 12) {
-                    Button(action: { reminderManager.resumeReminders() }) {
+                    Button(action: {
+                        store.send(.delegate(.stopRemindersTapped))
+                    }) {
+                        HStack {
+                            Image(systemName: "stop.fill")
+                                .foregroundStyle(Color.red)
+                            Text("Stand Down")
+                        }
+                    }
+
+                    Button(action: {
+                        store.send(.delegate(.resumeRemindersTapped))
+                    }) {
                         HStack {
                             Image(systemName: "play.fill")
                                 .foregroundStyle(Color.green)
@@ -119,23 +143,41 @@ struct ContentView: View {
                         }
                     }
 
-                    Button(action: { reminderManager.stopReminders() }) {
+                    Button(action: {
+                        store.send(.delegate(.restartRemindersTapped))
+                    }) {
                         HStack {
-                            Image(systemName: "stop.fill")
-                                .foregroundStyle(Color.red)
-                            Text("Stand Down")
+                            Image(systemName: "restart.circle.fill")
+                                .foregroundStyle(Color.blue)
+                            Text("Reissue Orders")
                         }
                     }
                 }
-            } else {
-                Button(action: { reminderManager.startReminders() }) {
+                .imageScale(.large)
+            case .off:
+                Button(action: { store.send(.delegate(.startRemindersTapped)) })
+                {
                     HStack {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.blue)
                         Text("Report for Duty")
                     }
                 }
+                .imageScale(.large)
             }
+            Divider()
+            HStack {
+                Spacer()
+                Button {
+                    store.send(.delegate(.settingsTapped))
+                } label: {
+                    HStack {
+                        Image(systemName: "gear")
+                        Text("Settings…")
+                    }
+                }
+            }
+            .imageScale(.large)
         }
         .padding(32)
         .frame(width: 600)
@@ -144,7 +186,13 @@ struct ContentView: View {
 }
 
 #Preview {
-    let settingsManager = SettingsManager()
-    ContentView()
-        .environment(ReminderManager(settingsManager: settingsManager))
+    let store = Store(
+        initialState: BriefingFeature.State(
+            reminderInterval: Shared(value: 60.0 * 60),
+            remindersStatus: Shared(value: .on)
+        )
+    ) {
+        BriefingFeature()
+    }
+    BriefingView(store: store)
 }

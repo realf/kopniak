@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		75FF24F42EA1A9CD00A5B636 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 75FF24F32EA1A9CD00A5B636 /* ComposableArchitecture */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		75997A352E8E6A2400C6F17B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,7 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75997A272E8E6A2300C6F17B /* Sergeant Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sergeant Kopniak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75997A272E8E6A2300C6F17B /* Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kopniak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75997A342E8E6A2400C6F17B /* KopniakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75FF24F42EA1A9CD00A5B636 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,7 +90,7 @@
 		75997A282E8E6A2300C6F17B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				75997A272E8E6A2300C6F17B /* Sergeant Kopniak.app */,
+				75997A272E8E6A2300C6F17B /* Kopniak.app */,
 				75997A342E8E6A2400C6F17B /* KopniakTests.xctest */,
 				75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */,
 			);
@@ -95,9 +100,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		75997A262E8E6A2300C6F17B /* Sergeant Kopniak */ = {
+		75997A262E8E6A2300C6F17B /* Kopniak */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75997A482E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */;
+			buildConfigurationList = 75997A482E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "Kopniak" */;
 			buildPhases = (
 				75997A232E8E6A2300C6F17B /* Sources */,
 				75997A242E8E6A2300C6F17B /* Frameworks */,
@@ -110,11 +115,12 @@
 			fileSystemSynchronizedGroups = (
 				75997A292E8E6A2300C6F17B /* Kopniak */,
 			);
-			name = "Sergeant Kopniak";
+			name = Kopniak;
 			packageProductDependencies = (
+				75FF24F32EA1A9CD00A5B636 /* ComposableArchitecture */,
 			);
 			productName = Kopniak;
-			productReference = 75997A272E8E6A2300C6F17B /* Sergeant Kopniak.app */;
+			productReference = 75997A272E8E6A2300C6F17B /* Kopniak.app */;
 			productType = "com.apple.product-type.application";
 		};
 		75997A332E8E6A2400C6F17B /* KopniakTests */ = {
@@ -195,12 +201,15 @@
 			);
 			mainGroup = 75997A1E2E8E6A2300C6F17B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				75FF24F22EA1A9CD00A5B636 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 75997A282E8E6A2300C6F17B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				75997A262E8E6A2300C6F17B /* Sergeant Kopniak */,
+				75997A262E8E6A2300C6F17B /* Kopniak */,
 				75997A332E8E6A2400C6F17B /* KopniakTests */,
 				75997A3D2E8E6A2400C6F17B /* KopniakUITests */,
 			);
@@ -258,12 +267,12 @@
 /* Begin PBXTargetDependency section */
 		75997A362E8E6A2400C6F17B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 75997A262E8E6A2300C6F17B /* Sergeant Kopniak */;
+			target = 75997A262E8E6A2300C6F17B /* Kopniak */;
 			targetProxy = 75997A352E8E6A2400C6F17B /* PBXContainerItemProxy */;
 		};
 		75997A402E8E6A2400C6F17B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 75997A262E8E6A2300C6F17B /* Sergeant Kopniak */;
+			target = 75997A262E8E6A2300C6F17B /* Kopniak */;
 			targetProxy = 75997A3F2E8E6A2400C6F17B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -553,7 +562,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		75997A482E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "Sergeant Kopniak" */ = {
+		75997A482E8E6A2400C6F17B /* Build configuration list for PBXNativeTarget "Kopniak" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				75997A492E8E6A2400C6F17B /* Debug */,
@@ -581,6 +590,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		75FF24F22EA1A9CD00A5B636 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.23.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		75FF24F32EA1A9CD00A5B636 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75FF24F22EA1A9CD00A5B636 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 75997A1F2E8E6A2300C6F17B /* Project object */;
 }

@@ -1,14 +1,15 @@
 //
-//  LaunchAtLoginDialog.swift
+//  LaunchAtLoginView.swift
 //  Sergeant Kopniak
 //
 //  Created by alf on 03.10.2025.
 //
 
+import ComposableArchitecture
 import SwiftUI
 
-struct LaunchAtLoginDialog: View {
-    let onResponse: (LaunchAtLoginDialogResponse) -> Void
+struct LaunchAtLoginView: View {
+    var store: StoreOf<LaunchAtLoginFeature>
 
     var body: some View {
         VStack(spacing: 20) {
@@ -37,19 +38,16 @@ struct LaunchAtLoginDialog: View {
 
             // Buttons
             HStack(spacing: 12) {
-                Button("No Thanks") {
-                    onResponse(.disable)
-                }
-
                 Spacer()
 
-                Button("Ask Later") {
-                    onResponse(.askLater)
+                Button {
+                    store.send(.noTapped)
+                } label: {
+                    Text("No, Sir!")
                 }
-                .keyboardShortcut(.cancelAction)
 
                 Button("Yes, Sir!") {
-                    onResponse(.enable)
+                    store.send(.yesTapped)
                 }
                 .keyboardShortcut(.defaultAction)
                 .buttonStyle(.borderedProminent)
@@ -61,7 +59,12 @@ struct LaunchAtLoginDialog: View {
 }
 
 #Preview {
-    LaunchAtLoginDialog { response in
-        print("Response: \(response)")
-    }
+    LaunchAtLoginView(
+        store: Store(
+            initialState: LaunchAtLoginFeature.State(),
+            reducer: {
+                LaunchAtLoginFeature()
+            }
+        )
+    )
 }

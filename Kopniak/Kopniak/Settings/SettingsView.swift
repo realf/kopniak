@@ -5,17 +5,22 @@
 //  Created by alf on 02.10.2025.
 //
 
-import AppKit
+import ComposableArchitecture
+import ServiceManagement
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(SettingsManager.self) private var settingsManager
-    @Environment(ReminderManager.self) private var reminderManager
+    @Bindable var store: StoreOf<SettingsFeature>
 
     // MARK: - Constants
 
-    private let minIntervalMinutes = 15
-    private let maxIntervalMinutes = 120
+    #if DEBUG
+        private let intervalRange = 0.1...1.0
+        private let intervalStep = 0.1
+    #else
+        private let intervalRange = 15.0...120.0
+        private let intervalStep = 5.0
+    #endif
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -38,33 +43,31 @@ struct SettingsView: View {
                             Text("Reminder Interval:")
                             Spacer()
                             Text(
-                                "\(settingsManager.reminderIntervalMinutes) minutes"
+                                "\(Int((store.reminderInterval / 60.0).rounded())) minutes"
                             )
                             .foregroundColor(.secondary)
                         }
 
                         Slider(
                             value: Binding(
-                                get: { Double(settingsManager.reminderIntervalMinutes) },
+                                get: {
+                                    Double(store.reminderInterval / 60.0)
+                                },
                                 set: { newValue in
-                                    settingsManager.reminderIntervalMinutes = Int(newValue.rounded())
-                                    // If reminders are active, restart them with new interval
-                                    if reminderManager.isActive {
-                                        reminderManager.stopReminders()
-                                        reminderManager.startReminders()
-                                    }
+                                    store.reminderInterval =
+                                        (newValue * 60.0).rounded()
                                 }
                             ),
-                            in: Double(minIntervalMinutes)...Double(maxIntervalMinutes),
-                            step: 5
+                            in: intervalRange,
+                            step: intervalStep
                         )
 
                         HStack {
-                            Text("\(minIntervalMinutes) min")
+                            Text("\(Int(intervalRange.lowerBound)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("\(maxIntervalMinutes) min")
+                            Text("\(Int(intervalRange.upperBound)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -76,15 +79,14 @@ struct SettingsView: View {
 
                 // Launch Behavior Section
                 Section {
-                    @Bindable var settingsManager = settingsManager
                     Toggle(
-                        "Show Mission Briefing when app launches",
-                        isOn: $settingsManager.showMainWindowOnLaunch
+                        "Launch Sergeant Kopniak at login",
+                        isOn: $store.launchAtLogin
                     )
 
                     Toggle(
-                        "Launch Sergeant Kopniak at login",
-                        isOn: $settingsManager.launchAtLogin
+                        "Show Mission Briefing when app launches",
+                        isOn: $store.showMissionBriefingAtLaunch
                     )
                 } header: {
                     Label("Launch Behavior", systemImage: "macwindow")
@@ -93,14 +95,23 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
         }
-        .padding(20)
-        .frame(width: 450, height: 450)
+        .padding()
+        .frame(width: 500)
+        .onAppear {
+            store.send(.onAppear)
+        }
     }
 }
 
 #Preview {
-    let settingsManager = SettingsManager()
-    SettingsView()
-        .environment(settingsManager)
-        .environment(ReminderManager(settingsManager: settingsManager))
+    let reminderInterval = Shared(value: 45.0 * 60)
+    let store = Store(
+        initialState: SettingsFeature.State(
+            reminderInterval: reminderInterval
+        ),
+        reducer: {
+            SettingsFeature()
+        }
+    )
+    SettingsView(store: store)
 }

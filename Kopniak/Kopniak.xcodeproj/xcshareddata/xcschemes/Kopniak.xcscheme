@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "75997A262E8E6A2300C6F17B"
-               BuildableName = "Sergeant Kopniak.app"
-               BlueprintName = "Sergeant Kopniak"
+               BuildableName = "Kopniak.app"
+               BlueprintName = "Kopniak"
                ReferencedContainer = "container:Kopniak.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75997A262E8E6A2300C6F17B"
-            BuildableName = "Sergeant Kopniak.app"
-            BlueprintName = "Sergeant Kopniak"
+            BuildableName = "Kopniak.app"
+            BlueprintName = "Kopniak"
             ReferencedContainer = "container:Kopniak.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -86,8 +86,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75997A262E8E6A2300C6F17B"
-            BuildableName = "Sergeant Kopniak.app"
-            BlueprintName = "Sergeant Kopniak"
+            BuildableName = "Kopniak.app"
+            BlueprintName = "Kopniak"
             ReferencedContainer = "container:Kopniak.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

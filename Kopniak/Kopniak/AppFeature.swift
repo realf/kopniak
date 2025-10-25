@@ -1,0 +1,324 @@
+//
+//  AppFeature.swift
+//  Sergeant Kopniak
+//
+//  Created by alf on 16.10.2025.
+//
+
+import AppKit
+import ComposableArchitecture
+import Foundation
+
+/// Type used to display windows in SwiftUI. Set a new value to `openWindowID`
+/// to show a window. Even if the `destination` stays the same, `uniqueID` will be
+/// different and the window will be activated.
+struct WindowID: Equatable {
+    let destination: Destination
+    let uniqueID = UUID()
+
+    enum Destination: Equatable {
+        case reminder
+        case settings
+        case briefing
+        case launchAtLogin
+    }
+}
+
+@Reducer
+struct AppFeature {
+    @ObservableState
+    struct State {
+        var appMenu: AppMenuFeature.State
+        var briefing: BriefingFeature.State
+        var launchAtLogin: LaunchAtLoginFeature.State
+        var menuIcon: AppMenuIconFeature.State
+        var reminder: ReminderFeature.State
+        var reminders: RemindersFeature.State
+        var settings: SettingsFeature.State
+
+        init(remindersStatus: @autoclosure () -> RemindersStatus) {
+            launchAtLogin = LaunchAtLoginFeature.State()
+            let reminders = RemindersFeature.State(
+                remindersStatus: remindersStatus()
+            )
+            self.reminders = reminders
+
+            appMenu = AppMenuFeature.State(
+                remindersStatus: reminders.$remindersStatus
+            )
+
+            reminder = ReminderFeature.State(title: "", message: "")
+
+            settings = SettingsFeature.State(
+                reminderInterval: reminders.$reminderInterval
+            )
+
+            briefing = BriefingFeature.State(
+                reminderInterval: reminders.$reminderInterval,
+                remindersStatus: reminders.$remindersStatus
+            )
+
+            menuIcon = AppMenuIconFeature.State(
+                remindersStatus: reminders.$remindersStatus,
+                remainingTime: reminders.$remainingTime
+            )
+        }
+    }
+
+    enum Action {
+        case appMenu(AppMenuFeature.Action)
+        case briefing(BriefingFeature.Action)
+        case launchAtLogin(LaunchAtLoginFeature.Action)
+        case menuIcon(AppMenuIconFeature.Action)
+        case reminder(ReminderFeature.Action)
+        case reminders(RemindersFeature.Action)
+        case settings(SettingsFeature.Action)
+    }
+
+    var body: some Reducer<State, Action> {
+        Scope(state: \.appMenu, action: \.appMenu) { AppMenuFeature() }
+
+        Scope(state: \.menuIcon, action: \.menuIcon) { AppMenuIconFeature() }
+
+        Scope(state: \.briefing, action: \.briefing) { BriefingFeature() }
+
+        Scope(state: \.launchAtLogin, action: \.launchAtLogin) {
+            LaunchAtLoginFeature()
+        }
+        Scope(state: \.reminder, action: \.reminder) { ReminderFeature() }
+        Scope(state: \.reminders, action: \.reminders) { RemindersFeature() }
+        Scope(state: \.settings, action: \.settings) { SettingsFeature() }
+
+        Reduce { state, action in
+            switch action {
+            case .appMenu(.delegate(let action)):
+                return reduceAppMenuDelegate(&state, action: action)
+
+            case .briefing(.delegate(let action)):
+                return reduceBriefingDelegate(&state, action: action)
+
+            case .launchAtLogin(.delegate(let action)):
+                return reduceLaunchAtLoginDelegate(&state, action: action)
+
+            case .launchAtLogin:
+                return .none
+
+            case .menuIcon(.delegate(.onAppear)):
+                return reduceMenuIconOnAppear(&state)
+
+            case .menuIcon:
+                return .none
+
+            case .reminder(.delegate(let action)):
+                return reduceReminderDelegate(&state, action: action)
+
+            case .reminder:
+                return .none
+
+            case .reminders(.delegate(let action)):
+                return reduceRemindersDelegate(&state, action: action)
+
+            case .reminders:
+                return .none
+
+            case .settings(.delegate(.reminderIntervalChanged)):
+                return reduce(
+                    into: &state,
+                    action: .reminders(.reminderIntervalChanged)
+                )
+
+            case .settings:
+                return .none
+            }
+        }
+    }
+}
+
+extension AppFeature {
+    /// Handles menu icon appearance, effectively this is an application
+    /// launch
+    fileprivate func reduceMenuIconOnAppear(_ state: inout State)
+        -> Effect<Action>
+    {
+        var effects: [Effect<Action>] = []
+        if state.settings.showMissionBriefingAtLaunch {
+            let window = WindowID(destination: .briefing)
+            effects.append(showWindow(&state, window: window))
+        }
+        effects.append(
+            reduce(into: &state, action: .reminders(.menuIconOnAppear))
+        )
+        return .merge(effects)
+    }
+}
+
+// MARK: - LaunchAtLoginDelegate
+extension AppFeature {
+    fileprivate func reduceLaunchAtLoginDelegate(
+        _ state: inout State,
+        action: LaunchAtLoginFeature.Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .dismissLaunchAtLogin:
+            return dismissWindow(
+                &state,
+                window: WindowID(destination: .launchAtLogin)
+            )
+        case .showLaunchAtLogin:
+            return showWindow(
+                &state,
+                window: WindowID(destination: .launchAtLogin)
+            )
+        }
+    }
+}
+
+// MARK: - AppMenuDelegate
+extension AppFeature {
+    fileprivate func reduceAppMenuDelegate(
+        _ state: inout State,
+        action: AppMenuFeature.Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .missionBriefingTapped:
+            return showWindow(&state, window: WindowID(destination: .briefing))
+        case .pauseRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.pauseRemindersTapped)
+            )
+        case .restartRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.restartRemindersTapped)
+            )
+        case .resumeRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.resumeRemindersTapped)
+            )
+        case .settingsTapped:
+            let window = WindowID(destination: .settings)
+            return showWindow(&state, window: window)
+
+        case .startRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.restartRemindersTapped)
+            )
+        case .stopRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.stopRemindersTapped)
+            )
+        case .quitTapped:
+            return .run { send in
+                await NSApplication.shared.terminate(nil)
+            }
+        }
+    }
+}
+
+// MARK: - BriefingDelegate
+extension AppFeature {
+    fileprivate func reduceBriefingDelegate(
+        _ state: inout State,
+        action: BriefingFeature.Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .pauseRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.pauseRemindersTapped)
+            )
+        case .restartRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.restartRemindersTapped)
+            )
+        case .resumeRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.resumeRemindersTapped)
+            )
+        case .settingsTapped:
+            return showWindow(&state, window: WindowID(destination: .settings))
+        case .startRemindersTapped:
+            return .merge(
+                reduce(
+                    into: &state,
+                    action: .launchAtLogin(.startRemindersTapped)
+                ),
+                reduce(
+                    into: &state,
+                    action: .reminders(.startRemindersTapped)
+                )
+            )
+        case .stopRemindersTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.stopRemindersTapped)
+            )
+        }
+    }
+}
+
+// MARK: - Reminder Delegate
+extension AppFeature {
+    fileprivate func reduceReminderDelegate(
+        _ state: inout State,
+        action: ReminderFeature.Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .dismissTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.reminderDismissTapped)
+            )
+
+        case .snoozeTapped:
+            return reduce(
+                into: &state,
+                action: .reminders(.reminderSnoozeTapped)
+            )
+        }
+    }
+}
+
+// MARK: - Reminders Delegate
+extension AppFeature {
+    fileprivate func reduceRemindersDelegate(
+        _ state: inout State,
+        action: RemindersFeature.Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .dismissReminder:
+            return dismissReminder(&state)
+        case .showReminder:
+            return showReminder(&state)
+        }
+    }
+}
+
+// MARK: - Window presentation
+extension AppFeature {
+    fileprivate func showWindow(_ state: inout State, window: WindowID)
+        -> Effect<Action>
+    {
+        return reduce(into: &state, action: .menuIcon(.openWindow(window)))
+    }
+
+    fileprivate func dismissWindow(_ state: inout State, window: WindowID)
+        -> Effect<Action>
+    {
+        return reduce(into: &state, action: .menuIcon(.dismissWindow(window)))
+    }
+
+    fileprivate func showReminder(_ state: inout State) -> Effect<Action> {
+        return showWindow(&state, window: WindowID(destination: .reminder))
+    }
+
+    fileprivate func dismissReminder(_ state: inout State) -> Effect<Action> {
+        dismissWindow(&state, window: WindowID(destination: .reminder))
+    }
+}
