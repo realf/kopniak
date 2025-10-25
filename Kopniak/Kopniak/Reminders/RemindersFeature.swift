@@ -231,9 +231,3 @@ extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
         .appStorage("reminderInterval")
     }
 }
-
-extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
-    static var remainingTime: Self {
-        .appStorage("remainingTime")
-    }
-}
