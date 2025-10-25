@@ -85,6 +85,7 @@ struct BriefingView: View {
                 }
                 .padding()
             }
+            .imageScale(.large)
 
             switch store.remindersStatus {
             case .on:
@@ -114,11 +115,12 @@ struct BriefingView: View {
                     }) {
                         HStack {
                             Image(systemName: "restart.circle.fill")
-                                .foregroundStyle(Color.orange)
+                                .foregroundStyle(Color.blue)
                             Text("Reissue Orders")
                         }
                     }
                 }
+                .imageScale(.large)
             case .paused:
                 HStack(spacing: 12) {
                     Button(action: {
@@ -146,11 +148,12 @@ struct BriefingView: View {
                     }) {
                         HStack {
                             Image(systemName: "restart.circle.fill")
-                                .foregroundStyle(Color.orange)
+                                .foregroundStyle(Color.blue)
                             Text("Reissue Orders")
                         }
                     }
                 }
+                .imageScale(.large)
             case .off:
                 Button(action: { store.send(.delegate(.startRemindersTapped)) })
                 {
@@ -160,6 +163,7 @@ struct BriefingView: View {
                         Text("Report for Duty")
                     }
                 }
+                .imageScale(.large)
             }
             Divider()
             HStack {
@@ -173,6 +177,7 @@ struct BriefingView: View {
                     }
                 }
             }
+            .imageScale(.large)
         }
         .padding(32)
         .frame(width: 600)
