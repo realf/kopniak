@@ -112,7 +112,7 @@ struct AppMenuView: View {
 
             Divider()
 
-            Button("Quit Sergeant Kopniak") {
+            Button("Quit Kopniak") {
                 store.send(.delegate(.quitTapped))
             }
             .keyboardShortcut("q", modifiers: .command)
