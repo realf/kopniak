@@ -16,7 +16,7 @@ struct KopniakApp: App {
     ) {
         AppFeature()
             #if DEBUG
-                ._printChanges()
+//                ._printChanges()
             #endif
     }
 
