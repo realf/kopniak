@@ -37,6 +37,7 @@ AppFeature (root reducer, manages windows and overall state)
 ├── BriefingFeature → main information window
 ├── ReminderFeature → reminder popup window
 ├── RemindersFeature → core timer logic and reminder scheduling
+│   └── IdleMonitorFeature → observes system idle state changes
 ├── SettingsFeature → settings window
 └── LaunchAtLoginFeature → launch-at-login prompt
 ```
@@ -76,7 +77,9 @@ Kopniak/                           # Main Xcode project directory
 │   │   └── Utils/
 │   │       └── FloatingWindow.swift # Custom NSPanel for floating window
 │   ├── Reminders/                 # Core timer and reminder logic
-│   │   └── RemindersFeature.swift (243 lines)
+│   │   └── RemindersFeature.swift (integrates with IdleMonitorFeature)
+│   ├── IdleMonitor/               # Idle state monitoring
+│   │   └── IdleMonitorFeature.swift (268 lines)
 │   ├── Settings/                  # Settings window feature
 │   │   ├── SettingsFeature.swift
 │   │   └── SettingsView.swift
@@ -139,6 +142,22 @@ xcodebuild test -scheme Kopniak -only-testing "KopniakTests/TestClassName/testMe
 - Respects `remindersStatus` state (.off, .on, .paused)
 - `reminderInterval` is user-configurable (stored in AppStorage)
 
+### Idle State Monitoring
+- `IdleMonitorFeature` observes system events indicating the computer is idle or active
+- Observations include:
+  - **Screen lock/unlock** via `DistributedNotificationCenter` (`com.apple.screenIsLocked`, `com.apple.screenIsUnlocked`)
+  - **Display sleep/wake** via `NSWorkspace.shared.notificationCenter` (per Apple documentation)
+  - **System sleep/wake** via `NSWorkspace.shared.notificationCenter`
+  - **Session resign/become active** via `NSWorkspace.shared.notificationCenter` (for fast user switching)
+- Behavior:
+  - When computer enters idle state and `remindersStatus == .on` → timer is **cancelled** (paused)
+  - When computer exits idle state and `remindersStatus == .on` → timer is **restarted**
+  - **Important**: Idle state never modifies `remindersStatus` itself—only timer control
+- Idle observation lifecycle is tied to `remindersStatus`:
+  - `remindersStatus == .on` → idle observation is active
+  - `remindersStatus == .off` or `.paused` → idle observation is stopped
+- Uses `AsyncStream`-based dependency injection for testability with `liveValue` and `previewValue`
+
 ### State Persistence
 - Key state persisted via `@Shared` + `AppStorage`:
   - `remindersStatus` - current state of reminders
@@ -173,7 +192,7 @@ xcodebuild test -scheme Kopniak -only-testing "KopniakTests/TestClassName/testMe
 
 ```swift
 // Define dependency
-struct MyDependency {
+struct MyDependency: DependencyKey {
     var getValue: @Sendable () -> String
 
     static let liveValue = Self(
@@ -197,6 +216,34 @@ extension DependencyValues {
 @Dependency(\.myDependency) var myDep
 ```
 
+**AsyncStream-based Dependency Example** (used in `IdleMonitorFeature`):
+```swift
+struct IdleNotificationObserverDependency: DependencyKey {
+    var observeScreenLock: @Sendable () async -> AsyncStream<Void>
+
+    static let liveValue = Self(
+        observeScreenLock: {
+            AsyncStream { continuation in
+                let observer = DistributedNotificationCenter.default().addObserver(
+                    forName: NSNotification.Name("com.apple.screenIsLocked"),
+                    object: nil,
+                    queue: nil
+                ) { _ in
+                    continuation.yield()
+                }
+                continuation.onTermination = { _ in
+                    DistributedNotificationCenter.default().removeObserver(observer)
+                }
+            }
+        }
+    )
+
+    static let previewValue = Self(
+        observeScreenLock: { AsyncStream { _ in } }
+    )
+}
+```
+
 ### Handling Async Operations
 
 - Use `Effect` and `.run` for async work in reducers
@@ -212,12 +259,14 @@ extension DependencyValues {
 
 ## Git Context
 
-- Currently on branch `feature/tca-transition` - indicates recent or ongoing migration to TCA
-- Recent commits focus on:
-  - TCA migration and reducer refactoring
-  - Feature renaming
-  - UI/copy improvements
-  - Timer logic fixes
+- Main development branch uses TCA (The Composable Architecture) throughout
+- Recent feature branches focus on:
+  - Idle state monitoring integration (pauses reminders when computer is idle)
+  - Timer logic optimization
+  - State management improvements
+- Key recent commits:
+  - `observe more idle state notifications` - comprehensive idle event observation
+  - `add IdleMonitorFeature to track idle state` - new idle monitoring feature
 
 ## Platform Specifics
 
@@ -239,6 +288,13 @@ extension DependencyValues {
 5. **macOS App Delegate:** Since this is a menu bar app with no dock icon (typically), ensure any AppKit-level setup is in `KopniakApp.swift`.
 
 6. **Menu Bar Icon:** The icon displays the remaining time. This requires frequent state updates via `@Shared` - it's intentional and performant.
+
+7. **Idle State Handling:** Idle monitoring only pauses/resumes timers, never modifies `remindersStatus`. The observation lifecycle is tied to `remindersStatus == .on`—when reminders are off or paused, idle monitoring is not active. This keeps idle state separate from user intent for reminder status.
+
+8. **Notification Centers:** Always use the notification center documented by Apple for each notification type:
+   - `DistributedNotificationCenter` for system-wide notifications (e.g., screen lock/unlock)
+   - `NSWorkspace.shared.notificationCenter` for workspace events (e.g., display sleep, system sleep, session changes)
+   - Using the correct center ensures reliable delivery to background menu bar apps
 
 ## Debugging Tips
 
