@@ -15,9 +15,6 @@ struct KopniakApp: App {
         initialState: AppFeature.State(remindersStatus: .off)
     ) {
         AppFeature()
-            #if DEBUG
-                ._printChanges()
-            #endif
     }
 
     private static let reminderController = ReminderController(
@@ -29,7 +26,7 @@ struct KopniakApp: App {
 
     var body: some Scene {
         // Main app window
-        Window("Sergeant Kopniak", id: "briefing") {
+        Window("Kopniak", id: "briefing") {
             let store = KopniakApp.store.scope(
                 state: \.briefing,
                 action: \.briefing

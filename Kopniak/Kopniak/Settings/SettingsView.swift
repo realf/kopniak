@@ -80,7 +80,7 @@ struct SettingsView: View {
                 // Launch Behavior Section
                 Section {
                     Toggle(
-                        "Launch Sergeant Kopniak at login",
+                        "Launch Kopniak at login",
                         isOn: $store.launchAtLogin
                     )
 

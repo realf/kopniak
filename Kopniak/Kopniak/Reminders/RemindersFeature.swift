@@ -23,6 +23,7 @@ struct RemindersFeature {
         static let defaultReminderInterval: TimeInterval = 45.0 * 60
         static let snoozeReminderInterval: TimeInterval = 10.0 * 60
 
+        var idleMonitor: IdleMonitorFeature.State
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
@@ -30,6 +31,7 @@ struct RemindersFeature {
         let timerID = UUID()
 
         init(remindersStatus: @autoclosure () -> RemindersStatus) {
+            idleMonitor = IdleMonitorFeature.State()
             let status = Shared<RemindersStatus>(
                 wrappedValue: remindersStatus(),
                 .remindersStatus
@@ -50,6 +52,7 @@ struct RemindersFeature {
 
     enum Action {
         case delegate(Delegate)
+        case idleMonitor(IdleMonitorFeature.Action)
         case menuIconOnAppear
         case reminderDismissTapped
         case reminderSnoozeTapped
@@ -68,10 +71,19 @@ struct RemindersFeature {
     }
 
     var body: some Reducer<State, Action> {
+        Scope(state: \.idleMonitor, action: \.idleMonitor) {
+            IdleMonitorFeature()
+        }
         Reduce { state, action in
             switch action {
+            case .idleMonitor(.delegate(let delegateAction)):
+                return reduceIdleMonitorDelegate(&state, action: delegateAction)
+
+            case .idleMonitor:
+                return .none
+
             case .menuIconOnAppear:
-                return restoreTimerState(state)
+                return restoreTimerState(&state)
 
             case .pauseRemindersTapped:
                 return pauseReminders(&state)
@@ -118,6 +130,26 @@ struct RemindersFeature {
         }
     }
 
+    private func reduceIdleMonitorDelegate(
+        _ state: inout State,
+        action: IdleMonitorFeature.Action.Delegate
+    ) -> Effect<Action> {
+        // Only respond to idle events if reminders are actively on
+        guard state.remindersStatus == .on else {
+            return .none
+        }
+
+        // When entering idle state, cancel the reminder timer
+        switch action {
+        case .screenDidLock, .sessionDidResignActive, .systemWillSleep:
+            return cancelTimer(state)
+
+        // When exiting idle state, restart the reminder timer
+        case .screenDidUnlock, .sessionDidBecomeActive, .systemDidWake:
+            return restartReminders(&state)
+        }
+    }
+
     private func reminderResponse(
         _ state: inout State,
         nextReminderIn remaining: TimeInterval
@@ -128,29 +160,31 @@ struct RemindersFeature {
             .run { send in await send(.delegate(.dismissReminder)) }
         ]
         if state.remindersStatus == .on {
-            effects.append(startTimer(state))
+            effects.append(startTimer(&state))
         }
 
         return .merge(effects)
     }
 
-    private func restoreTimerState(_ state: State) -> Effect<Action> {
+    private func restoreTimerState(_ state: inout State) -> Effect<Action> {
         if state.remindersStatus == .on {
             if state.remainingTime <= 0 {
                 state.$remainingTime.withLock { $0 = state.reminderInterval }
             }
-            return startTimer(state)
+            return startTimer(&state)
         }
         return .none
     }
 
-    private func startTimer(_ state: State) -> Effect<Action> {
-        return .run { [clock] send in
-            for await _ in clock.timer(interval: .seconds(1)) {
-                await send(.timerTicked)
-            }
-        }
-        .cancellable(id: state.timerID)
+    private func startTimer(_ state: inout State) -> Effect<Action> {
+        return .merge(
+            .run { [clock] send in
+                for await _ in clock.timer(interval: .seconds(1)) {
+                    await send(.timerTicked)
+                }
+            }.cancellable(id: state.timerID),
+            reduce(into: &state, action: .idleMonitor(.startObserving))
+        )
     }
 
     private func dismissReminder(_ state: inout State) -> Effect<Action> {
@@ -163,20 +197,25 @@ struct RemindersFeature {
         }
         state.$remindersStatus.withLock { $0 = .on }
         state.$remainingTime.withLock { $0 = state.reminderInterval }
-        return startTimer(state)
+        return startTimer(&state)
     }
 
     private func stopReminders(_ state: inout State) -> Effect<Action> {
         state.$remainingTime.withLock { $0 = 0.0 }
         state.$remindersStatus.withLock { $0 = .off }
-        return .cancel(id: state.timerID)
+        return .merge(
+            cancelTimer(state),
+            dismissReminder(&state),
+            reduce(into: &state, action: .idleMonitor(.stopObserving))
+        )
     }
 
     private func pauseReminders(_ state: inout State) -> Effect<Action> {
         state.$remindersStatus.withLock { $0 = .paused }
         return .merge(
-            .cancel(id: state.timerID),
-            dismissReminder(&state)
+            cancelTimer(state),
+            dismissReminder(&state),
+            reduce(into: &state, action: .idleMonitor(.stopObserving))
         )
     }
 
@@ -184,8 +223,8 @@ struct RemindersFeature {
         state.$remindersStatus.withLock { $0 = .on }
         state.$remainingTime.withLock { $0 = state.reminderInterval }
         return .concatenate(
-            .cancel(id: state.timerID),
-            startTimer(state)
+            cancelTimer(state),
+            startTimer(&state)
         )
     }
 
@@ -197,7 +236,7 @@ struct RemindersFeature {
         if state.remainingTime <= 0 {
             state.$remainingTime.withLock { $0 = state.reminderInterval }
         }
-        return startTimer(state)
+        return startTimer(&state)
     }
 
     private func processTimerTick(_ state: inout State) -> Effect<Action> {
@@ -206,11 +245,15 @@ struct RemindersFeature {
             state.$remainingTime.withLock { $0 = 0.0 }
 
             return .merge(
-                .cancel(id: state.timerID),
+                cancelTimer(state),
                 showWindow(&state, window: WindowID(destination: .reminder))
             )
         }
         return .none
+    }
+
+    private func cancelTimer(_ state: State) -> Effect<Action> {
+        return .cancel(id: state.timerID)
     }
 
     private func showWindow(_ state: inout State, window: WindowID) -> Effect<

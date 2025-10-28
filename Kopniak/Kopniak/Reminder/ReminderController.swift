@@ -36,7 +36,7 @@ class ReminderController: NSWindowController {
         hostingView.autoresizingMask = [.width, .height]
 
         window.contentView = hostingView
-        window.title = "Sergeant Kopniak"
+        window.title = "Kopniak"
         window.center()  // Re-center before showing
         window.orderFrontRegardless()  // Show without activating
 
