@@ -73,7 +73,6 @@ struct RemindersFeature {
     var body: some Reducer<State, Action> {
         Scope(state: \.idleMonitor, action: \.idleMonitor) {
             IdleMonitorFeature()
-                ._printChanges()
         }
         Reduce { state, action in
             switch action {
@@ -142,11 +141,11 @@ struct RemindersFeature {
 
         // When entering idle state, cancel the reminder timer
         switch action {
-        case .screenDidLock:
+        case .screenDidLock, .sessionDidResignActive, .systemWillSleep:
             return cancelTimer(state)
 
         // When exiting idle state, restart the reminder timer
-        case .screenDidUnlock:
+        case .screenDidUnlock, .sessionDidBecomeActive, .systemDidWake:
             return restartReminders(&state)
         }
     }

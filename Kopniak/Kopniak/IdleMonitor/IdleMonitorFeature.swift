@@ -14,33 +14,102 @@ import Foundation
 struct IdleNotificationObserverDependency: DependencyKey {
     var observeScreenLock: @Sendable () async -> AsyncStream<Void>
     var observeScreenUnlock: @Sendable () async -> AsyncStream<Void>
+    var observeSessionDidResignActive: @Sendable () async -> AsyncStream<Void>
+    var observeSessionDidBecomeActive: @Sendable () async -> AsyncStream<Void>
+    var observeWillSleep: @Sendable () async -> AsyncStream<Void>
+    var observeDidWake: @Sendable () async -> AsyncStream<Void>
+
+    nonisolated private static let workspaceCenter = NSWorkspace.shared
+        .notificationCenter
+    nonisolated private static let distributedCenter =
+        DistributedNotificationCenter.default()
 
     static let liveValue = Self(
         observeScreenLock: {
             AsyncStream { continuation in
-                let observer = DistributedNotificationCenter.default().addObserver(
-                    forName: NSNotification.Name("com.apple.screenIsLocked"),
+                let observer = distributedCenter.addObserver(
+                    forName: NSNotification.Name(
+                        "com.apple.screenIsLocked"
+                    ),
                     object: nil,
                     queue: nil
                 ) { _ in
                     continuation.yield()
                 }
                 continuation.onTermination = { _ in
-                    DistributedNotificationCenter.default().removeObserver(observer)
+                    distributedCenter.removeObserver(observer)
                 }
             }
         },
         observeScreenUnlock: {
             AsyncStream { continuation in
-                let observer = DistributedNotificationCenter.default().addObserver(
-                    forName: NSNotification.Name("com.apple.screenIsUnlocked"),
+                let observer = distributedCenter.addObserver(
+                    forName: NSNotification.Name(
+                        "com.apple.screenIsUnlocked"
+                    ),
                     object: nil,
                     queue: nil
                 ) { _ in
                     continuation.yield()
                 }
                 continuation.onTermination = { _ in
-                    DistributedNotificationCenter.default().removeObserver(observer)
+                    distributedCenter.removeObserver(observer)
+                }
+            }
+        },
+        observeSessionDidResignActive: {
+            AsyncStream { continuation in
+                let observer = workspaceCenter.addObserver(
+                    forName: NSWorkspace.sessionDidResignActiveNotification,
+                    object: nil,
+                    queue: nil
+                ) { _ in
+                    continuation.yield()
+                }
+                continuation.onTermination = { _ in
+                    workspaceCenter.removeObserver(observer)
+                }
+            }
+        },
+        observeSessionDidBecomeActive: {
+            AsyncStream { continuation in
+                let observer = workspaceCenter.addObserver(
+                    forName: NSWorkspace.sessionDidBecomeActiveNotification,
+                    object: nil,
+                    queue: nil
+                ) { _ in
+                    continuation.yield()
+                }
+                continuation.onTermination = { _ in
+                    workspaceCenter.removeObserver(observer)
+                }
+            }
+        },
+        observeWillSleep: {
+            AsyncStream { continuation in
+                let observer = workspaceCenter.addObserver(
+                    forName: NSWorkspace.willSleepNotification,
+                    object: nil,
+                    queue: nil
+                ) { _ in
+                    continuation.yield()
+                }
+                continuation.onTermination = { _ in
+                    workspaceCenter.removeObserver(observer)
+                }
+            }
+        },
+        observeDidWake: {
+            AsyncStream { continuation in
+                let observer = workspaceCenter.addObserver(
+                    forName: NSWorkspace.didWakeNotification,
+                    object: nil,
+                    queue: nil
+                ) { _ in
+                    continuation.yield()
+                }
+                continuation.onTermination = { _ in
+                    workspaceCenter.removeObserver(observer)
                 }
             }
         }
@@ -48,7 +117,11 @@ struct IdleNotificationObserverDependency: DependencyKey {
 
     static let previewValue = Self(
         observeScreenLock: { AsyncStream { _ in } },
-        observeScreenUnlock: { AsyncStream { _ in } }
+        observeScreenUnlock: { AsyncStream { _ in } },
+        observeSessionDidResignActive: { AsyncStream { _ in } },
+        observeSessionDidBecomeActive: { AsyncStream { _ in } },
+        observeWillSleep: { AsyncStream { _ in } },
+        observeDidWake: { AsyncStream { _ in } }
     )
 }
 
@@ -78,6 +151,10 @@ struct IdleMonitorFeature {
         enum Delegate {
             case screenDidLock
             case screenDidUnlock
+            case sessionDidBecomeActive
+            case sessionDidResignActive
+            case systemWillSleep
+            case systemDidWake
         }
     }
 
@@ -91,7 +168,11 @@ struct IdleMonitorFeature {
                 state.isObserving = true
                 return .merge(
                     observeScreenLock(),
-                    observeScreenUnlock()
+                    observeScreenUnlock(),
+                    observeSessionDidBecomeActive(),
+                    observeSessionDidResignActive(),
+                    observeDidWake(),
+                    observeWillSleep()
                 )
 
             case .stopObserving:
@@ -101,7 +182,11 @@ struct IdleMonitorFeature {
                 state.isObserving = false
                 return .merge(
                     .cancel(id: ObservationID.screenLock),
-                    .cancel(id: ObservationID.screenUnlock)
+                    .cancel(id: ObservationID.screenUnlock),
+                    .cancel(id: ObservationID.sessionDidBecomeActive),
+                    .cancel(id: ObservationID.sessionDidResignActive),
+                    .cancel(id: ObservationID.systemDidWake),
+                    .cancel(id: ObservationID.systemWillSleep)
                 )
 
             case .delegate:
@@ -128,8 +213,56 @@ struct IdleMonitorFeature {
         .cancellable(id: ObservationID.screenUnlock)
     }
 
+    private func observeSessionDidBecomeActive() -> Effect<Action> {
+        .run { send in
+            for await _
+                in await notificationObserver.observeSessionDidBecomeActive()
+            {
+                await send(.delegate(.sessionDidBecomeActive))
+            }
+        }
+        .cancellable(id: ObservationID.sessionDidBecomeActive)
+    }
+
+    private func observeSessionDidResignActive() -> Effect<Action> {
+        .run { send in
+            for await _
+                in await notificationObserver.observeSessionDidResignActive()
+            {
+                await send(.delegate(.sessionDidResignActive))
+            }
+        }
+        .cancellable(id: ObservationID.sessionDidResignActive)
+    }
+
+    private func observeWillSleep() -> Effect<Action> {
+        .run { send in
+            for await _
+                in await notificationObserver.observeWillSleep()
+            {
+                await send(.delegate(.systemWillSleep))
+            }
+        }
+        .cancellable(id: ObservationID.systemWillSleep)
+    }
+
+    private func observeDidWake() -> Effect<Action> {
+        .run { send in
+            for await _
+                in await notificationObserver.observeDidWake()
+            {
+                await send(.delegate(.systemDidWake))
+            }
+        }
+        .cancellable(id: ObservationID.systemDidWake)
+    }
+
     nonisolated enum ObservationID: Hashable {
         case screenLock
         case screenUnlock
+        case sessionDidBecomeActive
+        case sessionDidResignActive
+        case systemDidWake
+        case systemWillSleep
     }
 }

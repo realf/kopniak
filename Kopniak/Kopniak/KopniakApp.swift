@@ -15,9 +15,6 @@ struct KopniakApp: App {
         initialState: AppFeature.State(remindersStatus: .off)
     ) {
         AppFeature()
-            #if DEBUG
-//                ._printChanges()
-            #endif
     }
 
     private static let reminderController = ReminderController(
