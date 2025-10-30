@@ -25,7 +25,7 @@ class ReminderController: NSWindowController {
 
     // MARK: - Public Methods
 
-    func showReminder() {
+    func showReminder(title: String) {
         guard let window = window else { return }
 
         // Create SwiftUI view and set as window content
@@ -36,7 +36,7 @@ class ReminderController: NSWindowController {
         hostingView.autoresizingMask = [.width, .height]
 
         window.contentView = hostingView
-        window.title = "Kopniak"
+        window.title = title
         window.center()  // Re-center before showing
         window.orderFrontRegardless()  // Show without activating
 

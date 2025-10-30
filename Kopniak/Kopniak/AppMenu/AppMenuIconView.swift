@@ -88,7 +88,7 @@ struct AppMenuIconView: View {
     }
 
     private func showReminder() {
-        reminderController.showReminder()
+        reminderController.showReminder(title: "Kopniak Command")
     }
 
     private func dismissReminder() {

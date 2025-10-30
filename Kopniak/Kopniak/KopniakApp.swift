@@ -26,7 +26,7 @@ struct KopniakApp: App {
 
     var body: some Scene {
         // Main app window
-        Window("Kopniak", id: "briefing") {
+        Window("Kopniak Briefing", id: "briefing") {
             let store = KopniakApp.store.scope(
                 state: \.briefing,
                 action: \.briefing
@@ -68,7 +68,7 @@ struct KopniakApp: App {
         .defaultPosition(.center)
 
         // Launch at login dialog
-        Window("Launch at Login", id: "launchAtLogin") {
+        Window("Launch Kopniak at Login?", id: "launchAtLogin") {
             let store = KopniakApp.store.scope(
                 state: \.launchAtLogin,
                 action: \.launchAtLogin
