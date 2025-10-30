@@ -176,21 +176,6 @@ struct RemindersFeature {
         return .none
     }
 
-    private func startTimer(_ state: inout State) -> Effect<Action> {
-        return .merge(
-            .run { [clock] send in
-                for await _ in clock.timer(interval: .seconds(1)) {
-                    await send(.timerTicked)
-                }
-            }.cancellable(id: state.timerID),
-            reduce(into: &state, action: .idleMonitor(.startObserving))
-        )
-    }
-
-    private func dismissReminder(_ state: inout State) -> Effect<Action> {
-        .run { send in await send(.delegate(.dismissReminder)) }
-    }
-
     private func startReminders(_ state: inout State) -> Effect<Action> {
         guard state.remindersStatus != .on else {
             return .none
@@ -246,20 +231,36 @@ struct RemindersFeature {
 
             return .merge(
                 cancelTimer(state),
-                showWindow(&state, window: WindowID(destination: .reminder))
+                showReminder(&state)
             )
         }
         return .none
+    }
+
+    private func startTimer(_ state: inout State) -> Effect<Action> {
+        return .merge(
+            .run { [clock] send in
+                for await _ in clock.timer(interval: .seconds(1)) {
+                    await send(.timerTicked)
+                }
+            }.cancellable(id: state.timerID),
+            reduce(into: &state, action: .idleMonitor(.startObserving))
+        )
     }
 
     private func cancelTimer(_ state: State) -> Effect<Action> {
         return .cancel(id: state.timerID)
     }
 
-    private func showWindow(_ state: inout State, window: WindowID) -> Effect<
-        Action
-    > {
-        return .run { send in await send(.delegate(.showReminder)) }
+    private func showReminder(_ state: inout State) -> Effect<Action> {
+        return .merge(
+            .run { send in await send(.delegate(.showReminder)) },
+            reduce(into: &state, action: .idleMonitor(.stopObserving))
+        )
+    }
+
+    private func dismissReminder(_ state: inout State) -> Effect<Action> {
+        .run { send in await send(.delegate(.dismissReminder)) }
     }
 }
 
