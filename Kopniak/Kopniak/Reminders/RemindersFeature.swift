@@ -207,10 +207,7 @@ struct RemindersFeature {
     private func restartReminders(_ state: inout State) -> Effect<Action> {
         state.$remindersStatus.withLock { $0 = .on }
         state.$remainingTime.withLock { $0 = state.reminderInterval }
-        return .concatenate(
-            cancelTimer(state),
-            startTimer(&state)
-        )
+        return startTimer(&state)
     }
 
     private func resumeReminders(_ state: inout State) -> Effect<Action> {
@@ -239,11 +236,14 @@ struct RemindersFeature {
 
     private func startTimer(_ state: inout State) -> Effect<Action> {
         return .merge(
-            .run { [clock] send in
-                for await _ in clock.timer(interval: .seconds(1)) {
-                    await send(.timerTicked)
-                }
-            }.cancellable(id: state.timerID),
+            .concatenate(
+                cancelTimer(state),
+                .run { [clock] send in
+                    for await _ in clock.timer(interval: .seconds(1)) {
+                        await send(.timerTicked)
+                    }
+                }.cancellable(id: state.timerID)
+            ),
             reduce(into: &state, action: .idleMonitor(.startObserving))
         )
     }
