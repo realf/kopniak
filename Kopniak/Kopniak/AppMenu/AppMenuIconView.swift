@@ -33,10 +33,10 @@ struct AppMenuIconView: View {
     }
 
     private func formatted(remainingTime: TimeInterval) -> String {
-        let totalSeconds = Int(remainingTime)
-        let minutes = totalSeconds / 60
-        let seconds = totalSeconds % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = .pad
+        return formatter.string(from: remainingTime) ?? "00:00"
     }
 
     var body: some View {
