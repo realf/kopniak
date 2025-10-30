@@ -17,7 +17,7 @@ struct LaunchAtLoginView: View {
             Image(systemName: "calendar.badge.clock")
                 .imageScale(.large)
                 .foregroundStyle(.brown)
-                .font(.system(size: 32))
+                .font(.largeTitle)
 
             // Title
             Text("ENLIST FOR DAILY DUTY?")
@@ -29,12 +29,14 @@ struct LaunchAtLoginView: View {
                 """
                 Want me to report for duty automatically every time you log in to your Mac?
 
-                I'll be standing by in your menu bar, ready to keep you moving!
+                I’ll be standing by in your menu bar, ready to keep you moving!
                 """
             )
             .multilineTextAlignment(.leading)
             .foregroundColor(.secondary)
             .fixedSize(horizontal: false, vertical: true)
+
+            Divider()
 
             // Buttons
             HStack(spacing: 12) {

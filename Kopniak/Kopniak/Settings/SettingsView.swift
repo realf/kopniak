@@ -13,17 +13,16 @@ struct SettingsView: View {
     @Bindable var store: StoreOf<SettingsFeature>
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Header
-            HStack {
-                Image(systemName: "gear")
-                    .font(.title2)
-                    .foregroundColor(.secondary)
-                Text("Mission Settings")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
-            .padding(.bottom, 10)
+        VStack(spacing: 20.0) {
+            Image(systemName: "gear")
+                .imageScale(.large)
+                .foregroundStyle(.brown)
+                .font(.largeTitle)
+
+            // Title
+            Text("MISSION SETTINGS")
+                .font(.title2)
+                .fontWeight(.bold)
 
             Form {
                 // Reminder Interval Section

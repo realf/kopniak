@@ -40,7 +40,7 @@ struct BriefingView: View {
             Image(systemName: "chevron.up.2")
                 .imageScale(.large)
                 .foregroundStyle(.brown)
-                .font(.system(size: 32))
+                .font(.largeTitle)
 
             GroupBox {
                 VStack(spacing: 20) {
@@ -51,7 +51,7 @@ struct BriefingView: View {
                     Text(
                         """
                         My name is Sergeant Kopniak and I am your drill instructor.
-                        Look for my chevron \(chevron) in your menu bar — those twin stripes mean I'm watching. Click it to access your orders.
+                        Look for my chevron \(chevron) in your menu bar — those twin stripes mean I’m watching. Click it to access your orders.
                         """
                     )
                     .font(.headline)
@@ -68,15 +68,13 @@ struct BriefingView: View {
 
                     Text(
                         """
-                        • I'll bark orders every __\(Int(store.reminderInterval / 60.0))__ minutes — time for a movement break!
-                        • \(reportForDutyText) when you're ready to start your fitness regimen.
-                        • \(holdPositionText) to temporarily pause reminders (keeps your place in line).
-                        • \(standDownText) to completely stop and dismiss the drill sergeant.
-                        • When I call, you drop and give me 20... or stretch and go have some water!
+                        I’ll bark orders every __\(Int(store.reminderInterval / 60.0))__ minutes — time for a movement break!\n
+                        \(reportForDutyText) when you’re ready to start your fitness regimen.
+                        \(holdPositionText) to temporarily pause reminders (keeps your place in line).
+                        \(standDownText) to completely stop and dismiss the drill sergeant.\n
+                        When I call, you drop and give me 20… or stretch and go have some water!
 
                         My job? Keep your spine straight and your circulation flowing. Your chair is NOT a permanent duty station!
-
-                        You ready to join the Anti-Slouch Squadron and whip that body back into shape?
 
                         MOVE OUT!
                         """
