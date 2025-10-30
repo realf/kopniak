@@ -18,6 +18,16 @@ struct SettingsFeature {
         @Shared var reminderInterval: TimeInterval
         @Shared var showMissionBriefingAtLaunch: Bool
 
+        // MARK: - Constants
+
+        #if DEBUG
+            let intervalRange = 0.1...1.0
+            let intervalStep = 0.1
+        #else
+            let intervalRange = 15.0...120.0
+            let intervalStep = 5.0
+        #endif
+
         init(reminderInterval: Shared<TimeInterval>) {
             let showMissionBriefingAtLaunch = Shared(
                 wrappedValue: true,

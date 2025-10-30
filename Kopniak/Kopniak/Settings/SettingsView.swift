@@ -12,16 +12,6 @@ import SwiftUI
 struct SettingsView: View {
     @Bindable var store: StoreOf<SettingsFeature>
 
-    // MARK: - Constants
-
-    #if DEBUG
-        private let intervalRange = 0.1...1.0
-        private let intervalStep = 0.1
-    #else
-        private let intervalRange = 15.0...120.0
-        private let intervalStep = 5.0
-    #endif
-
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             // Header
@@ -58,16 +48,16 @@ struct SettingsView: View {
                                         (newValue * 60.0).rounded()
                                 }
                             ),
-                            in: intervalRange,
-                            step: intervalStep
+                            in: store.intervalRange,
+                            step: store.intervalStep
                         )
 
                         HStack {
-                            Text("\(Int(intervalRange.lowerBound)) min")
+                            Text("\(Int(store.intervalRange.lowerBound)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("\(Int(intervalRange.upperBound)) min")
+                            Text("\(Int(store.intervalRange.upperBound)) min")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -104,7 +94,7 @@ struct SettingsView: View {
 }
 
 #Preview {
-    let reminderInterval = Shared(value: 45.0 * 60)
+    let reminderInterval = Shared(value: 25.0 * 60)
     let store = Store(
         initialState: SettingsFeature.State(
             reminderInterval: reminderInterval

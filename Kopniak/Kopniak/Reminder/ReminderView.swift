@@ -46,7 +46,7 @@ struct ReminderView: View {
                             Text("At Ease for 10")
                                 .font(.title3)
                         }
-                        .frame(width: 150, height: 32)
+                        .frame(width: 180, height: 32)
                     }
 
                     Spacer()
@@ -58,10 +58,10 @@ struct ReminderView: View {
                         HStack {
                             Image(systemName: "checkmark.square")
                                 .imageScale(.large)
-                            Text("Yes Sir!")
+                            Text("Mission Completed")
                                 .font(.title3)
                         }
-                        .frame(width: 150, height: 32)
+                        .frame(width: 180, height: 32)
                     }
                     .buttonStyle(.borderedProminent)
 
@@ -72,7 +72,7 @@ struct ReminderView: View {
             .padding(.top, 12)
         }
         .padding(20)
-        .frame(width: 470)
+        .frame(width: 520)
         .onAppear {
             store.send(.onAppear)
         }
