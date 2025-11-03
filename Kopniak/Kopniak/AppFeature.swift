@@ -78,6 +78,7 @@ struct AppFeature {
         case reminder(ReminderFeature.Action)
         case reminders(RemindersFeature.Action)
         case settings(SettingsFeature.Action)
+        case statusItemDidActivate
     }
 
     var body: some Reducer<State, Action> {
@@ -108,9 +109,6 @@ struct AppFeature {
             case .launchAtLogin:
                 return .none
 
-            case .menuIcon(.delegate(.onAppear)):
-                return reduceMenuIconOnAppear(&state)
-
             case .menuIcon:
                 return .none
 
@@ -134,15 +132,17 @@ struct AppFeature {
 
             case .settings:
                 return .none
+
+            case .statusItemDidActivate:
+                return reduceStatusItemDidActivate(&state)
             }
         }
     }
 }
 
 extension AppFeature {
-    /// Handles menu icon appearance, effectively this is an application
-    /// launch
-    fileprivate func reduceMenuIconOnAppear(_ state: inout State)
+    /// Effectively handles app launch
+    fileprivate func reduceStatusItemDidActivate(_ state: inout State)
         -> Effect<Action>
     {
         var effects: [Effect<Action>] = []

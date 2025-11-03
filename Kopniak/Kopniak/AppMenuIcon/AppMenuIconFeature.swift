@@ -15,20 +15,4 @@ struct AppMenuIconFeature {
         @Shared var remindersStatus: RemindersStatus
         @Shared var remainingTime: TimeInterval
     }
-
-    enum Action {
-        case delegate(Delegate)
-        enum Delegate {
-            case onAppear
-        }
-    }
-
-    var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .delegate:
-                return .none
-            }
-        }
-    }
 }

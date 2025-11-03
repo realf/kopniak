@@ -43,9 +43,9 @@ struct AppMenuIconView: View {
                     .font(.system(.body, design: .monospaced))
             }
         }
-        .onAppear {
-            store.send(.delegate(.onAppear))
-        }
+//        .onAppear {
+//            store.send(.delegate(.onAppear))
+//        }
     }
 }
 

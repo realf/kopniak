@@ -26,6 +26,8 @@ struct KopniakApp: App {
             store: store.scope(state: \.menuIcon, action: \.menuIcon)
         )
         controller.activateStatusItem()
+        store.send(.statusItemDidActivate)
+
         return controller
     }()
 
