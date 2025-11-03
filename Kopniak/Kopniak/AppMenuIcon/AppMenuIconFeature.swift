@@ -14,15 +14,10 @@ struct AppMenuIconFeature {
     struct State {
         @Shared var remindersStatus: RemindersStatus
         @Shared var remainingTime: TimeInterval
-        var openWindow: WindowID?
-        var dismissWindow: WindowID?
     }
 
     enum Action {
         case delegate(Delegate)
-        case openWindow(WindowID)
-        case dismissWindow(WindowID)
-
         enum Delegate {
             case onAppear
         }
@@ -32,14 +27,6 @@ struct AppMenuIconFeature {
         Reduce { state, action in
             switch action {
             case .delegate:
-                return .none
-
-            case .openWindow(let windowID):
-                state.openWindow = windowID
-                return .none
-
-            case .dismissWindow(let windowID):
-                state.dismissWindow = windowID
                 return .none
             }
         }

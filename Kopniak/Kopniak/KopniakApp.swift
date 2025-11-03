@@ -17,12 +17,13 @@ struct KopniakApp: App {
         AppFeature()
     }
 
-    private static let reminderController = ReminderController(
+    private let reminderController = ReminderController(
         store: store.scope(state: \.reminder, action: \.reminder)
     )
 
-    @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.openSettings) private var openSettings
+    @Environment(\.openWindow) private var openWindow
 
     var body: some Scene {
         // Main app window
@@ -37,6 +38,34 @@ struct KopniakApp: App {
         .defaultPosition(.center)
         .windowResizability(.contentSize)
         .defaultLaunchBehavior(.suppressed)
+        .onChange(of: Self.store.openWindow) { _, windowID in
+            if let windowID {
+                switch windowID.destination {
+                case .briefing:
+                    openWindow(id: "briefing")
+                case .launchAtLogin:
+                    openWindow(id: "launchAtLogin")
+                case .reminder:
+                    showReminder()
+                case .settings:
+                    openSettings()
+                }
+            }
+        }
+        .onChange(of: Self.store.dismissWindow) { _, windowID in
+            if let windowID {
+                switch windowID.destination {
+                case .briefing:
+                    dismissWindow(id: "briefing")
+                case .launchAtLogin:
+                    dismissWindow(id: "launchAtLogin")
+                case .reminder:
+                    dismissReminder()
+                case .settings:
+                    break
+                }
+            }
+        }
 
         // Status bar menu
         MenuBarExtra {
@@ -53,7 +82,7 @@ struct KopniakApp: App {
             )
             AppMenuIconView(
                 store: store,
-                reminderController: KopniakApp.reminderController
+                reminderController: reminderController
             )
         }
 
@@ -77,5 +106,13 @@ struct KopniakApp: App {
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
+    }
+
+    private func showReminder() {
+        reminderController.showReminder(title: "Kopniak Command")
+    }
+
+    private func dismissReminder() {
+        reminderController.hideReminder()
     }
 }

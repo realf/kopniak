@@ -9,10 +9,6 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AppMenuIconView: View {
-    @Environment(\.openWindow) var openWindow
-    @Environment(\.dismissWindow) var dismissWindow
-    @Environment(\.openSettings) private var openSettings
-
     let store: StoreOf<AppMenuIconFeature>
     let reminderController: ReminderController
 
@@ -49,41 +45,6 @@ struct AppMenuIconView: View {
         }
         .onAppear {
             store.send(.delegate(.onAppear))
-            DispatchQueue.main.async {
-                // Activate the app to bring it to front
-                activateApp()
-            }
-        }
-        .onChange(of: store.openWindow) { _, windowID in
-            if let windowID {
-                switch windowID.destination {
-                case .briefing:
-                    openWindow(id: "briefing")
-                    activateApp()
-                case .launchAtLogin:
-                    openWindow(id: "launchAtLogin")
-                    activateApp()
-                case .reminder:
-                    showReminder()
-                case .settings:
-                    openSettings()
-                    activateApp()
-                }
-            }
-        }
-        .onChange(of: store.dismissWindow) { _, windowID in
-            if let windowID {
-                switch windowID.destination {
-                case .briefing:
-                    dismissWindow(id: "briefing")
-                case .launchAtLogin:
-                    dismissWindow(id: "launchAtLogin")
-                case .reminder:
-                    dismissReminder()
-                case .settings:
-                    break
-                }
-            }
         }
     }
 
@@ -93,15 +54,6 @@ struct AppMenuIconView: View {
 
     private func dismissReminder() {
         reminderController.hideReminder()
-    }
-
-    private func activateApp() {
-        DispatchQueue.main.async {
-            // Activate the app to bring it to front
-            NSRunningApplication.current.activate(
-                options: .activateAllWindows
-            )
-        }
     }
 }
 
