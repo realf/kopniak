@@ -80,25 +80,6 @@ struct KopniakApp: App {
             }
         }
 
-        // Status bar menu
-        MenuBarExtra {
-            AppMenuView(
-                store: KopniakApp.store.scope(
-                    state: \.appMenu,
-                    action: \.appMenu
-                )
-            )
-        } label: {
-            let store = KopniakApp.store.scope(
-                state: \.menuIcon,
-                action: \.menuIcon
-            )
-            AppMenuIconView(
-                store: store,
-                reminderController: reminderController
-            )
-        }
-
         // Settings
         Settings {
             let store = KopniakApp.store.scope(
