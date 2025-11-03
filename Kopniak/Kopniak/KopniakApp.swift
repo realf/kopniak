@@ -27,7 +27,9 @@ struct KopniakApp: App {
             menuStore: store.scope(state: \.appMenu, action: \.appMenu)
         )
         controller.activateStatusItem()
-        store.send(.statusItemDidActivate)
+        DispatchQueue.main.async {
+            store.send(.statusItemDidActivate)
+        }
 
         return controller
     }()
