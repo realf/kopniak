@@ -21,19 +21,19 @@ final class StatusItemController {
     }
 
     func activateStatusItem() {
-        guard item == nil else {
+        guard self.item == nil else {
             return
         }
 
         let bar = NSStatusBar.system
-        item = bar.statusItem(withLength: NSStatusItem.variableLength)
+        self.item = bar.statusItem(withLength: NSStatusItem.variableLength)
 
         setupIcon()
         setupMenu()
     }
 
     private func setupIcon() {
-        if let button = item.button {
+        if let button = self.item.button {
             button.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .regular)
 
             let publisher = iconStore.publisher
@@ -57,7 +57,180 @@ final class StatusItemController {
     }
 
     private func setupMenu() {
-        
+        item.menu = buildMenu()
+
+        let publisher = menuStore.publisher
+        publisher.remindersStatus.sink { [weak self] _ in
+            guard let self else { return }
+            self.item.menu = self.buildMenu()
+        }
+        .store(in: &cancellables)
+    }
+
+    private func buildMenu() -> NSMenu {
+        let menu = NSMenu()
+
+        // Mission Briefing
+        menu.addItem(
+            createMenuItem(
+                title: "Mission Briefing",
+                icon: "chevron.up.2",
+                shortcut: ("b", .command),
+                action: #selector(missionBriefingAction)
+            )
+        )
+
+        menu.addItem(NSMenuItem.separator())
+
+        // Status-dependent menu items
+        let status = menuStore.remindersStatus
+
+        switch status {
+        case .off:
+            menu.addItem(
+                createMenuItem(
+                    title: "Report for Duty",
+                    icon: "play.fill",
+                    shortcut: ("r", .command),
+                    action: #selector(reportForDutyAction)
+                )
+            )
+        case .on:
+            menu.addItem(
+                createMenuItem(
+                    title: "Stand Down",
+                    icon: "stop.fill",
+                    shortcut: ("s", .command),
+                    action: #selector(standDownAction)
+                )
+            )
+
+            menu.addItem(
+                createMenuItem(
+                    title: "At Ease",
+                    icon: "pause.fill",
+                    shortcut: ("p", .command),
+                    action: #selector(atEaseAction)
+                )
+            )
+
+            menu.addItem(
+                createMenuItem(
+                    title: "Reissue Orders",
+                    icon: "restart",
+                    shortcut: ("o", .command),
+                    action: #selector(reissueOrdersAction)
+                )
+            )
+        case .paused:
+            menu.addItem(
+                createMenuItem(
+                    title: "Stand Down",
+                    icon: "stop.fill",
+                    shortcut: ("s", .command),
+                    action: #selector(standDownAction)
+                )
+            )
+
+            menu.addItem(
+                createMenuItem(
+                    title: "Resume Duty",
+                    icon: "play.fill",
+                    shortcut: ("r", .command),
+                    action: #selector(resumeDutyAction)
+                )
+            )
+
+            menu.addItem(
+                createMenuItem(
+                    title: "Reissue Orders",
+                    icon: "restart",
+                    shortcut: ("o", .command),
+                    action: #selector(reissueOrdersAction)
+                )
+            )
+        }
+
+        menu.addItem(NSMenuItem.separator())
+
+        // Settings
+        menu.addItem(
+            createMenuItem(
+                title: "Settings…",
+                icon: "gear",
+                shortcut: (",", .command),
+                action: #selector(settingsAction)
+            )
+        )
+
+        menu.addItem(NSMenuItem.separator())
+
+        // Quit
+        menu.addItem(
+            createMenuItem(
+                title: "Quit Kopniak",
+                icon: nil,
+                shortcut: ("q", .command),
+                action: #selector(quitAction)
+            )
+        )
+
+        return menu
+    }
+
+    private func createMenuItem(
+        title: String,
+        icon: String?,
+        shortcut: (key: String, modifiers: NSEvent.ModifierFlags)?,
+        action: Selector
+    ) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
+        item.target = self
+
+        if let (key, modifiers) = shortcut {
+            item.keyEquivalent = key
+            item.keyEquivalentModifierMask = modifiers
+        }
+
+        if let iconName = icon {
+            item.image = NSImage(systemSymbolName: iconName, accessibilityDescription: title)
+        }
+
+        return item
+    }
+
+    // MARK: - Menu Actions
+
+    @objc private func missionBriefingAction() {
+        menuStore.send(.delegate(.missionBriefingTapped))
+    }
+
+    @objc private func reportForDutyAction() {
+        menuStore.send(.delegate(.startRemindersTapped))
+    }
+
+    @objc private func standDownAction() {
+        menuStore.send(.delegate(.stopRemindersTapped))
+    }
+
+    @objc private func atEaseAction() {
+        menuStore.send(.delegate(.pauseRemindersTapped))
+    }
+
+    @objc private func reissueOrdersAction() {
+        menuStore.send(.delegate(.restartRemindersTapped))
+    }
+
+    @objc private func resumeDutyAction() {
+        menuStore.send(.delegate(.resumeRemindersTapped))
+    }
+
+    @objc private func settingsAction() {
+        menuStore.send(.delegate(.settingsTapped))
+    }
+
+    @objc private func quitAction() {
+        menuStore.send(.delegate(.quitTapped))
     }
 
     private func formatted(remainingTime: TimeInterval) -> String {
