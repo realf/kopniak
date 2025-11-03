@@ -10,12 +10,14 @@ import Combine
 import ComposableArchitecture
 
 final class StatusItemController {
-    private let store: StoreOf<AppMenuIconFeature>
+    private let iconStore: StoreOf<AppMenuIconFeature>
+    private let menuStore: StoreOf<AppMenuFeature>
     private var item: NSStatusItem!
     private var cancellables = Set<AnyCancellable>()
 
-    init(store: StoreOf<AppMenuIconFeature>) {
-        self.store = store
+    init(iconStore: StoreOf<AppMenuIconFeature>, menuStore: StoreOf<AppMenuFeature>) {
+        self.iconStore = iconStore
+        self.menuStore = menuStore
     }
 
     func activateStatusItem() {
@@ -25,13 +27,19 @@ final class StatusItemController {
 
         let bar = NSStatusBar.system
         item = bar.statusItem(withLength: NSStatusItem.variableLength)
+
+        setupIcon()
+        setupMenu()
+    }
+
+    private func setupIcon() {
         if let button = item.button {
             button.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .regular)
 
-            let publisher = store.publisher
+            let publisher = iconStore.publisher
             publisher.remainingTime.sink { [weak self] time in
                 guard let self else { return }
-                if store.remindersStatus != .off {
+                if iconStore.remindersStatus != .off {
                     button.title = self.formatted(remainingTime: time)
                 }
             }
@@ -48,6 +56,10 @@ final class StatusItemController {
         }
     }
 
+    private func setupMenu() {
+        
+    }
+
     private func formatted(remainingTime: TimeInterval) -> String {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.minute, .second]
@@ -56,7 +68,7 @@ final class StatusItemController {
     }
 
     private func menuBarIcon(status: RemindersStatus) -> NSImage {
-        if store.remindersStatus == .on {
+        if iconStore.remindersStatus == .on {
             return NSImage(systemSymbolName: "chevron.up.2", accessibilityDescription: "Kopniak, reminders active")!
         } else {
             return NSImage(systemSymbolName: "chevron.up.dotted.2", accessibilityDescription: "Kopniak, reminders inactive")!

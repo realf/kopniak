@@ -23,7 +23,8 @@ struct KopniakApp: App {
 
     private let statusItemController: StatusItemController = {
         let controller = StatusItemController(
-            store: store.scope(state: \.menuIcon, action: \.menuIcon)
+            iconStore: store.scope(state: \.menuIcon, action: \.menuIcon),
+            menuStore: store.scope(state: \.appMenu, action: \.appMenu)
         )
         controller.activateStatusItem()
         store.send(.statusItemDidActivate)
