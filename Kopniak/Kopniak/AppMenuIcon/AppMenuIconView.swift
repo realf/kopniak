@@ -47,14 +47,6 @@ struct AppMenuIconView: View {
             store.send(.delegate(.onAppear))
         }
     }
-
-    private func showReminder() {
-        reminderController.showReminder(title: "Kopniak Command")
-    }
-
-    private func dismissReminder() {
-        reminderController.hideReminder()
-    }
 }
 
 #Preview {

@@ -21,6 +21,14 @@ struct KopniakApp: App {
         store: store.scope(state: \.reminder, action: \.reminder)
     )
 
+    private let statusItemController: StatusItemController = {
+        let controller = StatusItemController(
+            store: store.scope(state: \.menuIcon, action: \.menuIcon)
+        )
+        controller.activateStatusItem()
+        return controller
+    }()
+
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.openSettings) private var openSettings
     @Environment(\.openWindow) private var openWindow
@@ -46,7 +54,7 @@ struct KopniakApp: App {
                 case .launchAtLogin:
                     openWindow(id: "launchAtLogin")
                 case .reminder:
-                    showReminder()
+                    reminderController.showReminder(title: "Kopniak Command")
                 case .settings:
                     openSettings()
                 }
@@ -60,7 +68,7 @@ struct KopniakApp: App {
                 case .launchAtLogin:
                     dismissWindow(id: "launchAtLogin")
                 case .reminder:
-                    dismissReminder()
+                    reminderController.hideReminder()
                 case .settings:
                     break
                 }
@@ -106,13 +114,5 @@ struct KopniakApp: App {
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
-    }
-
-    private func showReminder() {
-        reminderController.showReminder(title: "Kopniak Command")
-    }
-
-    private func dismissReminder() {
-        reminderController.hideReminder()
     }
 }
