@@ -10,10 +10,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Technology Stack
 
-- **SwiftUI** - All UI implementation (modern declarative framework)
-- **The Composable Architecture (TCA)** - State management and application architecture (16/20 Swift files use this)
-- **AppKit** - macOS-specific APIs (menu bar, ServiceManagement for launch-at-login, custom NSPanel for floating windows)
-- **Swift 5.0** language version
+- **SwiftUI** - Application windows and UI views (BriefingView, SettingsView, LaunchAtLoginView)
+- **The Composable Architecture (TCA)** - State management and application architecture (all Swift files use TCA reducers)
+- **AppKit** - macOS-specific APIs:
+  - NSStatusItem and NSMenu for menu bar icon and dropdown menu (StatusItemController)
+  - NSPanel for custom floating reminder windows (FloatingWindow)
+  - ServiceManagement for launch-at-login functionality
+  - NSWorkspace and DistributedNotificationCenter for system idle state monitoring
+- **Swift 5.0+** language version
 - **Testing frameworks** - Swift Testing (unit tests) and XCTest (UI tests)
 
 ### Architectural Pattern: The Composable Architecture (TCA)
@@ -32,7 +36,7 @@ The entire app uses TCA's feature-based reducer pattern. Understanding this is e
 **Feature Hierarchy:**
 ```
 AppFeature (root reducer, manages windows and overall state)
-├── AppMenuFeature → menu bar menu
+├── AppMenuFeature → menu bar menu (AppKit NSMenu)
 ├── AppMenuIconFeature → menu bar icon with timer display
 ├── BriefingFeature → main information window
 ├── ReminderFeature → reminder popup window
@@ -59,34 +63,32 @@ AppFeature (root reducer, manages windows and overall state)
 Kopniak/                           # Main Xcode project directory
 ├── Kopniak/                       # Source code
 │   ├── KopniakApp.swift           # SwiftUI app entry point
-│   ├── AppFeature.swift           # Root reducer (324 lines)
+│   ├── AppFeature.swift           # Root reducer
 │   ├── Assets.xcassets/           # App icons and color assets
-│   ├── AppMenu/                   # Menu bar menu feature
-│   │   ├── AppMenuFeature.swift
-│   │   └── AppMenuView.swift
-│   ├── AppMenuIcon/               # Menu bar icon feature (separate from menu)
-│   │   ├── AppMenuIconFeature.swift
-│   │   └── AppMenuIconView.swift
+│   ├── StatusItem/                # Menu bar icon and menu (AppKit)
+│   │   ├── AppMenuFeature.swift   # Menu bar menu feature (TCA reducer)
+│   │   ├── AppMenuIconFeature.swift # Menu bar icon state (TCA reducer)
+│   │   └── StatusItemController.swift # AppKit NSStatusItem and NSMenu setup
 │   ├── Briefing/                  # Main info window feature
 │   │   ├── BriefingFeature.swift
 │   │   └── BriefingView.swift
 │   ├── Reminder/                  # Reminder popup window feature
 │   │   ├── ReminderFeature.swift
 │   │   ├── ReminderView.swift
-│   │   ├── ReminderController.swift
+│   │   ├── ReminderController.swift # AppKit NSPanel management
 │   │   └── Utils/
 │   │       └── FloatingWindow.swift # Custom NSPanel for floating window
 │   ├── Reminders/                 # Core timer and reminder logic
-│   │   └── RemindersFeature.swift (integrates with IdleMonitorFeature)
+│   │   └── RemindersFeature.swift # Timer scheduling and idle integration
 │   ├── IdleMonitor/               # Idle state monitoring
-│   │   └── IdleMonitorFeature.swift (268 lines)
+│   │   └── IdleMonitorFeature.swift # System idle state observation
 │   ├── Settings/                  # Settings window feature
 │   │   ├── SettingsFeature.swift
 │   │   └── SettingsView.swift
 │   └── LaunchAtLogin/             # Launch-at-login feature
 │       ├── LaunchAtLoginFeature.swift
 │       └── LaunchAtLoginView.swift
-├── KopniakTests/                  # Unit tests (mostly stubs)
+├── KopniakTests/                  # Unit tests
 └── KopniakUITests/                # UI tests
 ├── Kopniak.xcodeproj/             # Xcode project configuration
 ├── README.md
@@ -126,10 +128,21 @@ xcodebuild test -scheme Kopniak -only-testing "KopniakTests/TestClassName/testMe
 
 ## Key Implementation Details
 
-### Menu Bar Implementation
-- `AppMenuIconFeature` manages the menu bar icon with live timer countdown display
-- Icon updates via `remainingTime` state from `@Shared` (persisted across app restarts)
-- Menu managed by `AppMenuFeature` with standard macOS menu items
+### Menu Bar Implementation (StatusItem)
+- **StatusItemController** is the AppKit-based controller managing the NSStatusItem and NSMenu
+  - Located in `StatusItem/StatusItemController.swift`
+  - Created and activated in `KopniakApp.swift` during app startup
+  - Manages both the menu bar icon (with timer display) and the dropdown menu
+- **Icon Setup** (`setupIcon()` method):
+  - Updates icon image based on `remindersStatus` (active/inactive chevron icons)
+  - Displays countdown timer formatted as MM:SS when reminders are active
+  - Uses monospaced digit font (13pt) for consistent timer display
+  - Subscribed to `remainingTime` and `remindersStatus` from `@Shared` state
+- **Menu Setup** (`setupMenu()` method):
+  - Creates NSMenu with items mirroring the original SwiftUI AppMenuView structure
+  - Menu items include icons (SF Symbols) and keyboard shortcuts (Cmd+B, Cmd+R, etc.)
+  - Dynamically rebuilds menu when `remindersStatus` changes to show context-appropriate actions
+  - Actions dispatch delegate actions to `AppMenuFeature` for parent handling
 
 ### Floating Reminder Window
 - Custom `FloatingWindow` utility (extends NSPanel) creates floating, non-activating reminder window
@@ -287,11 +300,18 @@ struct IdleNotificationObserverDependency: DependencyKey {
 
 5. **macOS App Delegate:** Since this is a menu bar app with no dock icon (typically), ensure any AppKit-level setup is in `KopniakApp.swift`.
 
-6. **Menu Bar Icon:** The icon displays the remaining time. This requires frequent state updates via `@Shared` - it's intentional and performant.
+6. **Menu Bar Implementation:** The menu bar is implemented using AppKit's NSStatusItem and NSMenu (via StatusItemController) instead of SwiftUI's MenuBarExtra. This allows for:
+   - Fixed-width menu bar item (no variable width issues)
+   - Full control over menu appearance and behavior
+   - Direct integration with TCA reducer state
+   - More reliable keyboard shortcuts and menu updates
+   - The controller subscribes to state changes and rebuilds the menu dynamically
 
-7. **Idle State Handling:** Idle monitoring only pauses/resumes timers, never modifies `remindersStatus`. The observation lifecycle is tied to `remindersStatus == .on`—when reminders are off or paused, idle monitoring is not active. This keeps idle state separate from user intent for reminder status.
+7. **Menu Bar Icon:** The icon displays the remaining time (MM:SS). This requires frequent state updates via `@Shared` - it's intentional and performant. Uses monospaced font for consistent timer display.
 
-8. **Notification Centers:** Always use the notification center documented by Apple for each notification type:
+8. **Idle State Handling:** Idle monitoring only pauses/resumes timers, never modifies `remindersStatus`. The observation lifecycle is tied to `remindersStatus == .on`—when reminders are off or paused, idle monitoring is not active. This keeps idle state separate from user intent for reminder status.
+
+9. **Notification Centers:** Always use the notification center documented by Apple for each notification type:
    - `DistributedNotificationCenter` for system-wide notifications (e.g., screen lock/unlock)
    - `NSWorkspace.shared.notificationCenter` for workspace events (e.g., display sleep, system sleep, session changes)
    - Using the correct center ensures reliable delivery to background menu bar apps
