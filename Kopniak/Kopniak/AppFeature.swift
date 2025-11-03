@@ -28,6 +28,11 @@ struct WindowID: Equatable {
 struct AppFeature {
     @ObservableState
     struct State {
+        // Open and dismiss windows
+        var dismissWindow: WindowID?
+        var openWindow: WindowID?
+
+        // Child states
         var appMenu: AppMenuFeature.State
         var briefing: BriefingFeature.State
         var launchAtLogin: LaunchAtLoginFeature.State
@@ -73,6 +78,7 @@ struct AppFeature {
         case reminder(ReminderFeature.Action)
         case reminders(RemindersFeature.Action)
         case settings(SettingsFeature.Action)
+        case statusItemDidActivate
     }
 
     var body: some Reducer<State, Action> {
@@ -103,9 +109,6 @@ struct AppFeature {
             case .launchAtLogin:
                 return .none
 
-            case .menuIcon(.delegate(.onAppear)):
-                return reduceMenuIconOnAppear(&state)
-
             case .menuIcon:
                 return .none
 
@@ -129,21 +132,26 @@ struct AppFeature {
 
             case .settings:
                 return .none
+
+            case .statusItemDidActivate:
+                return reduceStatusItemDidActivate(&state)
             }
         }
     }
 }
 
 extension AppFeature {
-    /// Handles menu icon appearance, effectively this is an application
-    /// launch
-    fileprivate func reduceMenuIconOnAppear(_ state: inout State)
+    /// Effectively handles app launch
+    fileprivate func reduceStatusItemDidActivate(_ state: inout State)
         -> Effect<Action>
     {
         var effects: [Effect<Action>] = []
         if state.settings.showMissionBriefingAtLaunch {
             let window = WindowID(destination: .briefing)
             effects.append(showWindow(&state, window: window))
+        }
+        if effects.isEmpty {
+            effects.append(activateApp())
         }
         effects.append(
             reduce(into: &state, action: .reminders(.menuIconOnAppear))
@@ -305,13 +313,21 @@ extension AppFeature {
     fileprivate func showWindow(_ state: inout State, window: WindowID)
         -> Effect<Action>
     {
-        return reduce(into: &state, action: .menuIcon(.openWindow(window)))
+        state.openWindow = window
+
+        switch window.destination {
+        case .reminder:
+            return .none
+        case .settings, .briefing, .launchAtLogin:
+            return activateApp()
+        }
     }
 
     fileprivate func dismissWindow(_ state: inout State, window: WindowID)
         -> Effect<Action>
     {
-        return reduce(into: &state, action: .menuIcon(.dismissWindow(window)))
+        state.dismissWindow = window
+        return .none
     }
 
     fileprivate func showReminder(_ state: inout State) -> Effect<Action> {
@@ -320,5 +336,14 @@ extension AppFeature {
 
     fileprivate func dismissReminder(_ state: inout State) -> Effect<Action> {
         dismissWindow(&state, window: WindowID(destination: .reminder))
+    }
+
+    private func activateApp() -> Effect<Action> {
+        return .run { @MainActor send in
+            // Activate the app to bring it to front
+            NSRunningApplication.current.activate(
+                options: .activateAllWindows
+            )
+        }
     }
 }
