@@ -13,12 +13,22 @@ struct ReminderView: View {
 
     var body: some View {
         VStack(spacing: 18) {
+            // App icon - random Kopniak variant
+            Image(store.imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 300, height: 300)
+                .cornerRadius(24)
+                .padding(20)
+
             // Title with military styling
             Text(store.title)
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
+
+            Spacer()
 
             // Message
             Text(store.message)
@@ -27,6 +37,8 @@ struct ReminderView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 8)
                 .fixedSize(horizontal: false, vertical: true)
+
+            Spacer()
 
             // Buttons
             HStack(spacing: 0) {

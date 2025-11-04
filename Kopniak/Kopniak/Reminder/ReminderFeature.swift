@@ -74,6 +74,7 @@ struct ReminderFeature {
     struct State {
         var title: String
         var message: String
+        var imageName: String = "Kopniak1"
 
         // Recent history to avoid repetition
         var recentTitles: [String] = []
@@ -98,8 +99,10 @@ struct ReminderFeature {
             case .onAppear:
                 let title = pickRandomTitle(state)
                 let message = pickRandomMessage(state)
+                let imageName = pickRandomImage()
                 state.title = title
                 state.message = message
+                state.imageName = imageName
                 updateRecentTitle(&state, title: title)
                 updateRecentMessage(&state, message: message)
                 return .none
@@ -108,6 +111,13 @@ struct ReminderFeature {
     }
 
     // MARK: - Picking logic that avoids recent repeats
+    private func pickRandomImage() -> String {
+        let kopniakImages = ["Kopniak1", "Kopniak2", "Kopniak3", "Kopniak4"]
+        return withRandomNumberGenerator { generator in
+            kopniakImages.randomElement() ?? "Kopniak1"
+        }
+    }
+
     private func pickRandomTitle(_ state: State) -> String {
         let available = reminderContentSource.titles.filter {
             !state.recentTitles.contains($0)
