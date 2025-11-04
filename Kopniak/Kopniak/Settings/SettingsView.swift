@@ -29,7 +29,7 @@ struct SettingsView: View {
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
-                            Text("Reminder Interval:")
+                            Text("Break Interval:")
                             Spacer()
                             Text(
                                 "\(Int((store.reminderInterval / 60.0).rounded())) minutes"
@@ -69,12 +69,12 @@ struct SettingsView: View {
                 // Launch Behavior Section
                 Section {
                     Toggle(
-                        "Launch Kopniak at login",
+                        "Start Kopniak at login",
                         isOn: $store.launchAtLogin
                     )
 
                     Toggle(
-                        "Show Mission Briefing when app launches",
+                        "Show briefing on startup",
                         isOn: $store.showMissionBriefingAtLaunch
                     )
                 } header: {

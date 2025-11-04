@@ -44,7 +44,7 @@ struct BriefingView: View {
 
             GroupBox {
                 VStack(spacing: 20) {
-                    Text("ATTENTION, RECRUIT!")
+                    Text("LISTEN UP, SOLDIER!")
                         .font(.largeTitle)
                         .fontWeight(.bold)
 
