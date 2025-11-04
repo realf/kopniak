@@ -17,10 +17,11 @@ struct WindowID: Equatable {
     let uniqueID = UUID()
 
     enum Destination: Equatable {
-        case reminder
-        case settings
+        case about
         case briefing
         case launchAtLogin
+        case reminder
+        case settings
     }
 }
 
@@ -33,6 +34,7 @@ struct AppFeature {
         var openWindow: WindowID?
 
         // Child states
+        var about: AboutFeature.State
         var appMenu: AppMenuFeature.State
         var briefing: BriefingFeature.State
         var launchAtLogin: LaunchAtLoginFeature.State
@@ -42,6 +44,7 @@ struct AppFeature {
         var settings: SettingsFeature.State
 
         init(remindersStatus: @autoclosure () -> RemindersStatus) {
+            about = AboutFeature.State()
             launchAtLogin = LaunchAtLoginFeature.State()
             let reminders = RemindersFeature.State(
                 remindersStatus: remindersStatus()
@@ -71,6 +74,7 @@ struct AppFeature {
     }
 
     enum Action {
+        case about(AboutFeature.Action)
         case appMenu(AppMenuFeature.Action)
         case briefing(BriefingFeature.Action)
         case launchAtLogin(LaunchAtLoginFeature.Action)
@@ -82,6 +86,8 @@ struct AppFeature {
     }
 
     var body: some Reducer<State, Action> {
+        Scope(state: \.about, action: \.about) { AboutFeature() }
+
         Scope(state: \.appMenu, action: \.appMenu) { AppMenuFeature() }
 
         Scope(state: \.menuIcon, action: \.menuIcon) { AppMenuIconFeature() }
@@ -97,6 +103,9 @@ struct AppFeature {
 
         Reduce { state, action in
             switch action {
+            case .about:
+                return .none
+
             case .appMenu(.delegate(let action)):
                 return reduceAppMenuDelegate(&state, action: action)
 
@@ -188,6 +197,8 @@ extension AppFeature {
         action: AppMenuFeature.Action.Delegate
     ) -> Effect<Action> {
         switch action {
+        case .aboutTapped:
+            return showWindow(&state, window: WindowID(destination: .about))
         case .missionBriefingTapped:
             return showWindow(&state, window: WindowID(destination: .briefing))
         case .pauseRemindersTapped:
@@ -318,7 +329,7 @@ extension AppFeature {
         switch window.destination {
         case .reminder:
             return .none
-        case .settings, .briefing, .launchAtLogin:
+        case .about, .settings, .briefing, .launchAtLogin:
             return activateApp()
         }
     }

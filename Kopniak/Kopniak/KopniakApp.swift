@@ -54,6 +54,8 @@ struct KopniakApp: App {
         .onChange(of: Self.store.openWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
+                case .about:
+                    openWindow(id: "about")
                 case .briefing:
                     openWindow(id: "briefing")
                 case .launchAtLogin:
@@ -68,6 +70,8 @@ struct KopniakApp: App {
         .onChange(of: Self.store.dismissWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
+                case .about:
+                    dismissWindow(id: "about")
                 case .briefing:
                     dismissWindow(id: "briefing")
                 case .launchAtLogin:
@@ -100,5 +104,17 @@ struct KopniakApp: App {
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
+
+        // About window
+        Window("About Kopniak", id: "about") {
+            let store = KopniakApp.store.scope(
+                state: \.about,
+                action: \.about
+            )
+            AboutView(store: store)
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
+        .windowLevel(.floating)
     }
 }

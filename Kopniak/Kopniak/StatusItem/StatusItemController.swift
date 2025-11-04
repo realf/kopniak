@@ -15,7 +15,10 @@ final class StatusItemController {
     private var item: NSStatusItem!
     private var cancellables = Set<AnyCancellable>()
 
-    init(iconStore: StoreOf<AppMenuIconFeature>, menuStore: StoreOf<AppMenuFeature>) {
+    init(
+        iconStore: StoreOf<AppMenuIconFeature>,
+        menuStore: StoreOf<AppMenuFeature>
+    ) {
         self.iconStore = iconStore
         self.menuStore = menuStore
     }
@@ -34,7 +37,10 @@ final class StatusItemController {
 
     private func setupIcon() {
         if let button = self.item.button {
-            button.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .regular)
+            button.font = NSFont.monospacedDigitSystemFont(
+                ofSize: 13,
+                weight: .regular
+            )
 
             let publisher = iconStore.publisher
             publisher.remainingTime.sink { [weak self] time in
@@ -69,6 +75,18 @@ final class StatusItemController {
 
     private func buildMenu() -> NSMenu {
         let menu = NSMenu()
+
+        // About
+        menu.addItem(
+            createMenuItem(
+                title: "About Kopniak",
+                icon: "info.circle.fill",
+                shortcut: nil,
+                action: #selector(aboutAction)
+            )
+        )
+
+        menu.addItem(NSMenuItem.separator())
 
         // Mission Briefing
         menu.addItem(
@@ -193,13 +211,20 @@ final class StatusItemController {
         }
 
         if let iconName = icon {
-            item.image = NSImage(systemSymbolName: iconName, accessibilityDescription: title)
+            item.image = NSImage(
+                systemSymbolName: iconName,
+                accessibilityDescription: title
+            )
         }
 
         return item
     }
 
     // MARK: - Menu Actions
+
+    @objc private func aboutAction() {
+        menuStore.send(.delegate(.aboutTapped))
+    }
 
     @objc private func missionBriefingAction() {
         menuStore.send(.delegate(.missionBriefingTapped))
@@ -242,9 +267,15 @@ final class StatusItemController {
 
     private func menuBarIcon(status: RemindersStatus) -> NSImage {
         if iconStore.remindersStatus == .on {
-            return NSImage(systemSymbolName: "chevron.up.2", accessibilityDescription: "Kopniak, reminders active")!
+            return NSImage(
+                systemSymbolName: "chevron.up.2",
+                accessibilityDescription: "Kopniak, reminders active"
+            )!
         } else {
-            return NSImage(systemSymbolName: "chevron.up.dotted.2", accessibilityDescription: "Kopniak, reminders inactive")!
+            return NSImage(
+                systemSymbolName: "chevron.up.dotted.2",
+                accessibilityDescription: "Kopniak, reminders inactive"
+            )!
         }
     }
 }
