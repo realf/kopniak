@@ -85,7 +85,7 @@ struct SettingsView: View {
             .formStyle(.grouped)
         }
         .padding()
-        .frame(width: 500)
+        .frame(width: 500, height: 420)
         .onAppear {
             store.send(.onAppear)
         }
