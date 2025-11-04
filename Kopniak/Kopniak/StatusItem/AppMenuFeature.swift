@@ -19,6 +19,7 @@ struct AppMenuFeature {
         case delegate(Delegate)
 
         enum Delegate {
+            case aboutTapped
             case missionBriefingTapped
             case pauseRemindersTapped
             case restartRemindersTapped
