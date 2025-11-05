@@ -79,6 +79,9 @@ struct ReminderFeature {
         // Recent history to avoid repetition
         var recentTitles: [String] = []
         var recentMessages: [String] = []
+
+        @Shared(.appStorage("dismissReminderStreakCount"))
+        var dismissReminderStreakCount = 0
     }
 
     enum Action {
@@ -94,12 +97,13 @@ struct ReminderFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .delegate:
-                return .none
+            case .delegate(let action):
+                return reduceDelegateAction(&state, action: action)
+
             case .onAppear:
                 let title = pickRandomTitle(state)
                 let message = pickRandomMessage(state)
-                let imageName = pickRandomImage()
+                let imageName = pickRandomImage(state)
                 state.title = title
                 state.message = message
                 state.imageName = imageName
@@ -110,11 +114,31 @@ struct ReminderFeature {
         }
     }
 
+    private func reduceDelegateAction(
+        _ state: inout State,
+        action: Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .dismissTapped:
+            state.$dismissReminderStreakCount.withLock { $0 += 1 }
+            return .none
+        case .snoozeTapped:
+            state.$dismissReminderStreakCount.withLock { $0 = 0 }
+            return .none
+        }
+    }
+
     // MARK: - Picking logic that avoids recent repeats
-    private func pickRandomImage() -> String {
+    private func pickRandomImage(_ state: State) -> String {
         let kopniakImages = ["Kopniak1", "Kopniak2", "Kopniak3", "Kopniak4"]
+        let kopniakCatImages = ["KopniakTheCat1"]
+        let count = state.dismissReminderStreakCount
         return withRandomNumberGenerator { generator in
-            kopniakImages.randomElement() ?? "Kopniak1"
+            return if count > 0 && count % 10 == 0 {
+                kopniakCatImages.randomElement() ?? "KopniakTheCat1"
+            } else {
+                kopniakImages.randomElement() ?? "Kopniak1"
+            }
         }
     }
 
