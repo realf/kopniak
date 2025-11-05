@@ -33,9 +33,22 @@
 		75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		75A9A0A12EBBE4550073D670 /* Exceptions for "Kopniak" folder in "Kopniak" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 75997A262E8E6A2300C6F17B /* Kopniak */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		75997A292E8E6A2300C6F17B /* Kopniak */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				75A9A0A12EBBE4550073D670 /* Exceptions for "Kopniak" folder in "Kopniak" target */,
+			);
 			path = Kopniak;
 			sourceTree = "<group>";
 		};
@@ -413,7 +426,9 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kopniak/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kopniak Debug";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -450,7 +465,9 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Kopniak;
+				INFOPLIST_FILE = Kopniak/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Kopniak Debug";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
