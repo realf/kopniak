@@ -37,12 +37,18 @@ struct AboutView: View {
                         .font(.body)
                         .foregroundColor(.secondary)
 
+                    Text("Kopniak is an app made by an independent developer Serhii Dunets. Feel free to contact me at dunets.devel@gmail.com")
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Text("I would like to express my sincere gratitude to Olena Priadko for her insightful discussions, thoughtful advice, and continuous support.")
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+
                     Text("© 2025 Serhii Dunets")
                         .font(.body)
                         .foregroundColor(.secondary)
                 }
-
-                Spacer()
             }
             .padding()
 
@@ -54,7 +60,7 @@ struct AboutView: View {
                     .font(.title2)
 
                 Text(
-                    "These are the licenses of open source projects shipped with Kopniak."
+                    "These are the licenses of open source projects shipped with Kopniak. Thank you to all the contributors."
                 )
                 .font(.body)
                 .foregroundColor(.secondary)
