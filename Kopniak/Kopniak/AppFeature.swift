@@ -350,11 +350,13 @@ extension AppFeature {
     }
 
     private func activateApp() -> Effect<Action> {
-        return .run { @MainActor send in
+        return .run { send in
             // Activate the app to bring it to front
-            NSRunningApplication.current.activate(
-                options: .activateAllWindows
-            )
+            DispatchQueue.main.async {
+                NSRunningApplication.current.activate(
+                    options: .activateAllWindows
+                )
+            }
         }
     }
 }
