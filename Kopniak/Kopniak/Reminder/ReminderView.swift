@@ -19,6 +19,7 @@ struct ReminderView: View {
                 .scaledToFit()
                 .frame(width: 300, height: 300)
                 .cornerRadius(24)
+                .shadow(color: .brown, radius: 20)
                 .padding(20)
 
             // Title with military styling

@@ -20,7 +20,7 @@ struct AboutView: View {
                     .scaledToFit()
                     .frame(width: 160, height: 160)
                     .cornerRadius(12)
-                    .shadow(radius: 8)
+                    .shadow(color: .brown, radius: 20)
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Kopniak")
