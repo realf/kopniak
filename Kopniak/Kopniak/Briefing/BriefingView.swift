@@ -51,7 +51,8 @@ struct BriefingView: View {
                     Text(
                         """
                         My name is Sergeant Kopniak and I am your drill instructor.
-                        Look for my chevron \(chevron) in your menu bar — those twin stripes mean I’m watching. Click it to access your orders.
+                        Look for my chevron \(chevron) in your menu bar — those twin stripes mean I’m watching. 
+                        Click it to access your orders.
                         """
                     )
                     .font(.headline)
@@ -189,7 +190,7 @@ struct BriefingView: View {
             .imageScale(.large)
         }
         .padding(32)
-        .frame(width: 600)
+        .frame(width: 700)
         .fixedSize()
     }
 }
