@@ -52,8 +52,15 @@ private struct Header: View {
                 Text("Kopniak")
                     .font(.largeTitle)
                 Text(
-                    "Kopniak is an app made by an indie developer Serhii Dunets.\nFeel free to contact me at dunets.devel@gmail.com"
+                    """
+                    Kopniak is an app made by an indie developer Serhii Dunets.
+                    Feel free to contact me at dunets.devel@gmail.com
+                    """
                 )
+                Text(
+                    "Thanks to Olena Priadko for her valuable contributions, and to my family for their continuous support."
+                )
+                Text("Special thanks to \(NSFullUserName()) ❤️")
 
                 let shortVersion =
                     Bundle.main.infoDictionary?[
@@ -71,7 +78,7 @@ private struct Header: View {
                     .foregroundColor(.secondary)
             }
         }
-        .frame(height: 150)
+        .frame(height: 200)
     }
 }
 
