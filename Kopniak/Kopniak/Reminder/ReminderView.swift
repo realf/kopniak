@@ -23,22 +23,13 @@ struct ReminderView: View {
                 .shadow(color: .brown, radius: 20)
                 .padding(20)
 
-            // Title with military styling
-            Text(store.title)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-                .multilineTextAlignment(.center)
-
             Spacer()
 
             // Message
             Text(store.message)
-                .font(.title3)
-                .foregroundColor(.secondary)
+                .font(.title2)
+                .fontWeight(.bold)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 8)
-                .fixedSize(horizontal: false, vertical: true)
 
             Spacer()
 
@@ -62,10 +53,11 @@ struct ReminderView: View {
                         }
                         .frame(width: 180, height: 32)
                     }
+                    .keyboardShortcut(.cancelAction)
 
                     Spacer()
 
-                    // "Yes Sir!" button
+                    // "Mission Completed" button
                     Button(action: {
                         store.send(.delegate(.dismissTapped))
                     }) {
@@ -78,6 +70,7 @@ struct ReminderView: View {
                         .frame(width: 180, height: 32)
                     }
                     .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
 
                     Spacer()
                 }
@@ -87,6 +80,7 @@ struct ReminderView: View {
         }
         .padding(20)
         .frame(width: 520)
+        .frame(minHeight: 600)
         .onAppear {
             store.send(.onAppear)
         }

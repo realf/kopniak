@@ -75,9 +75,9 @@ struct ReminderFeature {
 
     @ObservableState
     struct State {
-        var title: String
-        var message: String
-        var imageName: String
+        var title: String = ""
+        var message: String = ""
+        var imageName: String = "Kopniak1"
 
         // Recent history to avoid repetition
         var recentTitles: [String] = []
