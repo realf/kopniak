@@ -17,7 +17,6 @@ struct WindowID: Equatable {
     let uniqueID = UUID()
 
     enum Destination: Equatable {
-        case about
         case briefing
         case launchAtLogin
         case reminder
@@ -34,7 +33,6 @@ struct AppFeature {
         var openWindow: WindowID?
 
         // Child states
-        var about: AboutFeature.State
         var appMenu: AppMenuFeature.State
         var briefing: BriefingFeature.State
         var launchAtLogin: LaunchAtLoginFeature.State
@@ -44,7 +42,6 @@ struct AppFeature {
         var settings: SettingsFeature.State
 
         init(remindersStatus: @autoclosure () -> RemindersStatus) {
-            about = AboutFeature.State()
             launchAtLogin = LaunchAtLoginFeature.State()
             let reminders = RemindersFeature.State(
                 remindersStatus: remindersStatus()
@@ -74,7 +71,6 @@ struct AppFeature {
     }
 
     enum Action {
-        case about(AboutFeature.Action)
         case appMenu(AppMenuFeature.Action)
         case briefing(BriefingFeature.Action)
         case launchAtLogin(LaunchAtLoginFeature.Action)
@@ -86,8 +82,6 @@ struct AppFeature {
     }
 
     var body: some Reducer<State, Action> {
-        Scope(state: \.about, action: \.about) { AboutFeature() }
-
         Scope(state: \.appMenu, action: \.appMenu) { AppMenuFeature() }
 
         Scope(state: \.menuIcon, action: \.menuIcon) { AppMenuIconFeature() }
@@ -103,14 +97,17 @@ struct AppFeature {
 
         Reduce { state, action in
             switch action {
-            case .about:
-                return .none
-
             case .appMenu(.delegate(let action)):
                 return reduceAppMenuDelegate(&state, action: action)
 
+            case .appMenu:
+                return .none
+
             case .briefing(.delegate(let action)):
                 return reduceBriefingDelegate(&state, action: action)
+
+            case .briefing:
+                return .none
 
             case .launchAtLogin(.delegate(let action)):
                 return reduceLaunchAtLoginDelegate(&state, action: action)
@@ -155,7 +152,7 @@ extension AppFeature {
         -> Effect<Action>
     {
         var effects: [Effect<Action>] = []
-        if state.settings.showMissionBriefingAtLaunch {
+        if state.settings.generalSettings.showMissionBriefingAtLaunch {
             let window = WindowID(destination: .briefing)
             effects.append(showWindow(&state, window: window))
         }
@@ -197,8 +194,6 @@ extension AppFeature {
         action: AppMenuFeature.Action.Delegate
     ) -> Effect<Action> {
         switch action {
-        case .aboutTapped:
-            return showWindow(&state, window: WindowID(destination: .about))
         case .missionBriefingTapped:
             return showWindow(&state, window: WindowID(destination: .briefing))
         case .pauseRemindersTapped:
@@ -329,7 +324,7 @@ extension AppFeature {
         switch window.destination {
         case .reminder:
             return .none
-        case .about, .settings, .briefing, .launchAtLogin:
+        case .settings, .briefing, .launchAtLogin:
             return activateApp()
         }
     }

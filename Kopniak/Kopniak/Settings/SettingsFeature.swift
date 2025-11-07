@@ -6,43 +6,36 @@
 //
 
 import ComposableArchitecture
-import ServiceManagement
+import Foundation
+
+enum SettingsTab: Sendable, Equatable {
+    case general
+    case about
+}
 
 @Reducer
 struct SettingsFeature {
-    @Dependency(\.smAppService) var smAppService
 
     @ObservableState
     struct State {
-        var launchAtLogin: Bool = false
-        @Shared var reminderInterval: TimeInterval
-        @Shared var showMissionBriefingAtLaunch: Bool
-
-        // MARK: - Constants
-
-        #if DEBUG
-            let intervalRange = 0.1...1.0
-            let intervalStep = 0.1
-        #else
-            let intervalRange = 15.0...120.0
-            let intervalStep = 5.0
-        #endif
+        var selectedTab: SettingsTab = .general
+        var generalSettings: GeneralSettingsFeature.State
+        var about: AboutFeature.State
 
         init(reminderInterval: Shared<TimeInterval>) {
-            let showMissionBriefingAtLaunch = Shared(
-                wrappedValue: true,
-                .appStorage("showMissionBriefingAtLaunch")
+            self.selectedTab = .general
+            self.generalSettings = GeneralSettingsFeature.State(
+                reminderInterval: reminderInterval
             )
-            _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
-            _reminderInterval = reminderInterval
+            self.about = AboutFeature.State()
         }
     }
 
-    enum Action: BindableAction {
-        case binding(BindingAction<State>)
+    enum Action {
+        case about(AboutFeature.Action)
         case delegate(Delegate)
-        case onAppear
-        case updateLaunchAtLogin(Bool)
+        case generalSettings(GeneralSettingsFeature.Action)
+        case selectTab(SettingsTab)
 
         enum Delegate {
             case reminderIntervalChanged
@@ -50,99 +43,34 @@ struct SettingsFeature {
     }
 
     var body: some Reducer<State, Action> {
-        BindingReducer()
-            .onChange(of: \.reminderInterval) { _, _ in
-                Reduce { state, action in
-                    .run { send in
-                        await send(.delegate(.reminderIntervalChanged))
-                    }
-                }
-            }
-            .onChange(of: \.launchAtLogin) { _, enabled in
-                Reduce { state, action in
-                    .run { send in
-                        await updateLaunchAtLogin(enabled: enabled, send: send)
-                    }
-                }
-            }
+        Scope(state: \.generalSettings, action: \.generalSettings) {
+            GeneralSettingsFeature()
+        }
+
+        Scope(state: \.about, action: \.about) {
+            AboutFeature()
+        }
 
         Reduce { state, action in
             switch action {
-            case .binding, .delegate:
+            case .about:
                 return .none
 
-            case .onAppear:
-                // Initialize launch at login state from system
-                state.launchAtLogin = smAppService.isEnabled()
+            case .delegate:
                 return .none
 
-            case .updateLaunchAtLogin(let enabled):
-                state.launchAtLogin = enabled
+            case .generalSettings(.delegate(.reminderIntervalChanged)):
+                return .run { send in
+                    await send(.delegate(.reminderIntervalChanged))
+                }
+
+            case .generalSettings:
+                return .none
+
+            case .selectTab(let tab):
+                state.selectedTab = tab
                 return .none
             }
         }
-    }
-
-    // MARK: - Launch at Login Implementation
-    private nonisolated func updateLaunchAtLogin(
-        enabled: Bool,
-        send: Send<Action>
-    ) async {
-        do {
-            if enabled {
-                try await smAppService.register()
-            } else {
-                try await smAppService.unregister()
-            }
-
-            // Update cached state after successful operation
-            await send(.updateLaunchAtLogin(enabled))
-        } catch {
-            NSLog(
-                "Failed to \(enabled ? "enable" : "disable") launch at login: \(error)"
-            )
-
-            // Revert cached state on failure and refresh UI
-            let isEnabled = await smAppService.isEnabled()
-            await send(.updateLaunchAtLogin(isEnabled))
-        }
-    }
-}
-
-// MARK: - SMAppService dependency.
-nonisolated struct SMAppServiceDependency {
-    var register: () throws -> Void
-    var unregister: () async throws -> Void
-    var isEnabled: () -> Bool
-}
-
-// Conform to DependencyKey to provide a live and preview implementation of the interface.
-extension SMAppServiceDependency: DependencyKey {
-    static let liveValue = Self {
-        try SMAppService.mainApp.register()
-    } unregister: {
-        try await SMAppService.mainApp.unregister()
-    } isEnabled: {
-        SMAppService.mainApp.status == .enabled
-    }
-
-    static let previewValue = Self(
-        register: {
-            print("register")
-        },
-        unregister: {
-            print("unregister")
-        },
-        isEnabled: {
-            true
-        }
-    )
-}
-
-// Register the dependency within DependencyValues.
-extension DependencyValues {
-    var smAppService: SMAppServiceDependency {
-        get { self[SMAppServiceDependency.self] }
-        set { self[SMAppServiceDependency.self] = newValue }
     }
 }

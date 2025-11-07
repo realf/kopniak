@@ -76,18 +76,6 @@ final class StatusItemController {
     private func buildMenu() -> NSMenu {
         let menu = NSMenu()
 
-        // About
-        menu.addItem(
-            createMenuItem(
-                title: "About Kopniak",
-                icon: "info.circle.fill",
-                shortcut: nil,
-                action: #selector(aboutAction)
-            )
-        )
-
-        menu.addItem(NSMenuItem.separator())
-
         // Mission Briefing
         menu.addItem(
             createMenuItem(
@@ -221,10 +209,6 @@ final class StatusItemController {
     }
 
     // MARK: - Menu Actions
-
-    @objc private func aboutAction() {
-        menuStore.send(.delegate(.aboutTapped))
-    }
 
     @objc private func missionBriefingAction() {
         menuStore.send(.delegate(.missionBriefingTapped))
