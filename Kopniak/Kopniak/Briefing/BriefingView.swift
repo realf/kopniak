@@ -191,7 +191,6 @@ struct BriefingView: View {
         }
         .padding(32)
         .frame(width: 700)
-        .fixedSize()
     }
 }
 
