@@ -97,28 +97,28 @@ struct ReminderView: View {
     private nonisolated struct RNG: RandomNumberGenerator {
         mutating func next() -> UInt64 { 0 }
     }
-#endif
 
-#Preview {
-    let store = Store(
-        initialState: ReminderFeature.State(
-            title: "",
-            message: "",
-            imageName: ""
-        )
-    ) {
-        ReminderFeature()
-    } withDependencies: {
-        $0.reminderContentSource = ReminderContentSourceDependency(
-            titles: ["Listen to my order!"],
-            messages: [
-                "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
-            ],
-            sgtImages: ["Kopniak1"],
-            catImages: ["KopniakTheCat1"]
-        )
+    #Preview {
+        let store = Store(
+            initialState: ReminderFeature.State(
+                title: "",
+                message: "",
+                imageName: ""
+            )
+        ) {
+            ReminderFeature()
+        } withDependencies: {
+            $0.reminderContentSource = ReminderContentSourceDependency(
+                titles: ["Listen to my order!"],
+                messages: [
+                    "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
+                ],
+                sgtImages: ["Kopniak1"],
+                catImages: ["KopniakTheCat1"]
+            )
 
-        $0.withRandomNumberGenerator = WithRandomNumberGenerator(RNG())
+            $0.withRandomNumberGenerator = WithRandomNumberGenerator(RNG())
+        }
+        ReminderView(store: store)
     }
-    ReminderView(store: store)
-}
+#endif
