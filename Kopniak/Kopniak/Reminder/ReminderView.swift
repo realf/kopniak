@@ -16,9 +16,10 @@ struct ReminderView: View {
             // App icon - random Kopniak variant
             Image(store.imageName)
                 .resizable()
+                .interpolation(.high)
                 .scaledToFit()
                 .frame(width: 300, height: 300)
-                .cornerRadius(24)
+                .cornerRadius(40)
                 .shadow(color: .brown, radius: 20)
                 .padding(20)
 
@@ -92,9 +93,19 @@ struct ReminderView: View {
     }
 }
 
+#if DEBUG
+    private nonisolated struct RNG: RandomNumberGenerator {
+        mutating func next() -> UInt64 { 0 }
+    }
+#endif
+
 #Preview {
     let store = Store(
-        initialState: ReminderFeature.State(title: "", message: "")
+        initialState: ReminderFeature.State(
+            title: "",
+            message: "",
+            imageName: ""
+        )
     ) {
         ReminderFeature()
     } withDependencies: {
@@ -102,8 +113,12 @@ struct ReminderView: View {
             titles: ["Listen to my order!"],
             messages: [
                 "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
-            ]
+            ],
+            sgtImages: ["Kopniak1"],
+            catImages: ["KopniakTheCat1"]
         )
+
+        $0.withRandomNumberGenerator = WithRandomNumberGenerator(RNG())
     }
     ReminderView(store: store)
 }

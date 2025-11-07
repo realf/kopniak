@@ -52,7 +52,11 @@ struct AppFeature {
                 remindersStatus: reminders.$remindersStatus
             )
 
-            reminder = ReminderFeature.State(title: "", message: "")
+            reminder = ReminderFeature.State(
+                title: "",
+                message: "",
+                imageName: ""
+            )
 
             settings = SettingsFeature.State(
                 reminderInterval: reminders.$reminderInterval

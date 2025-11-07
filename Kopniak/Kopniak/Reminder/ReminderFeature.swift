@@ -61,6 +61,9 @@ struct ReminderContentSource {
         "Take a walk around the perimeter!\nMovement keeps the mind sharp!",
         "Stretch those legs, private!\nBlood flow is essential for peak performance!",
     ]
+
+    static let sgtImages = ["Kopniak1", "Kopniak2", "Kopniak3", "Kopniak4"]
+    static let catImages = ["KopniakTheCat1"]
 }
 
 @Reducer
@@ -74,7 +77,7 @@ struct ReminderFeature {
     struct State {
         var title: String
         var message: String
-        var imageName: String = "Kopniak1"
+        var imageName: String
 
         // Recent history to avoid repetition
         var recentTitles: [String] = []
@@ -128,19 +131,22 @@ struct ReminderFeature {
         }
     }
 
-    // MARK: - Picking logic that avoids recent repeats
+    // MARK: - Random image picking logic
+
     private func pickRandomImage(_ state: State) -> String {
-        let kopniakImages = ["Kopniak1", "Kopniak2", "Kopniak3", "Kopniak4"]
-        let kopniakCatImages = ["KopniakTheCat1"]
         let count = state.dismissReminderStreakCount
-        return withRandomNumberGenerator { generator in
+        return withRandomNumberGenerator { [reminderContentSource] generator in
             return if count > 0 && count % 10 == 0 {
-                kopniakCatImages.randomElement() ?? "KopniakTheCat1"
+                reminderContentSource.catImages.randomElement(using: &generator)
+                    ?? "KopniakTheCat1"
             } else {
-                kopniakImages.randomElement() ?? "Kopniak1"
+                reminderContentSource.sgtImages.randomElement(using: &generator)
+                    ?? "Kopniak1"
             }
         }
     }
+
+    // MARK: - Picking logic that avoids recent repeats
 
     private func pickRandomTitle(_ state: State) -> String {
         let available = reminderContentSource.titles.filter {
@@ -149,8 +155,8 @@ struct ReminderFeature {
 
         return withRandomNumberGenerator { [reminderContentSource] generator in
             (available.isEmpty
-                ? reminderContentSource.titles.randomElement()
-                : available.randomElement())
+                ? reminderContentSource.titles.randomElement(using: &generator)
+                : available.randomElement(using: &generator))
                 ?? "Time for Action, Trooper!"
         }
     }
@@ -161,8 +167,8 @@ struct ReminderFeature {
         }
         return withRandomNumberGenerator { [reminderContentSource] generator in
             (available.isEmpty
-                ? reminderContentSource.titles.randomElement()
-                : available.randomElement())
+                ? reminderContentSource.titles.randomElement(using: &generator)
+                : available.randomElement(using: &generator))
                 ?? "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
         }
     }
@@ -186,13 +192,17 @@ struct ReminderFeature {
 nonisolated struct ReminderContentSourceDependency {
     let titles: [String]
     let messages: [String]
+    let sgtImages: [String]
+    let catImages: [String]
 }
 
 // Conform to DependencyKey to provide a live and preview implementation of the interface.
 extension ReminderContentSourceDependency: DependencyKey {
     static let liveValue = Self(
         titles: ReminderContentSource.militaryTitles,
-        messages: ReminderContentSource.militaryMessages
+        messages: ReminderContentSource.militaryMessages,
+        sgtImages: ReminderContentSource.sgtImages,
+        catImages: ReminderContentSource.catImages
     )
 }
 
