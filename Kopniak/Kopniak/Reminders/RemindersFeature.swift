@@ -95,10 +95,7 @@ struct RemindersFeature {
                 )
 
             case .reminderIntervalChanged:
-                return .merge(
-                    restartReminders(&state),
-                    dismissReminder(&state)
-                )
+                return .none
 
             case .reminderSnoozeTapped:
                 return reminderResponse(
