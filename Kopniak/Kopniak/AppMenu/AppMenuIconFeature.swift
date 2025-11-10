@@ -12,7 +12,48 @@ import Foundation
 struct AppMenuIconFeature {
     @ObservableState
     struct State {
+        @Shared var menuIconTimeDisplay: TimeDisplaySetting
         @Shared var remindersStatus: RemindersStatus
         @Shared var remainingTime: TimeInterval
+
+        var remainingTimeFormatted: String {
+            formatted(remainingTime: remainingTime)
+        }
+
+        static let positionalTimeFormatter = {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.minute, .second]
+            formatter.zeroFormattingBehavior = .pad
+            formatter.unitsStyle = .positional
+            return formatter
+        }()
+
+        static let abbreviatedTimeFormatter = {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.minute]
+            formatter.unitsStyle = .abbreviated
+            return formatter
+        }()
+
+        init(remindersStatus: Shared<RemindersStatus>, remainingTime: Shared<TimeInterval>, menuIconTimeDisplay: TimeDisplaySetting) {
+            _remindersStatus = remindersStatus
+            _remainingTime = remainingTime
+            let menuIconTimeDisplay = Shared(
+                wrappedValue: menuIconTimeDisplay,
+                .appStorage("menuIconTimeDisplay")
+            )
+            _menuIconTimeDisplay = menuIconTimeDisplay
+        }
+
+        private func formatted(remainingTime: TimeInterval) -> String {
+            return switch menuIconTimeDisplay {
+            case .none:
+                ""
+            case .abbreviated:
+                Self.abbreviatedTimeFormatter.string(from: remainingTime) ?? ""
+            case .positional:
+                Self.positionalTimeFormatter.string(from: remainingTime) ?? ""
+            }
+        }
     }
 }

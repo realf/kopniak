@@ -43,10 +43,10 @@ final class StatusItemController {
             )
 
             let publisher = iconStore.publisher
-            publisher.remainingTime.sink { [weak self] time in
+            publisher.remainingTimeFormatted.sink { [weak self] time in
                 guard let self else { return }
                 if iconStore.remindersStatus != .off {
-                    button.title = self.formatted(remainingTime: time)
+                    button.title = time
                 }
             }
             .store(in: &cancellables)
@@ -240,13 +240,6 @@ final class StatusItemController {
 
     @objc private func quitAction() {
         menuStore.send(.delegate(.quitTapped))
-    }
-
-    private func formatted(remainingTime: TimeInterval) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.minute, .second]
-        formatter.zeroFormattingBehavior = .pad
-        return formatter.string(from: remainingTime) ?? "00:00"
     }
 
     private func menuBarIcon(status: RemindersStatus) -> NSImage {

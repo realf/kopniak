@@ -23,12 +23,14 @@ struct SettingsFeature {
 
         init(
             reminderInterval: Shared<TimeInterval>,
-            snoozeInterval: Shared<TimeInterval>
+            snoozeInterval: Shared<TimeInterval>,
+            menuIconTimeDisplay: Shared<TimeDisplaySetting>
         ) {
             self.selectedTab = .general
             self.generalSettings = GeneralSettingsFeature.State(
                 reminderInterval: reminderInterval,
-                snoozeInterval: snoozeInterval
+                snoozeInterval: snoozeInterval,
+                menuIconTimeDisplay: menuIconTimeDisplay
             )
             self.about = AboutFeature.State()
         }

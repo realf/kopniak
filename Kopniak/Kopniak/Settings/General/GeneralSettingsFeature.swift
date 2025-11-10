@@ -8,6 +8,14 @@
 import ComposableArchitecture
 import ServiceManagement
 
+enum TimeDisplaySetting: String, CaseIterable, Identifiable {
+    case abbreviated
+    case positional
+    case none
+
+    var id: Self { self }
+}
+
 @Reducer
 struct GeneralSettingsFeature {
     @Dependency(\.smAppService) var smAppService
@@ -32,6 +40,7 @@ struct GeneralSettingsFeature {
         @Shared var reminderInterval: TimeInterval
         @Shared var showMissionBriefingAtLaunch: Bool
         @Shared var snoozeInterval: TimeInterval
+        @Shared var menuIconTimeDisplay: TimeDisplaySetting
 
         var reminderIntervalFormatted: String {
             return Self.intervalFormatter.string(from: reminderInterval)
@@ -76,7 +85,8 @@ struct GeneralSettingsFeature {
 
         init(
             reminderInterval: Shared<TimeInterval>,
-            snoozeInterval: Shared<TimeInterval>
+            snoozeInterval: Shared<TimeInterval>,
+            menuIconTimeDisplay: Shared<TimeDisplaySetting>
         ) {
             _reminderInterval = reminderInterval
             let showMissionBriefingAtLaunch = Shared(
@@ -85,6 +95,7 @@ struct GeneralSettingsFeature {
             )
             _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
             _snoozeInterval = snoozeInterval
+            _menuIconTimeDisplay = menuIconTimeDisplay
         }
     }
 

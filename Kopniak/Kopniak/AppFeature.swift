@@ -56,19 +56,22 @@ struct AppFeature {
                 snoozeInterval: reminders.$snoozeInterval
             )
 
+            let menuIcon = AppMenuIconFeature.State(
+                remindersStatus: reminders.$remindersStatus,
+                remainingTime: reminders.$remainingTime,
+                menuIconTimeDisplay: .abbreviated
+            )
+            self.menuIcon = menuIcon
+
             settings = SettingsFeature.State(
                 reminderInterval: reminders.$reminderInterval,
-                snoozeInterval: reminders.$snoozeInterval
+                snoozeInterval: reminders.$snoozeInterval,
+                menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay
             )
-
+            
             briefing = BriefingFeature.State(
                 reminderInterval: reminders.$reminderInterval,
                 remindersStatus: reminders.$remindersStatus
-            )
-
-            menuIcon = AppMenuIconFeature.State(
-                remindersStatus: reminders.$remindersStatus,
-                remainingTime: reminders.$remainingTime
             )
         }
     }

@@ -15,16 +15,17 @@ struct GeneralSettingsView: View {
     var body: some View {
         let reminderIntervalBinding = Binding(
             get: { store.reminderInterval },
-            set: { newValue in
-                store.reminderInterval = newValue.rounded()
-            }
+            set: { newValue in store.reminderInterval = newValue.rounded() }
         )
 
         let snoozeIntervalBinding = Binding(
             get: { store.snoozeInterval },
-            set: { newValue in
-                store.snoozeInterval = newValue.rounded()
-            }
+            set: { newValue in store.snoozeInterval = newValue.rounded() }
+        )
+
+        let menuIconTimeDisplayBinding = Binding(
+            get: { store.menuIconTimeDisplay },
+            set: { newValue in store.menuIconTimeDisplay = newValue }
         )
 
         HStack {
@@ -83,6 +84,20 @@ struct GeneralSettingsView: View {
                 } header: {
                     Text("Launch Behavior")
                 }
+
+                // Icon settings
+                Section {
+                    Picker(
+                        selection: menuIconTimeDisplayBinding,
+                        label: Text("Remaining Time Format")
+                    ) {
+                        ForEach(TimeDisplaySetting.allCases) { setting in
+                            Text(setting.rawValue.capitalized)
+                        }
+                    }
+                } header: {
+                    Text("Menu Icon Settings")
+                }
             }
             .formStyle(.grouped)
             Spacer()
@@ -96,10 +111,12 @@ struct GeneralSettingsView: View {
 #Preview {
     let reminderInterval = Shared(value: 25.0 * 60)
     let snoozeInterval = Shared(value: 10.0 * 60)
+    let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.abbreviated)
     let store = Store(
         initialState: GeneralSettingsFeature.State(
             reminderInterval: reminderInterval,
-            snoozeInterval: snoozeInterval
+            snoozeInterval: snoozeInterval,
+            menuIconTimeDisplay: menuIconTimeDisplay
         ),
         reducer: {
             GeneralSettingsFeature()
