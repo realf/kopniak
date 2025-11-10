@@ -27,6 +27,7 @@ struct RemindersFeature {
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
+        @Shared var restartAfterScreenLock: Bool
         @Shared var snoozeInterval: TimeInterval
 
         let timerID = UUID()
@@ -48,6 +49,11 @@ struct RemindersFeature {
             )
 
             _reminderInterval = reminderInterval
+
+            _restartAfterScreenLock = Shared(
+                wrappedValue: true,
+                .restartAfterScreenLock
+            )
 
             let snoozeInterval = Shared(
                 wrappedValue: Self.defaultSnoozeInterval,
@@ -151,9 +157,13 @@ struct RemindersFeature {
         case .screenDidLock, .sessionDidResignActive, .systemWillSleep:
             return cancelTimer(state)
 
-        // When exiting idle state, restart the reminder timer
+        // When exiting idle state, restart or start the reminder timer
         case .screenDidUnlock, .sessionDidBecomeActive, .systemDidWake:
-            return restartReminders(&state)
+            if state.restartAfterScreenLock {
+                return restartReminders(&state)
+            } else {
+                return startTimer(&state)
+            }
         }
     }
 
@@ -286,5 +296,11 @@ extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
 extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
     static var snoozeInterval: Self {
         .appStorage("snoozeInterval")
+    }
+}
+
+extension SharedReaderKey where Self == AppStorageKey<Bool> {
+    static var restartAfterScreenLock: Self {
+        .appStorage("restartAfterScreenLock")
     }
 }

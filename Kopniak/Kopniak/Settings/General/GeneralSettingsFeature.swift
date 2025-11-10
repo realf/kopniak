@@ -37,10 +37,11 @@ struct GeneralSettingsFeature {
             return formatter
         }()
 
+        @Shared var menuIconTimeDisplay: TimeDisplaySetting
+        @Shared var restartAfterScreenLock: Bool
         @Shared var reminderInterval: TimeInterval
         @Shared var showMissionBriefingAtLaunch: Bool
         @Shared var snoozeInterval: TimeInterval
-        @Shared var menuIconTimeDisplay: TimeDisplaySetting
 
         var reminderIntervalFormatted: String {
             return Self.intervalFormatter.string(from: reminderInterval)
@@ -86,7 +87,8 @@ struct GeneralSettingsFeature {
         init(
             reminderInterval: Shared<TimeInterval>,
             snoozeInterval: Shared<TimeInterval>,
-            menuIconTimeDisplay: Shared<TimeDisplaySetting>
+            menuIconTimeDisplay: Shared<TimeDisplaySetting>,
+            restartAfterScreenLock: Shared<Bool>
         ) {
             _reminderInterval = reminderInterval
             let showMissionBriefingAtLaunch = Shared(
@@ -96,6 +98,7 @@ struct GeneralSettingsFeature {
             _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
             _snoozeInterval = snoozeInterval
             _menuIconTimeDisplay = menuIconTimeDisplay
+            _restartAfterScreenLock = restartAfterScreenLock
         }
     }
 

@@ -45,7 +45,7 @@ struct GeneralSettingsView: View {
                         ),
                         label: {
                             Text(
-                                "Break Interval: \(store.reminderIntervalFormatted)"
+                                "Break interval: \(store.reminderIntervalFormatted)"
                             )
                         }
                     )
@@ -62,12 +62,16 @@ struct GeneralSettingsView: View {
                         ),
                         label: {
                             Text(
-                                "Snooze Interval: \(store.snoozeIntervalFormatted)"
+                                "Snooze interval: \(store.snoozeIntervalFormatted)"
                             )
                         }
                     )
+                    Toggle(
+                        "Reset timer after screen lock",
+                        isOn: $store.restartAfterScreenLock
+                    )
                 } header: {
-                    Text("Exercise Drill Schedule")
+                    Text("Exercise Drill")
                 }
 
                 // Launch settings
@@ -89,14 +93,14 @@ struct GeneralSettingsView: View {
                 Section {
                     Picker(
                         selection: menuIconTimeDisplayBinding,
-                        label: Text("Remaining Time Format")
+                        label: Text("Remaining time format")
                     ) {
                         ForEach(TimeDisplaySetting.allCases) { setting in
                             Text(setting.rawValue.capitalized)
                         }
                     }
                 } header: {
-                    Text("Menu Icon Settings")
+                    Text("Menu Icon")
                 }
             }
             .formStyle(.grouped)
@@ -112,11 +116,13 @@ struct GeneralSettingsView: View {
     let reminderInterval = Shared(value: 25.0 * 60)
     let snoozeInterval = Shared(value: 10.0 * 60)
     let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.abbreviated)
+    let restartAfterScreenLock = Shared(value: true)
     let store = Store(
         initialState: GeneralSettingsFeature.State(
             reminderInterval: reminderInterval,
             snoozeInterval: snoozeInterval,
-            menuIconTimeDisplay: menuIconTimeDisplay
+            menuIconTimeDisplay: menuIconTimeDisplay,
+            restartAfterScreenLock: restartAfterScreenLock
         ),
         reducer: {
             GeneralSettingsFeature()

@@ -66,9 +66,10 @@ struct AppFeature {
             settings = SettingsFeature.State(
                 reminderInterval: reminders.$reminderInterval,
                 snoozeInterval: reminders.$snoozeInterval,
-                menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay
+                menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay,
+                restartAfterScreenLock: reminders.$restartAfterScreenLock
             )
-            
+
             briefing = BriefingFeature.State(
                 reminderInterval: reminders.$reminderInterval,
                 remindersStatus: reminders.$remindersStatus
