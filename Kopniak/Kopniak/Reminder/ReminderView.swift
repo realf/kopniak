@@ -45,11 +45,13 @@ struct ReminderView: View {
                         HStack {
                             Image(
                                 systemName:
-                                    "10.arrow.trianglehead.counterclockwise"
+                                    "arrow.trianglehead.counterclockwise"
                             )
                             .imageScale(.large)
-                            Text("At Ease for 10")
-                                .font(.title3)
+                            Text(
+                                "At Ease for \(store.snoozeIntervalFormatted)"
+                            )
+                            .font(.title3)
                         }
                         .frame(width: 180, height: 32)
                     }
@@ -97,7 +99,8 @@ struct ReminderView: View {
             initialState: ReminderFeature.State(
                 title: "",
                 message: "",
-                imageName: ""
+                imageName: "",
+                snoozeInterval: Shared(value: 1.0)
             )
         ) {
             ReminderFeature()

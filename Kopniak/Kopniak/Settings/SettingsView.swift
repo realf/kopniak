@@ -44,9 +44,11 @@ struct SettingsView: View {
 
 #Preview {
     let reminderInterval = Shared(value: 25.0 * 60)
+    let snoozeInterval = Shared(value: 10.0 * 60)
     let store = Store(
         initialState: SettingsFeature.State(
-            reminderInterval: reminderInterval
+            reminderInterval: reminderInterval,
+            snoozeInterval: snoozeInterval
         ),
         reducer: {
             SettingsFeature()

@@ -15,26 +15,76 @@ struct GeneralSettingsFeature {
     @ObservableState
     struct State {
         var launchAtLogin: Bool = false
+        static let intervalFormatter = {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.minute, .second]
+            formatter.unitsStyle = .full
+            return formatter
+        }()
+
+        static let rangeBoundFormatter = {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.minute, .second]
+            formatter.unitsStyle = .short
+            return formatter
+        }()
+
         @Shared var reminderInterval: TimeInterval
         @Shared var showMissionBriefingAtLaunch: Bool
+        @Shared var snoozeInterval: TimeInterval
+
+        var reminderIntervalFormatted: String {
+            return Self.intervalFormatter.string(from: reminderInterval)
+                ?? "0 minutes"
+        }
+
+        var snoozeIntervalFormatted: String {
+            return Self.intervalFormatter.string(from: snoozeInterval)
+                ?? "0 minutes"
+        }
+
+        var minReminderIntervalFormatted: String {
+            return Self.rangeBoundFormatter.string(
+                from: reminderIntervalRange.lowerBound
+            ) ?? "0 minutes"
+        }
+
+        var maxReminderIntervalFormatted: String {
+            return Self.rangeBoundFormatter.string(
+                from: reminderIntervalRange.upperBound
+            ) ?? "0 minutes"
+        }
+
+        var minSnoozeIntervalFormatted: String {
+            return Self.rangeBoundFormatter.string(
+                from: snoozeIntervalRange.lowerBound
+            ) ?? "0 minutes"
+        }
+
+        var maxSnoozeIntervalFormatted: String {
+            return Self.rangeBoundFormatter.string(
+                from: snoozeIntervalRange.upperBound
+            ) ?? "0 minutes"
+        }
 
         // MARK: - Constants
 
-        #if DEBUG
-            let intervalRange = 0.1...1.0
-            let intervalStep = 0.1
-        #else
-            let intervalRange = 15.0...120.0
-            let intervalStep = 5.0
-        #endif
+        let reminderIntervalRange = 15.0 * 60.0...120.0 * 60.0
+        let reminderIntervalStep = 5.0 * 60.0
+        let snoozeIntervalRange = 5.0 * 60.0...15.0 * 60.0
+        let snoozeIntervalStep = 5.0 * 60.0
 
-        init(reminderInterval: Shared<TimeInterval>) {
+        init(
+            reminderInterval: Shared<TimeInterval>,
+            snoozeInterval: Shared<TimeInterval>
+        ) {
+            _reminderInterval = reminderInterval
             let showMissionBriefingAtLaunch = Shared(
                 wrappedValue: true,
                 .appStorage("showMissionBriefingAtLaunch")
             )
             _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
-            _reminderInterval = reminderInterval
+            _snoozeInterval = snoozeInterval
         }
     }
 

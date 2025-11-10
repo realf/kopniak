@@ -21,12 +21,13 @@ struct RemindersFeature {
     @ObservableState
     struct State {
         static let defaultReminderInterval: TimeInterval = 25.0 * 60
-        static let snoozeReminderInterval: TimeInterval = 10.0 * 60
+        static let defaultSnoozeInterval: TimeInterval = 5.0 * 60
 
         var idleMonitor: IdleMonitorFeature.State
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
+        @Shared var snoozeInterval: TimeInterval
 
         let timerID = UUID()
 
@@ -42,11 +43,17 @@ struct RemindersFeature {
             _remainingTime = remainingTime
 
             let reminderInterval = Shared(
-                wrappedValue: State.defaultReminderInterval,
+                wrappedValue: Self.defaultReminderInterval,
                 .reminderInterval
             )
 
             _reminderInterval = reminderInterval
+
+            let snoozeInterval = Shared(
+                wrappedValue: Self.defaultSnoozeInterval,
+                .snoozeInterval
+            )
+            _snoozeInterval = snoozeInterval
         }
     }
 
@@ -100,7 +107,7 @@ struct RemindersFeature {
             case .reminderSnoozeTapped:
                 return reminderResponse(
                     &state,
-                    nextReminderIn: State.snoozeReminderInterval
+                    nextReminderIn: state.snoozeInterval
                 )
 
             case .restartRemindersTapped:
@@ -273,5 +280,11 @@ extension SharedReaderKey where Self == AppStorageKey<RemindersStatus> {
 extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
     static var reminderInterval: Self {
         .appStorage("reminderInterval")
+    }
+}
+
+extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
+    static var snoozeInterval: Self {
+        .appStorage("snoozeInterval")
     }
 }

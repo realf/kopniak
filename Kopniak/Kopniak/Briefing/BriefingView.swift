@@ -53,7 +53,7 @@ struct BriefingView: View {
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(
-                        "I'll bark orders every __\(Int(store.reminderInterval / 60.0))__ minutes — time for a movement break!"
+                        "I'll bark orders every __\(store.reminderIntervalFormatted)__ — time for a movement break!"
                     )
 
                     HStack(alignment: .center, spacing: 0) {

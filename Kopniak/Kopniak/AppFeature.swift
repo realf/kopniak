@@ -52,10 +52,13 @@ struct AppFeature {
                 remindersStatus: reminders.$remindersStatus
             )
 
-            reminder = ReminderFeature.State()
+            reminder = ReminderFeature.State(
+                snoozeInterval: reminders.$snoozeInterval
+            )
 
             settings = SettingsFeature.State(
-                reminderInterval: reminders.$reminderInterval
+                reminderInterval: reminders.$reminderInterval,
+                snoozeInterval: reminders.$snoozeInterval
             )
 
             briefing = BriefingFeature.State(

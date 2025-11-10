@@ -13,6 +13,12 @@ struct BriefingFeature {
     @ObservableState
     struct State {
         @Shared var reminderInterval: TimeInterval
+        var reminderIntervalFormatted: String {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.minute, .second]
+            formatter.unitsStyle = .full
+            return formatter.string(from: reminderInterval) ?? "0 minutes"
+        }
         @Shared var remindersStatus: RemindersStatus
     }
 

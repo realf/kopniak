@@ -13,31 +13,55 @@ struct GeneralSettingsView: View {
     @Bindable var store: StoreOf<GeneralSettingsFeature>
 
     var body: some View {
-        let binding = Binding(
-            get: { Double(store.reminderInterval / 60.0) },
+        let reminderIntervalBinding = Binding(
+            get: { store.reminderInterval },
             set: { newValue in
-                store.reminderInterval = (newValue * 60.0)
-                    .rounded()
+                store.reminderInterval = newValue.rounded()
             }
         )
+
+        let snoozeIntervalBinding = Binding(
+            get: { store.snoozeInterval },
+            set: { newValue in
+                store.snoozeInterval = newValue.rounded()
+            }
+        )
+
         HStack {
             Spacer()
             Form {
                 // Reminder settings
                 Section {
                     Slider(
-                        value: binding,
-                        in: store.intervalRange,
-                        step: store.intervalStep,
+                        value: reminderIntervalBinding,
+                        in: store.reminderIntervalRange,
+                        step: store.reminderIntervalStep,
                         minimumValueLabel: Text(
-                            "\(Int(store.intervalRange.lowerBound)) min"
+                            store.minReminderIntervalFormatted
                         ),
                         maximumValueLabel: Text(
-                            "\(Int(store.intervalRange.upperBound)) min"
+                            store.maxReminderIntervalFormatted
                         ),
                         label: {
                             Text(
-                                "Break Interval: \(Int((store.reminderInterval / 60.0).rounded())) minutes"
+                                "Break Interval: \(store.reminderIntervalFormatted)"
+                            )
+                        }
+                    )
+
+                    Slider(
+                        value: snoozeIntervalBinding,
+                        in: store.snoozeIntervalRange,
+                        step: store.snoozeIntervalStep,
+                        minimumValueLabel: Text(
+                            store.minSnoozeIntervalFormatted
+                        ),
+                        maximumValueLabel: Text(
+                            store.maxSnoozeIntervalFormatted
+                        ),
+                        label: {
+                            Text(
+                                "Snooze Interval: \(store.snoozeIntervalFormatted)"
                             )
                         }
                     )
@@ -71,9 +95,11 @@ struct GeneralSettingsView: View {
 
 #Preview {
     let reminderInterval = Shared(value: 25.0 * 60)
+    let snoozeInterval = Shared(value: 10.0 * 60)
     let store = Store(
         initialState: GeneralSettingsFeature.State(
-            reminderInterval: reminderInterval
+            reminderInterval: reminderInterval,
+            snoozeInterval: snoozeInterval
         ),
         reducer: {
             GeneralSettingsFeature()

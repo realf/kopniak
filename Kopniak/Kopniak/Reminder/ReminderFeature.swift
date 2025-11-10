@@ -85,6 +85,13 @@ struct ReminderFeature {
 
         @Shared(.appStorage("dismissReminderStreakCount"))
         var dismissReminderStreakCount = 0
+
+        @Shared var snoozeInterval: TimeInterval
+        var snoozeIntervalFormatted: String {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.minute]
+            return formatter.string(from: snoozeInterval) ?? "0"
+        }
     }
 
     enum Action {

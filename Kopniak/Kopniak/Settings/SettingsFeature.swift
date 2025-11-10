@@ -15,17 +15,20 @@ enum SettingsTab: Sendable, Equatable {
 
 @Reducer
 struct SettingsFeature {
-
     @ObservableState
     struct State {
         var selectedTab: SettingsTab = .general
         var generalSettings: GeneralSettingsFeature.State
         var about: AboutFeature.State
 
-        init(reminderInterval: Shared<TimeInterval>) {
+        init(
+            reminderInterval: Shared<TimeInterval>,
+            snoozeInterval: Shared<TimeInterval>
+        ) {
             self.selectedTab = .general
             self.generalSettings = GeneralSettingsFeature.State(
-                reminderInterval: reminderInterval
+                reminderInterval: reminderInterval,
+                snoozeInterval: snoozeInterval
             )
             self.about = AboutFeature.State()
         }
