@@ -122,10 +122,10 @@ final class StatusItemController {
 
             menu.addItem(
                 createMenuItem(
-                    title: "Reissue Orders",
-                    icon: "restart",
-                    shortcut: ("o", .command),
-                    action: #selector(reissueOrdersAction)
+                    title: "Say Again",
+                    icon: "backward.end.fill",
+                    shortcut: ("y", .command),
+                    action: #selector(sayAgainAction)
                 )
             )
         case .paused:
@@ -149,10 +149,10 @@ final class StatusItemController {
 
             menu.addItem(
                 createMenuItem(
-                    title: "Reissue Orders",
-                    icon: "restart",
-                    shortcut: ("o", .command),
-                    action: #selector(reissueOrdersAction)
+                    title: "Say Again",
+                    icon: "backward.end.fill",
+                    shortcut: ("y", .command),
+                    action: #selector(sayAgainAction)
                 )
             )
         }
@@ -226,7 +226,7 @@ final class StatusItemController {
         menuStore.send(.delegate(.pauseRemindersTapped))
     }
 
-    @objc private func reissueOrdersAction() {
+    @objc private func sayAgainAction() {
         menuStore.send(.delegate(.restartRemindersTapped))
     }
 
