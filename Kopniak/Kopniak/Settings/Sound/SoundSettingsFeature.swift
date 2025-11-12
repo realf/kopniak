@@ -21,6 +21,7 @@ struct SoundSettingsFeature {
     @ObservableState
     struct State {
         var availableSounds: [String] = []
+        var isLoadingSounds = true
 
         var soundOptions: [SoundOption] {
             // Build sound options, ensuring current selection is included even if not yet loaded
@@ -34,15 +35,6 @@ struct SoundSettingsFeature {
                 }
             )
 
-            // If current reminderSound is set but not in available sounds (e.g., before onAppear), add it
-            if let currentSound = reminderSound,
-                !availableSounds.contains(currentSound)
-            {
-                options.append(
-                    SoundOption(label: currentSound, soundName: currentSound)
-                )
-            }
-
             return options
         }
 
@@ -54,6 +46,7 @@ struct SoundSettingsFeature {
         case binding(BindingAction<State>)
         case onAppear
         case playPreviewSound
+        case soundsLoaded([String])
     }
 
     var body: some Reducer<State, Action> {
@@ -65,7 +58,15 @@ struct SoundSettingsFeature {
                 return .none
 
             case .onAppear:
-                state.availableSounds = systemSounds.availableSounds()
+                state.isLoadingSounds = true
+                return .run { send in
+                    let sounds = await systemSounds.availableSounds()
+                    await send(.soundsLoaded(sounds))
+                }
+
+            case .soundsLoaded(let sounds):
+                state.availableSounds = sounds
+                state.isLoadingSounds = false
                 return .none
 
             case .playPreviewSound:

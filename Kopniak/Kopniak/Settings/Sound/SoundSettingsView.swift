@@ -21,9 +21,11 @@ struct SoundSettingsView: View {
                             selection: $store.reminderSound,
                             label: Text("Reminder sound")
                         ) {
-                            ForEach(store.soundOptions, id: \.soundName) {
-                                option in
-                                Text(option.label)
+                            if !store.isLoadingSounds {
+                                ForEach(store.soundOptions, id: \.soundName) {
+                                    option in
+                                    Text(option.label)
+                                }
                             }
                         }
 
