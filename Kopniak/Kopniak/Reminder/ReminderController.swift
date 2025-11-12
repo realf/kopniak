@@ -43,6 +43,7 @@ class ReminderController: NSWindowController {
         // Add subtle animation
         window.alphaValue = 0
         window.animator().alphaValue = 1.0
+        window.isMovableByWindowBackground = true
     }
 
     func hideReminder() {
