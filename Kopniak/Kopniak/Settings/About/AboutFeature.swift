@@ -23,7 +23,7 @@ struct AboutFeature {
         let libraries: [LibraryInfo] = [
             .init(
                 name: "combine-schedulers",
-                version: "1.0.3",
+                version: "1.1.0",
                 licenseType: "MIT",
                 repositoryURL: URL(
                     string: "https://github.com/pointfreeco/combine-schedulers"
@@ -71,7 +71,7 @@ struct AboutFeature {
             ),
             .init(
                 name: "swift-composable-architecture",
-                version: "1.23.0",
+                version: "1.23.1",
                 licenseType: "MIT",
                 repositoryURL: URL(
                     string:
