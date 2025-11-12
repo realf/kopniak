@@ -28,6 +28,9 @@ struct SoundSettingsView: View {
                                 }
                             }
                         }
+                        .onChange(of: store.reminderSound) {
+                            store.send(.reminderSoundChanged)
+                        }
 
                         Button {
                             store.send(.playPreviewSound)

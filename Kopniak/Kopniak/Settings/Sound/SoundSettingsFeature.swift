@@ -46,6 +46,7 @@ struct SoundSettingsFeature {
         case binding(BindingAction<State>)
         case onAppear
         case playPreviewSound
+        case reminderSoundChanged
         case soundsLoaded([String])
     }
 
@@ -69,11 +70,15 @@ struct SoundSettingsFeature {
                 state.isLoadingSounds = false
                 return .none
 
-            case .playPreviewSound:
+            case .playPreviewSound, .reminderSoundChanged:
                 if let sound = state.reminderSound {
-                    soundPlayback.playSound(sound, state.soundVolume)
+                    let volume = state.soundVolume
+                    return .run { send in
+                        await soundPlayback.playSound(sound, volume)
+                    }
+                } else {
+                    return .none
                 }
-                return .none
             }
         }
     }
