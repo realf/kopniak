@@ -70,6 +70,7 @@ struct ReminderContentSource {
 struct ReminderFeature {
     @Dependency(\.withRandomNumberGenerator) var withRandomNumberGenerator
     @Dependency(\.reminderContentSource) var reminderContentSource
+    @Dependency(\.soundPlayback) var soundPlayback
 
     let maxRecent = 10
 
@@ -87,10 +88,31 @@ struct ReminderFeature {
         var dismissReminderStreakCount = 0
 
         @Shared var snoozeInterval: TimeInterval
+        @Shared var reminderSound: String?
+        @Shared var soundVolume: Double
+
         var snoozeIntervalFormatted: String {
             let formatter = DateComponentsFormatter()
             formatter.allowedUnits = [.minute]
             return formatter.string(from: snoozeInterval) ?? "0"
+        }
+
+        init(
+            snoozeInterval: Shared<TimeInterval>
+        ) {
+            _snoozeInterval = snoozeInterval
+
+            let reminderSound = Shared(
+                wrappedValue: Optional<String>.none,
+                .appStorage("reminderSound")
+            )
+            let soundVolume = Shared(
+                wrappedValue: 1.0,
+                .appStorage("soundVolume")
+            )
+
+            _reminderSound = reminderSound
+            _soundVolume = soundVolume
         }
     }
 
@@ -119,7 +141,16 @@ struct ReminderFeature {
                 state.imageName = imageName
                 updateRecentTitle(&state, title: title)
                 updateRecentMessage(&state, message: message)
-                return .none
+
+                if let sound = state.reminderSound {
+                    let volume = state.soundVolume
+                    return .run { send in
+                        // Play sound if configured
+                        await soundPlayback.playSound(sound, volume)
+                    }
+                } else {
+                    return .none
+                }
             }
         }
     }

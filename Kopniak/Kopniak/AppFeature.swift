@@ -52,9 +52,11 @@ struct AppFeature {
                 remindersStatus: reminders.$remindersStatus
             )
 
-            reminder = ReminderFeature.State(
+            let reminder = ReminderFeature.State(
                 snoozeInterval: reminders.$snoozeInterval
             )
+
+            self.reminder = reminder
 
             let menuIcon = AppMenuIconFeature.State(
                 remindersStatus: reminders.$remindersStatus,
@@ -67,7 +69,9 @@ struct AppFeature {
                 reminderInterval: reminders.$reminderInterval,
                 snoozeInterval: reminders.$snoozeInterval,
                 menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay,
-                restartAfterScreenLock: reminders.$restartAfterScreenLock
+                restartAfterScreenLock: reminders.$restartAfterScreenLock,
+                reminderSound: reminder.$reminderSound,
+                soundVolume: reminder.$soundVolume
             )
 
             briefing = BriefingFeature.State(

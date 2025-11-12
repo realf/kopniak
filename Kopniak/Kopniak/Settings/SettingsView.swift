@@ -27,6 +27,18 @@ struct SettingsView: View {
                     )
                 )
             }
+            Tab(
+                "Sounds",
+                systemImage: "speaker.wave.3",
+                value: SettingsTab.sound
+            ) {
+                SoundSettingsView(
+                    store: store.scope(
+                        state: \.sound,
+                        action: \.sound
+                    )
+                )
+            }
             Tab("About", systemImage: "info.circle", value: SettingsTab.about) {
                 AboutView(
                     store: store.scope(
@@ -47,12 +59,16 @@ struct SettingsView: View {
     let snoozeInterval = Shared(value: 10.0 * 60)
     let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.abbreviated)
     let restartAfterScreenLock = Shared(value: true)
+    let reminderSound = Shared(value: Optional<String>.none)
+    let soundVolume = Shared(value: 1.0)
     let store = Store(
         initialState: SettingsFeature.State(
             reminderInterval: reminderInterval,
             snoozeInterval: snoozeInterval,
             menuIconTimeDisplay: menuIconTimeDisplay,
-            restartAfterScreenLock: restartAfterScreenLock
+            restartAfterScreenLock: restartAfterScreenLock,
+            reminderSound: reminderSound,
+            soundVolume: soundVolume
         ),
         reducer: {
             SettingsFeature()

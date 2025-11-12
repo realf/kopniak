@@ -97,9 +97,6 @@ struct ReminderView: View {
     #Preview {
         let store = Store(
             initialState: ReminderFeature.State(
-                title: "",
-                message: "",
-                imageName: "",
                 snoozeInterval: Shared(value: 1.0)
             )
         ) {
