@@ -42,7 +42,6 @@ class ReminderController: NSWindowController {
 
         // Add subtle animation
         window.alphaValue = 0
-        window.isMovableByWindowBackground = true
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 2.0
             window.animator().alphaValue = 1.0

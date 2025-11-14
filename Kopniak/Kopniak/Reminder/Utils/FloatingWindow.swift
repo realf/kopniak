@@ -41,6 +41,7 @@ class FloatingWindow: NSPanel {
         center()
 
         isRestorable = false
+        isMovableByWindowBackground = true
     }
 
     // MARK: - Overrides
