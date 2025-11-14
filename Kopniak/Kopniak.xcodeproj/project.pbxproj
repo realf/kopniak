@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75D217152EC767C8007EFC75 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 75D217142EC767C8007EFC75 /* Localizable.xcstrings */; };
 		75FF24F42EA1A9CD00A5B636 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 75FF24F32EA1A9CD00A5B636 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		75997A272E8E6A2300C6F17B /* Kopniak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kopniak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75997A342E8E6A2400C6F17B /* KopniakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		75997A3E2E8E6A2400C6F17B /* KopniakUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KopniakUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75D217142EC767C8007EFC75 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = Localizable.xcstrings; path = Kopniak/Resources/Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -93,6 +95,7 @@
 		75997A1E2E8E6A2300C6F17B = {
 			isa = PBXGroup;
 			children = (
+				75D217142EC767C8007EFC75 /* Localizable.xcstrings */,
 				75997A292E8E6A2300C6F17B /* Kopniak */,
 				75997A372E8E6A2400C6F17B /* KopniakTests */,
 				75997A412E8E6A2400C6F17B /* KopniakUITests */,
@@ -211,6 +214,7 @@
 			knownRegions = (
 				en,
 				Base,
+				uk,
 			);
 			mainGroup = 75997A1E2E8E6A2300C6F17B;
 			minimizedProjectReferenceProxies = 1;
@@ -234,6 +238,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75D217152EC767C8007EFC75 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +356,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -408,6 +414,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
