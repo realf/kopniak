@@ -279,7 +279,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Я буду кричати наказ кожні __%@__ — час рухатися!"
+            "value" : "Я буду вигукувати наказ кожні __%@__ — це час рухатися!"
           }
         }
       }
@@ -304,12 +304,12 @@
         }
       }
     },
-    "Kopniak is an app made by an indie developer Serhii Dunets.\nFeel free to contact me at dunets.devel@gmail.com" : {
+    "Kopniak is an app made by an indie developer [realf](https://github.com/realf/).\nIf you have any suggestions or issues, feel free to visit [GitHub](https://github.com/realf/kopniak/issues).\nConsider rating Kopniak on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310)." : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Копняк — це додаток, створений незалежним розробником Сергієм Дунцем.\nСміливо звертайтеся до мене на dunets.devel@gmail.com"
+            "value" : "Копняк - це додаток, зроблений незалежним розробником [realf](https://github.com/realf/).\nЯкщо маєш пропозиції або проблеми, заходь на [GitHub](https://github.com/realf/kopniak/issues).\nПодумай про те, щоб оцінити Копняка в [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310)."
           }
         }
       }
@@ -417,12 +417,12 @@
         }
       }
     },
-    "My name is Sergeant Kopniak and I am your drill instructor.\nLook for my chevron %@ in your menu bar — those twin stripes mean I'm watching.\nClick it to access your orders." : {
+    "My name is Sergeant Kopniak and I am your drill instructor.\nI am here to give you a kick in the butt so you don't forget to take a break from the computer.\nLook for my chevron %@ in your menu bar — those twin stripes mean I'm watching.\nClick it to access your orders." : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Мене звуть сержант Копняк, і я твій інструктор.\nШукай мій шеврон %@ в панелі меню — ці дві смужки означають, що я спостерігаю.\nНатисни на нього, щоб отримати накази."
+            "value" : "Мене звати Сержант Копняк і я твій інструктор.\nЯ буду давати тобі копняка, щоб ти не забував відпочивати від компʼютера.\nШукай мій шеврон %@ в панелі меню — ці дві смужки означають, що я спостерігаю.\nНатисни на нього, щоб отримати накази."
           }
         }
       }
@@ -661,12 +661,12 @@
         }
       }
     },
-    "Thanks to Olena Priadko for her valuable contributions, and to my family for their continuous support." : {
+    "Thanks to Olena for her valuable contributions, and to my family for their continuous support." : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Подяка Олені Прядко за її цінний внесок, та моїй родині за постійну підтримку."
+            "value" : "Подяка Олені за її цінний внесок, та моїй родині за постійну підтримку."
           }
         }
       }

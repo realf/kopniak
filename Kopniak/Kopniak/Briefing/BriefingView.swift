@@ -35,6 +35,7 @@ struct BriefingView: View {
                 Text(
                     """
                     My name is Sergeant Kopniak and I am your drill instructor.
+                    I am here to give you a kick in the butt so you don't forget to take a break from the computer.
                     Look for my chevron \(chevron) in your menu bar — those twin stripes mean I'm watching.
                     Click it to access your orders.
                     """

@@ -53,12 +53,13 @@ private struct Header: View {
                     .font(.largeTitle)
                 Text(
                     """
-                    Kopniak is an app made by an indie developer Serhii Dunets.
-                    Feel free to contact me at dunets.devel@gmail.com
+                    Kopniak is an app made by an indie developer [realf](https://github.com/realf/).
+                    If you have any suggestions or issues, feel free to visit [GitHub](https://github.com/realf/kopniak/issues).
+                    Consider rating Kopniak on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310).
                     """
                 )
                 Text(
-                    "Thanks to Olena Priadko for her valuable contributions, and to my family for their continuous support."
+                    "Thanks to Olena for her valuable contributions, and to my family for their continuous support."
                 )
                 Text("Special thanks to \(NSFullUserName()) ❤️")
 
