@@ -45,7 +45,7 @@ struct GeneralSettingsView: View {
                         ),
                         label: {
                             Text(
-                                "Break reminder every \(store.reminderIntervalFormatted)"
+                                "Break reminder interval: \(store.reminderIntervalFormatted)"
                             )
                         }
                     )
@@ -62,7 +62,7 @@ struct GeneralSettingsView: View {
                         ),
                         label: {
                             Text(
-                                "Postponing duration: \(store.snoozeIntervalFormatted)"
+                                "Break delay: \(store.snoozeIntervalFormatted)"
                             )
                         }
                     )

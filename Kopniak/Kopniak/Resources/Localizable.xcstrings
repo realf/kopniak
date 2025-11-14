@@ -121,12 +121,22 @@
         }
       }
     },
-    "Break reminder every %@" : {
+    "Break delay: %@" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нагадування про перерву кожні %@"
+            "value" : "Затримка відпочинку: %@"
+          }
+        }
+      }
+    },
+    "Break reminder interval: %@" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інтервал нагадувань про відпочинок: %@"
           }
         }
       }
@@ -454,16 +464,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Грати"
-          }
-        }
-      }
-    },
-    "Postponing duration: %@" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Час відкладення: %@"
           }
         }
       }
