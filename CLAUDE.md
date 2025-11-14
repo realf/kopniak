@@ -39,8 +39,14 @@ Kopniak/                           # Main Xcode project directory
 │       └── LaunchAtLoginView.swift
 ├── KopniakTests/                  # Unit tests
 └── KopniakUITests/                # UI tests
+├── docs/                          # GitHub Pages landing site
+│   ├── index.html                 # Main landing page
+│   ├── kopniak-icon.png           # App icon (favicon)
+│   ├── kopniak-character.png      # Character image
+│   └── .nojekyll                  # Disable Jekyll processing
 ├── Kopniak.xcodeproj/             # Xcode project configuration
 ├── README.md
+├── CLAUDE.md                       # This file
 └── LICENSE (MIT)
 ```
 
@@ -106,6 +112,50 @@ Kopniak/                           # Main Xcode project directory
 - Military-themed motivational messages provided by `ReminderContentSourceDependency`
 - Messages rotate through available quotes
 - Injected as a dependency for easy testing and customization
+
+## GitHub Pages Landing Site
+
+The `docs/` directory contains a static HTML landing page hosted on GitHub Pages.
+
+### Accessing the Landing Page
+
+The landing page is accessible at:
+```
+https://username.github.io/kopniak/
+```
+
+**Prerequisites:**
+- Repository must be public
+- GitHub Pages must be enabled in repository settings:
+  - Settings → Pages
+  - Source: Deploy from a branch
+  - Branch: `main`
+  - Folder: `/docs`
+
+### Updating the Landing Page
+
+The landing page is a single HTML file (`docs/index.html`) with inline CSS. To make updates:
+
+1. **Edit `docs/index.html`** - Contains all HTML, CSS, and is self-contained
+2. **Update images** - Replace PNG files in `docs/` directory:
+   - `kopniak-icon.png` - Favicon and logo
+   - `kopniak-character.png` - Main character image
+3. **Commit and push** - Changes are live immediately after push
+
+### Landing Page Sections
+
+- **Hero Section** - Main call-to-action with app description
+- **Features Section** - Grid of 6 key features with icons
+- **Download Section** - Download button and app information
+- **Privacy Policy Section** - Detailed privacy information
+- **Support Section** - Links to GitHub Issues and source code
+- **Navigation & Footer** - Site header and footer with links
+
+### Key Content Links
+
+- App Store: `https://apps.apple.com/us/app/kopniak/id6754943310`
+- GitHub Issues: `https://github.com/realf/kopniak/issues`
+- GitHub Repository: `https://github.com/realf/kopniak`
 
 ## Important Notes
 
