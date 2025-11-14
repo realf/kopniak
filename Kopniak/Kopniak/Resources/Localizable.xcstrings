@@ -1,137 +1,745 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "\nWhen I call, you drop and give me 20… or stretch and go have some water!\n\nMy job? Keep your spine straight and your circulation flowing. Your chair is NOT a permanent duty station!\n\nMOVE OUT!" : {
-
+    "\nWhen I call, you drop and give me 20… or stretch and go have some water!\n\nMy job? Keep your spine straight and your mind clear. Your chair is NOT a permanent duty station!\n\nMOVE OUT!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\nКоли я командую, ти робиш 20 віджимань… або тягнешся і пʼєш воду!\n\nМоя справа? Тримати твій хребет рівним, а голову — ясною. Твій стілець — це НЕ казарма!\n\nБІГОМ МАРШ!"
+          }
+        }
+      }
     },
     " to completely stop and dismiss the drill sergeant." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " щоб повністю зупинити й звільнити сержанта."
+          }
+        }
+      }
     },
     " to restart reminders." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " щоб перезапустити нагадування."
+          }
+        }
+      }
     },
     " to temporarily pause reminders (keeps your place in line)." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " щоб тимчасово призупинити нагадування (зберігає твоє місце у строю)."
+          }
+        }
+      }
     },
     " when you're ready to start your fitness regimen." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " коли ти готовий розпочати свій тренувальний план."
+          }
+        }
+      }
     },
     "%@" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "© 2025 Serhii Dunets" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "© 2025 Сергій Дунець"
+          }
+        }
+      }
+    },
+    "09:41" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "09:41"
+          }
+        }
+      }
+    },
+    "9m" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9 хв"
+          }
+        }
+      }
     },
     "About" : {
-
-    },
-    "At Ease" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Про додаток"
+          }
+        }
+      }
     },
     "At Ease for %@" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вільно на %@"
+          }
+        }
+      }
     },
-    "Break interval: %@" : {
-
+    "Blink those eyes 20 times - that’s military precision!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блимни очима 20 разів з військовою точністю!"
+          }
+        }
+      }
+    },
+    "Break reminder every %@" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нагадування про перерву кожні %@"
+          }
+        }
+      }
+    },
+    "Break time is now, trooper.\nExecute a perfect posture drill." : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час перерви, рядовий.\nВиконай вправу на взіркову осанку."
+          }
+        }
+      }
+    },
+    "Dismissed" : {
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розійтись"
+          }
+        }
+      }
+    },
+    "Do not show" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не показувати"
+          }
+        }
+      }
+    },
+    "Do some push-ups against your desk!\nShow me what you’re made of!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Віджимання від столу, зараз!\nПокажи, з чого ти зроблений!"
+          }
+        }
+      }
+    },
+    "Don’t make me come over there.\nStretch those limbs!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не змушуй мене підходити.\nРозтягнись!"
+          }
+        }
+      }
+    },
+    "Drop that mouse and march in place!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кинь мишку і маршируй на місці!"
+          }
+        }
+      }
     },
     "ENLIST FOR DAILY DUTY?" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ЗАПИСАТИСЯ НА ЩОДЕННУ СЛУЖБУ?"
+          }
+        }
+      }
     },
     "Exercise Drill" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренування"
+          }
+        }
+      }
     },
     "General" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Основне"
+          }
+        }
+      }
+    },
+    "Get up and do some jumping jacks!\nA good soldier is always ready for action!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вставай і вистрибуй з махами руками!\nДобрий боєць завжди готовий до дії!"
+          }
+        }
+      }
+    },
+    "Go" : {
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вперед"
+          }
+        }
+      }
+    },
+    "Halt" : {
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стій"
+          }
+        }
+      }
+    },
+    "Hydration check!\nDrink some water, private!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевірка спраги!\nНапийся води, рядовий!"
+          }
+        }
+      }
     },
     "I'll bark orders every __%@__ — time for a movement break!" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Я буду кричати наказ кожні __%@__ — час рухатися!"
+          }
+        }
+      }
     },
     "Kopniak" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копняк"
+          }
+        }
+      }
     },
     "Kopniak Briefing" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інструктаж Копняка"
+          }
+        }
+      }
     },
     "Kopniak is an app made by an indie developer Serhii Dunets.\nFeel free to contact me at dunets.devel@gmail.com" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копняк — це додаток, створений незалежним розробником Сергієм Дунцем.\nСміливо звертайтеся до мене на dunets.devel@gmail.com"
+          }
+        }
+      }
+    },
+    "Kopniak, reminders active" : {
+      "comment" : "Chevron up accessibility description",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копняк, нагадування активні"
+          }
+        }
+      }
+    },
+    "Kopniak, reminders inactive" : {
+      "comment" : "Chevron up dotted accessibility description",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копняк, нагадування неактивні"
+          }
+        }
+      }
     },
     "Launch Behavior" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поведінка запуску"
+          }
+        }
+      }
     },
     "Launch Kopniak at Login?" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запустити Копняка при вході?"
+          }
+        }
+      }
     },
     "LISTEN UP, SOLDIER!" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "СЛУХАЙ, БОЄЦЬ!"
+          }
+        }
+      }
+    },
+    "Look out the window - that’s an order!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дивись у вікно — це наказ!"
+          }
+        }
+      }
     },
     "Menu Icon" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Піктограма меню"
+          }
+        }
+      }
+    },
+    "Mission Briefing" : {
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інструктаж операції"
+          }
+        }
+      }
     },
     "MISSION BRIEFING" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ІНСТРУКТАЖ ОПЕРАЦІЇ"
+          }
+        }
+      }
     },
     "Mission Completed" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Операція завершена"
+          }
+        }
+      }
     },
     "My name is Sergeant Kopniak and I am your drill instructor.\nLook for my chevron %@ in your menu bar — those twin stripes mean I'm watching.\nClick it to access your orders." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мене звуть сержант Копняк, і я твій інструктор.\nШукай мій шеврон %@ в панелі меню — ці дві смужки означають, що я спостерігаю.\nНатисни на нього, щоб отримати накази."
+          }
+        }
+      }
     },
     "No, Sir!" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ні, сержанте!"
+          }
+        }
+      }
+    },
+    "None" : {
+      "comment" : "Sound option",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає"
+          }
+        }
+      }
+    },
+    "Operation: Stretch is underway.\nYou’re the star recruit!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Операція: “Потягнись” розпочалась.\nТи зірковий новобранець!"
+          }
+        }
+      }
     },
     "Play" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Грати"
+          }
+        }
+      }
+    },
+    "Postponing duration: %@" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час відкладення: %@"
+          }
+        }
+      }
+    },
+    "Private, your chair’s not the only thing that needs action.\nGet up!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рядовий, твій стілець — не єдина річ, яка потребує дії.\nПідйом!"
+          }
+        }
+      }
+    },
+    "Quit Kopniak" : {
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вийти з Копняка"
+          }
+        }
+      }
     },
     "Remaining time format" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Формат залишкового часу"
+          }
+        }
+      }
     },
     "Reminder sound" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звук нагадування"
+          }
+        }
+      }
     },
     "Reminder Sound" : {
-
-    },
-    "Report for Duty" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звук нагадування"
+          }
+        }
+      }
     },
     "Reset timer after screen lock" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скидати таймер після блокування екрану"
+          }
+        }
+      }
     },
-    "Resume Duty" : {
-
+    "Roll those shoulders back!\nPosture like a soldier, not a slacker!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закинь плечі назад!\nОсанка як у бойця, а не як у лінивця!"
+          }
+        }
+      }
     },
     "Say Again" : {
-
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторити"
+          }
+        }
+      }
     },
     "Settings" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Параметри"
+          }
+        }
+      }
+    },
+    "Settings…" : {
+      "comment" : "Menu item",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Параметри…"
+          }
+        }
+      }
     },
     "Show briefing on startup" : {
-
-    },
-    "Snooze interval: %@" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показувати інструктаж при запуску"
+          }
+        }
+      }
     },
     "Sounds" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звуки"
+          }
+        }
+      }
     },
     "Special thanks to %@ ❤️" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Особлива подяка %@ ❤️"
+          }
+        }
+      }
     },
-    "Stand Down" : {
-
+    "Stand tall, soldier!\nHunching is not part of your mission." : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стій рівно, боєць!\nГорбитися — це не частина твоєї операції."
+          }
+        }
+      }
+    },
+    "Stand up and march around the room!\nSitting too long makes you soft, recruit!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вставай і маршируй по кімнаті!\nДовге сидіння робить тебе м'яким, солдате!"
+          }
+        }
+      }
+    },
+    "Stand up and stretch, soldier!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встань і потягнися, боєць!"
+          }
+        }
+      }
     },
     "Start Kopniak at login" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запустити Копняка при вході"
+          }
+        }
+      }
+    },
+    "Stretch those legs, private!\nBlood flow is essential for peak performance!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Потягни ноги, рядовий!\nЦиркуляція крові — ключ до максимальної продуктивності!"
+          }
+        }
+      }
+    },
+    "Take a walk around the perimeter!\nMovement keeps the mind sharp!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пройдися навколо периметру!\nРух тримає розум гострим!"
+          }
+        }
+      }
     },
     "Thanks to Olena Priadko for her valuable contributions, and to my family for their continuous support." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подяка Олені Прядко за її цінний внесок, та моїй родині за постійну підтримку."
+          }
+        }
+      }
     },
     "These are the licenses of open source projects shipped with Kopniak. Thank you to all the contributors." : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Це ліцензії проєктів з відкритим кодом, включених до Копняка. Дякуємо всім учасникам."
+          }
+        }
+      }
     },
     "Third Party Licenses" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ліцензії третіх сторін"
+          }
+        }
+      }
+    },
+    "This is an order!\nStep away from the screen. Now!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Це наказ!\nВідійди від екрану. Прямо зараз!"
+          }
+        }
+      }
+    },
+    "Time for a break, soldier!\nDrop and give me 20 pushups!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час на перерву, боєць!\nУпав та віджався 20 разів!"
+          }
+        }
+      }
+    },
+    "Time for a quick walk around the base!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час для швидкої прогулянки по базі!"
+          }
+        }
+      }
+    },
+    "Time to stretch those muscles, soldier!\nYour body is your weapon - keep it sharp!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час потягнути м'язи, боєць!\nТвоє тіло — твоя зброя — тримай її в формі!"
+          }
+        }
+      }
+    },
+    "Touch your toes and stretch!\nFlexibility wins battles, trooper!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доторкнись пальців ніг і потягнися!\nГнучкість виграє битви, рядовий!"
+          }
+        }
+      }
     },
     "Version %@ (%@)" : {
       "localizations" : {
@@ -140,17 +748,74 @@
             "state" : "new",
             "value" : "Version %1$@ (%2$@)"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версія %1$@ (%2$@)"
+          }
         }
       }
     },
     "Volume" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гучність"
+          }
+        }
+      }
     },
     "Want me to report for duty automatically every time you log in to your Mac?\n\nI’ll be standing by in your menu bar, ready to keep you moving!" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хочеш, щоб я автоматично розпочинав службу кожного разу, коли ти входиш на свій обліковий запис?\n\nЯ буду чекати в панелі меню, готовий тримати тебе в русі!"
+          }
+        }
+      }
+    },
+    "Whip that posture into shape.\nLet’s move!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Привeди осанку в порядок.\nРухайся!"
+          }
+        }
+      }
     },
     "Yes, Sir!" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Так, пане сержант!"
+          }
+        }
+      }
+    },
+    "Your eyes need rest!\nLook away from that screen!" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Твої очі потребують відпочинку!\nДивись подалі від екрану!"
+          }
+        }
+      }
+    },
+    "Your spine needs you to report for duty." : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Твій хребет потребує, щоб ти розпочав службу."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

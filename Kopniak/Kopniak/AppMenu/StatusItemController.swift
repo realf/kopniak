@@ -79,7 +79,7 @@ final class StatusItemController {
         // Mission Briefing
         menu.addItem(
             createMenuItem(
-                title: "Mission Briefing",
+                title: NSLocalizedString("Mission Briefing", comment: "Menu item"),
                 icon: "chevron.up.2",
                 shortcut: ("b", .command),
                 action: #selector(missionBriefingAction)
@@ -95,7 +95,7 @@ final class StatusItemController {
         case .off:
             menu.addItem(
                 createMenuItem(
-                    title: "Report for Duty",
+                    title: NSLocalizedString("Go", comment: "Menu item"),
                     icon: "play.fill",
                     shortcut: ("r", .command),
                     action: #selector(reportForDutyAction)
@@ -104,7 +104,7 @@ final class StatusItemController {
         case .on:
             menu.addItem(
                 createMenuItem(
-                    title: "Stand Down",
+                    title: NSLocalizedString("Dismissed", comment: "Menu item"),
                     icon: "stop.fill",
                     shortcut: ("s", .command),
                     action: #selector(standDownAction)
@@ -113,7 +113,7 @@ final class StatusItemController {
 
             menu.addItem(
                 createMenuItem(
-                    title: "At Ease",
+                    title: NSLocalizedString("Halt", comment: "Menu item"),
                     icon: "pause.fill",
                     shortcut: ("p", .command),
                     action: #selector(atEaseAction)
@@ -122,7 +122,7 @@ final class StatusItemController {
 
             menu.addItem(
                 createMenuItem(
-                    title: "Say Again",
+                    title: NSLocalizedString("Say Again", comment: "Menu item"),
                     icon: "backward.end.fill",
                     shortcut: ("y", .command),
                     action: #selector(sayAgainAction)
@@ -131,7 +131,7 @@ final class StatusItemController {
         case .paused:
             menu.addItem(
                 createMenuItem(
-                    title: "Stand Down",
+                    title: NSLocalizedString("Dismissed", comment: "Menu item"),
                     icon: "stop.fill",
                     shortcut: ("s", .command),
                     action: #selector(standDownAction)
@@ -140,7 +140,7 @@ final class StatusItemController {
 
             menu.addItem(
                 createMenuItem(
-                    title: "Resume Duty",
+                    title: NSLocalizedString("Go", comment: "Menu item"),
                     icon: "play.fill",
                     shortcut: ("r", .command),
                     action: #selector(resumeDutyAction)
@@ -149,7 +149,7 @@ final class StatusItemController {
 
             menu.addItem(
                 createMenuItem(
-                    title: "Say Again",
+                    title: NSLocalizedString("Say Again", comment: "Menu item"),
                     icon: "backward.end.fill",
                     shortcut: ("y", .command),
                     action: #selector(sayAgainAction)
@@ -162,7 +162,7 @@ final class StatusItemController {
         // Settings
         menu.addItem(
             createMenuItem(
-                title: "Settings…",
+                title: NSLocalizedString("Settings…", comment: "Menu item"),
                 icon: "gear",
                 shortcut: (",", .command),
                 action: #selector(settingsAction)
@@ -174,7 +174,7 @@ final class StatusItemController {
         // Quit
         menu.addItem(
             createMenuItem(
-                title: "Quit Kopniak",
+                title: NSLocalizedString("Quit Kopniak", comment: "Menu item"),
                 icon: nil,
                 shortcut: ("q", .command),
                 action: #selector(quitAction)
@@ -246,12 +246,12 @@ final class StatusItemController {
         if iconStore.remindersStatus == .on {
             return NSImage(
                 systemSymbolName: "chevron.up.2",
-                accessibilityDescription: "Kopniak, reminders active"
+                accessibilityDescription: NSLocalizedString("Kopniak, reminders active", comment: "Chevron up accessibility description")
             )!
         } else {
             return NSImage(
                 systemSymbolName: "chevron.up.dotted.2",
-                accessibilityDescription: "Kopniak, reminders inactive"
+                accessibilityDescription: NSLocalizedString("Kopniak, reminders inactive", comment: "Chevron up dotted accessibility description")
             )!
         }
     }

@@ -45,7 +45,7 @@ struct GeneralSettingsView: View {
                         ),
                         label: {
                             Text(
-                                "Break interval: \(store.reminderIntervalFormatted)"
+                                "Break reminder every \(store.reminderIntervalFormatted)"
                             )
                         }
                     )
@@ -62,7 +62,7 @@ struct GeneralSettingsView: View {
                         ),
                         label: {
                             Text(
-                                "Snooze interval: \(store.snoozeIntervalFormatted)"
+                                "Postponing duration: \(store.snoozeIntervalFormatted)"
                             )
                         }
                     )
@@ -96,7 +96,14 @@ struct GeneralSettingsView: View {
                         label: Text("Remaining time format")
                     ) {
                         ForEach(TimeDisplaySetting.allCases) { setting in
-                            Text(setting.rawValue.capitalized)
+                            switch setting {
+                            case .abbreviated:
+                                Text("9m")
+                            case .positional:
+                                Text("09:41")
+                            case .none:
+                                Text("Do not show")
+                            }
                         }
                     }
                 } header: {

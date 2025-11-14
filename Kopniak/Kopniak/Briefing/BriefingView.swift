@@ -59,7 +59,7 @@ struct BriefingView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Image(systemName: "play.fill")
                             .frame(width: 30)
-                        Text("Report for Duty")
+                        Text("Go")
                             .fontWeight(.semibold)
                         Text(
                             " when you're ready to start your fitness regimen."
@@ -69,7 +69,7 @@ struct BriefingView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Image(systemName: "pause.fill")
                             .frame(width: 30)
-                        Text("At Ease")
+                        Text("Halt")
                             .fontWeight(.semibold)
                         Text(
                             " to temporarily pause reminders (keeps your place in line)."
@@ -79,7 +79,7 @@ struct BriefingView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Image(systemName: "stop.fill")
                             .frame(width: 30)
-                        Text("Stand Down")
+                        Text("Dismissed")
                             .fontWeight(.semibold)
                         Text(
                             " to completely stop and dismiss the drill sergeant."
@@ -100,7 +100,7 @@ struct BriefingView: View {
                         """
                         \nWhen I call, you drop and give me 20… or stretch and go have some water!
 
-                        My job? Keep your spine straight and your circulation flowing. Your chair is NOT a permanent duty station!
+                        My job? Keep your spine straight and your mind clear. Your chair is NOT a permanent duty station!
 
                         MOVE OUT!
                         """
@@ -126,7 +126,7 @@ struct BriefingView: View {
                         HStack {
                             Image(systemName: "stop.fill")
                                 .foregroundStyle(Color.red)
-                            Text("Stand Down")
+                            Text("Dismissed")
                         }
                         .frame(width: buttonWidth)
                         .padding(.vertical, 8)
@@ -138,7 +138,7 @@ struct BriefingView: View {
                         HStack {
                             Image(systemName: "pause.fill")
                                 .foregroundStyle(Color.orange)
-                            Text("At Ease")
+                            Text("Halt")
                         }
                         .frame(width: buttonWidth)
                         .padding(.vertical, 8)
@@ -164,7 +164,7 @@ struct BriefingView: View {
                         HStack {
                             Image(systemName: "stop.fill")
                                 .foregroundStyle(Color.red)
-                            Text("Stand Down")
+                            Text("Dismissed")
                         }
                         .frame(width: buttonWidth)
                         .padding(.vertical, 8)
@@ -176,7 +176,7 @@ struct BriefingView: View {
                         HStack {
                             Image(systemName: "play.fill")
                                 .foregroundStyle(Color.green)
-                            Text("Resume Duty")
+                            Text("Go")
                         }
                         .frame(width: buttonWidth)
                         .padding(.vertical, 8)
@@ -200,7 +200,7 @@ struct BriefingView: View {
                     HStack {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.blue)
-                        Text("Report for Duty")
+                        Text("Go")
                     }
                     .frame(width: buttonWidth)
                     .padding(.vertical, 8)

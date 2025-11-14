@@ -103,7 +103,6 @@ struct ReminderView: View {
             ReminderFeature()
         } withDependencies: {
             $0.reminderContentSource = ReminderContentSourceDependency(
-                titles: ["Listen to my order!"],
                 messages: [
                     "Time to stretch those muscles, soldier\nYour body is your weapon - keep it sharp!"
                 ],

@@ -26,7 +26,7 @@ struct SoundSettingsFeature {
         var soundOptions: [SoundOption] {
             // Build sound options, ensuring current selection is included even if not yet loaded
             var options: [SoundOption] = [
-                SoundOption(label: "None", soundName: nil)
+                SoundOption(label: String(localized: "None", comment: "Sound option"), soundName: nil)
             ]
 
             options.append(
