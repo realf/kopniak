@@ -50,7 +50,8 @@ struct KopniakApp: App {
         .defaultSize(width: 400, height: 500)
         .defaultPosition(.center)
         .windowResizability(.contentSize)
-        .windowLevel(.floating)
+        .restorationBehavior(.disabled)
+        .commandsRemoved()
         .defaultLaunchBehavior(.suppressed)
         .onChange(of: Self.store.openWindow) { _, windowID in
             if let windowID {
@@ -91,7 +92,6 @@ struct KopniakApp: App {
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
-        .windowLevel(.floating)
 
         // Launch at login dialog
         Window("Launch Kopniak at Login?", id: "launchAtLogin") {
@@ -103,6 +103,5 @@ struct KopniakApp: App {
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
-        .windowLevel(.floating)
     }
 }
