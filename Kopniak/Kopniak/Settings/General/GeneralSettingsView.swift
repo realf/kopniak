@@ -33,45 +33,51 @@ struct GeneralSettingsView: View {
             Form {
                 // Reminder settings
                 Section {
-                    Slider(
-                        value: reminderIntervalBinding,
-                        in: store.reminderIntervalRange,
-                        step: store.reminderIntervalStep,
-                        minimumValueLabel: Text(
-                            store.minReminderIntervalFormatted
-                        ),
-                        maximumValueLabel: Text(
-                            store.maxReminderIntervalFormatted
-                        ),
-                        label: {
-                            Text(
-                                "Break interval: \(store.reminderIntervalFormatted)"
-                            )
-                        }
-                    )
+                    VStack {
+                        Text("\(store.reminderIntervalFormatted)")
+                        Slider(
+                            value: reminderIntervalBinding,
+                            in: store.reminderIntervalRange,
+                            step: store.reminderIntervalStep,
+                            minimumValueLabel: Text(
+                                store.minReminderIntervalFormatted
+                            ),
+                            maximumValueLabel: Text(
+                                store.maxReminderIntervalFormatted
+                            ),
+                            label: {
+                                Text(
+                                    "Break interval"
+                                )
+                            }
+                        )
+                    }
 
-                    Slider(
-                        value: snoozeIntervalBinding,
-                        in: store.snoozeIntervalRange,
-                        step: store.snoozeIntervalStep,
-                        minimumValueLabel: Text(
-                            store.minSnoozeIntervalFormatted
-                        ),
-                        maximumValueLabel: Text(
-                            store.maxSnoozeIntervalFormatted
-                        ),
-                        label: {
-                            Text(
-                                "Postponed break: \(store.snoozeIntervalFormatted)"
-                            )
-                        }
-                    )
+                    VStack {
+                        Text("\(store.snoozeIntervalFormatted)")
+                        Slider(
+                            value: snoozeIntervalBinding,
+                            in: store.snoozeIntervalRange,
+                            step: store.snoozeIntervalStep,
+                            minimumValueLabel: Text(
+                                store.minSnoozeIntervalFormatted
+                            ),
+                            maximumValueLabel: Text(
+                                store.maxSnoozeIntervalFormatted
+                            ),
+                            label: {
+                                Text(
+                                    "Postponed break"
+                                )
+                            }
+                        )
+                    }
                     Toggle(
                         "Reset timer after screen lock",
                         isOn: $store.restartAfterScreenLock
                     )
                 } header: {
-                    Text("Exercise Drill")
+                    Text("Schedule")
                 }
 
                 // Launch settings
@@ -82,7 +88,7 @@ struct GeneralSettingsView: View {
                     )
 
                     Toggle(
-                        "Show briefing on startup",
+                        "Show menu on startup",
                         isOn: $store.showMissionBriefingAtLaunch
                     )
                 } header: {

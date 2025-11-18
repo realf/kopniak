@@ -108,6 +108,7 @@ struct RemindersFeature {
                 )
 
             case .reminderIntervalChanged:
+                state.$remainingTime.withLock { $0 = state.reminderInterval }
                 return .none
 
             case .reminderSnoozeTapped:

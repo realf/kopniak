@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
     "© 2025 Serhii Dunets" : {
       "localizations" : {
         "uk" : {
@@ -61,7 +64,11 @@
         }
       }
     },
+    "Break interval" : {
+
+    },
     "Break interval: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -137,16 +144,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ЗАПИСАТИСЯ НА ЩОДЕННУ СЛУЖБУ?"
-          }
-        }
-      }
-    },
-    "Exercise Drill" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Тренування"
           }
         }
       }
@@ -249,7 +246,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запустити Копняка при вході?"
+            "value" : "Запустити Копняка при вході в систему?"
           }
         }
       }
@@ -345,7 +342,11 @@
         }
       }
     },
+    "Postponed break" : {
+
+    },
     "Postponed break: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -476,6 +477,16 @@
         }
       }
     },
+    "Schedule" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розклад"
+          }
+        }
+      }
+    },
     "Settings" : {
       "localizations" : {
         "uk" : {
@@ -486,12 +497,12 @@
         }
       }
     },
-    "Show briefing on startup" : {
+    "Show menu on startup" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Показувати інструктаж при запуску"
+            "value" : "Показувати меню при запуску"
           }
         }
       }
@@ -551,7 +562,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запустити Копняка при вході"
+            "value" : "Запустити Копняка при вході в систему"
           }
         }
       }
