@@ -1,66 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "\nWhen I call, you drop and give me 20… or stretch and go have some water!\n\nMy job? Keep your spine straight and your mind clear. Your chair is NOT a permanent duty station!\n\nMOVE OUT!" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "\nКоли я командую, ти робиш 20 віджимань… або тягнешся і пʼєш воду!\n\nМоя справа? Тримати твій хребет рівним, а голову — ясною. Твій стілець — це НЕ казарма!\n\nБІГОМ МАРШ!"
-          }
-        }
-      }
-    },
-    " to completely stop and dismiss the drill sergeant." : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " щоб повністю зупинити й звільнити сержанта."
-          }
-        }
-      }
-    },
-    " to restart reminders." : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " щоб перезапустити нагадування."
-          }
-        }
-      }
-    },
-    " to temporarily pause reminders (keeps your place in line)." : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " щоб тимчасово призупинити нагадування (зберігає твоє місце у строю)."
-          }
-        }
-      }
-    },
-    " when you're ready to start your fitness regimen." : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " коли ти готовий розпочати свій тренувальний план."
-          }
-        }
-      }
-    },
-    "%@" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        }
-      }
-    },
     "© 2025 Serhii Dunets" : {
       "localizations" : {
         "uk" : {
@@ -121,22 +61,12 @@
         }
       }
     },
-    "Break delay: %@" : {
+    "Break interval: %@" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Затримка відпочинку: %@"
-          }
-        }
-      }
-    },
-    "Break reminder interval: %@" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Інтервал нагадувань про відпочинок: %@"
+            "value" : "Інтервал перерв: %@"
           }
         }
       }
@@ -147,17 +77,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Час перерви, рядовий.\nВиконай вправу на взіркову осанку."
-          }
-        }
-      }
-    },
-    "Dismissed" : {
-      "comment" : "Menu item",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Розійтись"
           }
         }
       }
@@ -202,6 +121,16 @@
         }
       }
     },
+    "Empty" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пусте"
+          }
+        }
+      }
+    },
     "ENLIST FOR DAILY DUTY?" : {
       "localizations" : {
         "uk" : {
@@ -242,44 +171,12 @@
         }
       }
     },
-    "Go" : {
-      "comment" : "Menu item",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вперед"
-          }
-        }
-      }
-    },
-    "Halt" : {
-      "comment" : "Menu item",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Стій"
-          }
-        }
-      }
-    },
     "Hydration check!\nDrink some water, private!" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Перевірка спраги!\nНапийся води, рядовий!"
-          }
-        }
-      }
-    },
-    "I'll bark orders every __%@__ — time for a movement break!" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Я буду вигукувати наказ кожні __%@__ — це час рухатися!"
           }
         }
       }
@@ -294,16 +191,6 @@
         }
       }
     },
-    "Kopniak Briefing" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Інструктаж Копняка"
-          }
-        }
-      }
-    },
     "Kopniak is an app made by an indie developer [realf](https://github.com/realf/).\nIf you have any suggestions or issues, feel free to visit [GitHub](https://github.com/realf/kopniak/issues).\nConsider rating Kopniak on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310)." : {
       "localizations" : {
         "uk" : {
@@ -314,24 +201,35 @@
         }
       }
     },
-    "Kopniak, reminders active" : {
-      "comment" : "Chevron up accessibility description",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Копняк, нагадування активні"
-          }
-        }
-      }
-    },
-    "Kopniak, reminders inactive" : {
+    "Kopniak, reminders off" : {
       "comment" : "Chevron up dotted accessibility description",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Копняк, нагадування неактивні"
+            "value" : "Копняк, нагадування вимкнені"
+          }
+        }
+      }
+    },
+    "Kopniak, reminders on" : {
+      "comment" : "Chevron up accessibility description",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копняк, нагадування увімкнені"
+          }
+        }
+      }
+    },
+    "Kopniak, reminders paused" : {
+      "comment" : "Chevron up dotted accessibility description",
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копняк, нагадування призупинені"
           }
         }
       }
@@ -356,16 +254,6 @@
         }
       }
     },
-    "LISTEN UP, SOLDIER!" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "СЛУХАЙ, БОЄЦЬ!"
-          }
-        }
-      }
-    },
     "Look out the window - that’s an order!" : {
       "localizations" : {
         "uk" : {
@@ -386,27 +274,6 @@
         }
       }
     },
-    "Mission Briefing" : {
-      "comment" : "Menu item",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Інструктаж операції"
-          }
-        }
-      }
-    },
-    "MISSION BRIEFING" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ІНСТРУКТАЖ ОПЕРАЦІЇ"
-          }
-        }
-      }
-    },
     "Mission Completed" : {
       "localizations" : {
         "uk" : {
@@ -417,12 +284,12 @@
         }
       }
     },
-    "My name is Sergeant Kopniak and I am your drill instructor.\nI am here to give you a kick in the butt so you don't forget to take a break from the computer.\nLook for my chevron %@ in your menu bar — those twin stripes mean I'm watching.\nClick it to access your orders." : {
+    "Next in %@" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Мене звати Сержант Копняк і я твій інструктор.\nЯ буду давати тобі копняка, щоб ти не забував відпочивати від компʼютера.\nШукай мій шеврон %@ в панелі меню — ці дві смужки означають, що я спостерігаю.\nНатисни на нього, щоб отримати накази."
+            "value" : "Наступне через %@"
           }
         }
       }
@@ -458,12 +325,32 @@
         }
       }
     },
+    "Pause reminders" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Призупинити нагадування"
+          }
+        }
+      }
+    },
     "Play" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Грати"
+          }
+        }
+      }
+    },
+    "Postponed break: %@" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкладена перерва: %@"
           }
         }
       }
@@ -519,12 +406,62 @@
         }
       }
     },
+    "Reminders off" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нагадування вимкнені"
+          }
+        }
+      }
+    },
+    "Reminders on" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нагадування увімкнені"
+          }
+        }
+      }
+    },
+    "Reminders paused" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нагадування призупинені"
+          }
+        }
+      }
+    },
     "Reset timer after screen lock" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Скидати таймер після блокування екрану"
+          }
+        }
+      }
+    },
+    "Restart reminders" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезапустити нагадування"
+          }
+        }
+      }
+    },
+    "Resume reminders" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продовжити нагадування"
           }
         }
       }
@@ -539,34 +476,12 @@
         }
       }
     },
-    "Say Again" : {
-      "comment" : "Menu item",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Повторити"
-          }
-        }
-      }
-    },
     "Settings" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Параметри"
-          }
-        }
-      }
-    },
-    "Settings…" : {
-      "comment" : "Menu item",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Параметри…"
           }
         }
       }
@@ -637,6 +552,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Запустити Копняка при вході"
+          }
+        }
+      }
+    },
+    "Start reminders" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почати нагадування"
+          }
+        }
+      }
+    },
+    "Stop reminders" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зупинити нагадування"
           }
         }
       }

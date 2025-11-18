@@ -8,19 +8,30 @@
 import AppKit
 import Combine
 import ComposableArchitecture
+import SwiftUI
 
 final class StatusItemController {
     private let iconStore: StoreOf<AppMenuIconFeature>
     private let menuStore: StoreOf<AppMenuFeature>
     private var item: NSStatusItem!
     private var cancellables = Set<AnyCancellable>()
+    private let popover: NSPopover
 
     init(
         iconStore: StoreOf<AppMenuIconFeature>,
-        menuStore: StoreOf<AppMenuFeature>
+        menuStore: StoreOf<AppMenuFeature>,
     ) {
         self.iconStore = iconStore
         self.menuStore = menuStore
+        let popover = NSPopover()
+        popover.contentViewController = NSHostingController(
+            rootView: AppMenuView(store: menuStore)
+        )
+        self.popover = popover
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.showMenu()
+        }
     }
 
     func activateStatusItem() {
@@ -41,6 +52,7 @@ final class StatusItemController {
                 ofSize: 13,
                 weight: .regular
             )
+            button.widthAnchor.constraint(equalToConstant: 70.0).isActive = true
 
             let publisher = iconStore.publisher
             publisher.remainingTimeFormatted.sink { [weak self] time in
@@ -59,199 +71,70 @@ final class StatusItemController {
                 }
             }
             .store(in: &cancellables)
+
+            button.target = self
+            button.action = #selector(menuIconTapped)
         }
     }
 
     private func setupMenu() {
-        item.menu = buildMenu()
-
-        let publisher = menuStore.publisher
-        publisher.remindersStatus.sink { [weak self] _ in
-            guard let self else { return }
-            self.item.menu = self.buildMenu()
-        }
-        .store(in: &cancellables)
+        menuStore.publisher
+            .isMenuShown.sink { [weak self] isShown in
+                guard let self else { return }
+                if isShown {
+                    self.showMenu()
+                } else {
+                    self.hideMenu()
+                }
+            }
+            .store(in: &cancellables)
     }
 
-    private func buildMenu() -> NSMenu {
-        let menu = NSMenu()
-
-        // Mission Briefing
-        menu.addItem(
-            createMenuItem(
-                title: NSLocalizedString("Mission Briefing", comment: "Menu item"),
-                icon: "chevron.up.2",
-                shortcut: ("b", .command),
-                action: #selector(missionBriefingAction)
-            )
-        )
-
-        menu.addItem(NSMenuItem.separator())
-
-        // Status-dependent menu items
-        let status = menuStore.remindersStatus
-
-        switch status {
-        case .off:
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Go", comment: "Menu item"),
-                    icon: "play.fill",
-                    shortcut: ("r", .command),
-                    action: #selector(reportForDutyAction)
-                )
-            )
-        case .on:
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Dismissed", comment: "Menu item"),
-                    icon: "stop.fill",
-                    shortcut: ("s", .command),
-                    action: #selector(standDownAction)
-                )
-            )
-
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Halt", comment: "Menu item"),
-                    icon: "pause.fill",
-                    shortcut: ("p", .command),
-                    action: #selector(atEaseAction)
-                )
-            )
-
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Say Again", comment: "Menu item"),
-                    icon: "backward.end.fill",
-                    shortcut: ("y", .command),
-                    action: #selector(sayAgainAction)
-                )
-            )
-        case .paused:
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Dismissed", comment: "Menu item"),
-                    icon: "stop.fill",
-                    shortcut: ("s", .command),
-                    action: #selector(standDownAction)
-                )
-            )
-
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Go", comment: "Menu item"),
-                    icon: "play.fill",
-                    shortcut: ("r", .command),
-                    action: #selector(resumeDutyAction)
-                )
-            )
-
-            menu.addItem(
-                createMenuItem(
-                    title: NSLocalizedString("Say Again", comment: "Menu item"),
-                    icon: "backward.end.fill",
-                    shortcut: ("y", .command),
-                    action: #selector(sayAgainAction)
-                )
-            )
+    private func showMenu() {
+        guard let button = self.item.button else {
+            return
         }
-
-        menu.addItem(NSMenuItem.separator())
-
-        // Settings
-        menu.addItem(
-            createMenuItem(
-                title: NSLocalizedString("Settings…", comment: "Menu item"),
-                icon: "gear",
-                shortcut: (",", .command),
-                action: #selector(settingsAction)
-            )
+        self.popover.show(
+            relativeTo: button.bounds,
+            of: button,
+            preferredEdge: .maxY
         )
-
-        menu.addItem(NSMenuItem.separator())
-
-        // Quit
-        menu.addItem(
-            createMenuItem(
-                title: NSLocalizedString("Quit Kopniak", comment: "Menu item"),
-                icon: nil,
-                shortcut: ("q", .command),
-                action: #selector(quitAction)
-            )
-        )
-
-        return menu
     }
 
-    private func createMenuItem(
-        title: String,
-        icon: String?,
-        shortcut: (key: String, modifiers: NSEvent.ModifierFlags)?,
-        action: Selector
-    ) -> NSMenuItem {
-        let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
-        item.target = self
-
-        if let (key, modifiers) = shortcut {
-            item.keyEquivalent = key
-            item.keyEquivalentModifierMask = modifiers
-        }
-
-        if let iconName = icon {
-            item.image = NSImage(
-                systemSymbolName: iconName,
-                accessibilityDescription: title
-            )
-        }
-
-        return item
+    private func hideMenu() {
+        self.popover.performClose(self)
     }
 
     // MARK: - Menu Actions
 
-    @objc private func missionBriefingAction() {
-        menuStore.send(.delegate(.missionBriefingTapped))
-    }
-
-    @objc private func reportForDutyAction() {
-        menuStore.send(.delegate(.startRemindersTapped))
-    }
-
-    @objc private func standDownAction() {
-        menuStore.send(.delegate(.stopRemindersTapped))
-    }
-
-    @objc private func atEaseAction() {
-        menuStore.send(.delegate(.pauseRemindersTapped))
-    }
-
-    @objc private func sayAgainAction() {
-        menuStore.send(.delegate(.restartRemindersTapped))
-    }
-
-    @objc private func resumeDutyAction() {
-        menuStore.send(.delegate(.resumeRemindersTapped))
-    }
-
-    @objc private func settingsAction() {
-        menuStore.send(.delegate(.settingsTapped))
-    }
-
-    @objc private func quitAction() {
-        menuStore.send(.delegate(.quitTapped))
+    @objc private func menuIconTapped() {
+        menuStore.send(.menuIconTapped)
     }
 
     private func menuBarIcon(status: RemindersStatus) -> NSImage {
         if iconStore.remindersStatus == .on {
             return NSImage(
                 systemSymbolName: "chevron.up.2",
-                accessibilityDescription: NSLocalizedString("Kopniak, reminders active", comment: "Chevron up accessibility description")
+                accessibilityDescription: NSLocalizedString(
+                    "Kopniak, reminders on",
+                    comment: "Chevron up accessibility description"
+                )
+            )!
+        } else if iconStore.remindersStatus == .off {
+            return NSImage(
+                systemSymbolName: "chevron.up.dotted.2",
+                accessibilityDescription: NSLocalizedString(
+                    "Kopniak, reminders off",
+                    comment: "Chevron up dotted accessibility description"
+                )
             )!
         } else {
             return NSImage(
                 systemSymbolName: "chevron.up.dotted.2",
-                accessibilityDescription: NSLocalizedString("Kopniak, reminders inactive", comment: "Chevron up dotted accessibility description")
+                accessibilityDescription: NSLocalizedString(
+                    "Kopniak, reminders paused",
+                    comment: "Chevron up dotted accessibility description"
+                )
             )!
         }
     }

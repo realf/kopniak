@@ -79,10 +79,10 @@ struct GeneralSettingsFeature {
 
         // MARK: - Constants
 
-        let reminderIntervalRange = 15.0 * 60.0...120.0 * 60.0
-        let reminderIntervalStep = 5.0 * 60.0
-        let snoozeIntervalRange = 5.0 * 60.0...15.0 * 60.0
-        let snoozeIntervalStep = 5.0 * 60.0
+        let reminderIntervalRange = 15.0...120.0
+        let reminderIntervalStep = 5.0
+        let snoozeIntervalRange = 5.0...15.0
+        let snoozeIntervalStep = 5.0
 
         init(
             reminderInterval: Shared<TimeInterval>,

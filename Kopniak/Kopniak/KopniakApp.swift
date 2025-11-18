@@ -39,25 +39,41 @@ struct KopniakApp: App {
     @Environment(\.openWindow) private var openWindow
 
     var body: some Scene {
-        // Main app window
-        Window("Kopniak Briefing", id: "briefing") {
+        // Launch at login dialog
+        Window("Launch Kopniak at Login?", id: "launchAtLogin") {
             let store = KopniakApp.store.scope(
-                state: \.briefing,
-                action: \.briefing
+                state: \.launchAtLogin,
+                action: \.launchAtLogin
             )
-            BriefingView(store: store)
+            LaunchAtLoginView(store: store)
         }
-        .defaultSize(width: 400, height: 500)
-        .defaultPosition(.center)
         .windowResizability(.contentSize)
+        .defaultPosition(.center)
         .restorationBehavior(.disabled)
         .commandsRemoved()
         .defaultLaunchBehavior(.suppressed)
+
+        // Add this window, so that the app does not close when there are no other windows
+        Window("Empty", id: "lastWindow") {
+            EmptyView()
+        }
+        .defaultLaunchBehavior(.suppressed)
+        .restorationBehavior(.disabled)
+
+        // Settings
+        Settings {
+            let store = KopniakApp.store.scope(
+                state: \.settings,
+                action: \.settings
+            )
+            SettingsView(store: store)
+        }
+        .defaultLaunchBehavior(.suppressed)
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
         .onChange(of: Self.store.openWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
-                case .briefing:
-                    openWindow(id: "briefing")
                 case .launchAtLogin:
                     openWindow(id: "launchAtLogin")
                 case .reminder:
@@ -70,8 +86,6 @@ struct KopniakApp: App {
         .onChange(of: Self.store.dismissWindow) { _, windowID in
             if let windowID {
                 switch windowID.destination {
-                case .briefing:
-                    dismissWindow(id: "briefing")
                 case .launchAtLogin:
                     dismissWindow(id: "launchAtLogin")
                 case .reminder:
@@ -81,27 +95,5 @@ struct KopniakApp: App {
                 }
             }
         }
-
-        // Settings
-        Settings {
-            let store = KopniakApp.store.scope(
-                state: \.settings,
-                action: \.settings
-            )
-            SettingsView(store: store)
-        }
-        .windowResizability(.contentSize)
-        .defaultPosition(.center)
-
-        // Launch at login dialog
-        Window("Launch Kopniak at Login?", id: "launchAtLogin") {
-            let store = KopniakApp.store.scope(
-                state: \.launchAtLogin,
-                action: \.launchAtLogin
-            )
-            LaunchAtLoginView(store: store)
-        }
-        .windowResizability(.contentSize)
-        .defaultPosition(.center)
     }
 }
