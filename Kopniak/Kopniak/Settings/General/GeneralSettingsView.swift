@@ -84,11 +84,6 @@ struct GeneralSettingsView: View {
                     )
 
                     Toggle(
-                        "Show menu bar icon",
-                        isOn: $store.showMenuBarIcon
-                    )
-
-                    Toggle(
                         "Show main window when Kopniak opens",
                         isOn: $store.showMainWindowAtLaunch
                     )
@@ -98,6 +93,11 @@ struct GeneralSettingsView: View {
 
                 // Icon settings
                 Section {
+                    Toggle(
+                        "Show menu bar icon",
+                        isOn: $store.showMenuBarIcon
+                    )
+
                     Picker(
                         selection: menuIconTimeDisplayBinding,
                         label: Text("Time format")
