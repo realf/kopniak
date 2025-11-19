@@ -64,9 +64,9 @@ struct RemindersFeature {
     }
 
     enum Action {
+        case applicationDidLaunch
         case delegate(Delegate)
         case idleMonitor(IdleMonitorFeature.Action)
-        case menuIconOnAppear
         case reminderDismissTapped
         case reminderSnoozeTapped
         case pauseRemindersTapped
@@ -89,14 +89,14 @@ struct RemindersFeature {
         }
         Reduce { state, action in
             switch action {
+            case .applicationDidLaunch:
+                return restoreTimerState(&state)
+
             case .idleMonitor(.delegate(let delegateAction)):
                 return reduceIdleMonitorDelegate(&state, action: delegateAction)
 
             case .idleMonitor:
                 return .none
-
-            case .menuIconOnAppear:
-                return restoreTimerState(&state)
 
             case .pauseRemindersTapped:
                 return pauseReminders(&state)

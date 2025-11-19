@@ -42,12 +42,11 @@ struct SoundSettingsView: View {
                         .accessibilityLabel("Play")
                         .disabled(store.reminderSound == nil)
                     }
-
                     Slider(
                         value: $store.soundVolume,
                         in: 0...1,
                         label: {
-                            Text("Volume")
+                            Text("Reminder volume")
                         },
                         minimumValueLabel: {
                             Image(systemName: "speaker.fill")
@@ -57,7 +56,7 @@ struct SoundSettingsView: View {
                         }
                     )
                 } header: {
-                    Text("Reminder Sound")
+                    Text("Sound Effects")
                 }
             }
             .formStyle(.grouped)

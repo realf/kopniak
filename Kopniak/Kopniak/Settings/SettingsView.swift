@@ -28,7 +28,7 @@ struct SettingsView: View {
                 )
             }
             Tab(
-                "Sounds",
+                "Sound",
                 systemImage: "speaker.wave.3",
                 value: SettingsTab.sound
             ) {
@@ -68,7 +68,9 @@ struct SettingsView: View {
             menuIconTimeDisplay: menuIconTimeDisplay,
             restartAfterScreenLock: restartAfterScreenLock,
             reminderSound: reminderSound,
-            soundVolume: soundVolume
+            soundVolume: soundVolume,
+            showMainWindowAtLaunch: Shared(value: true),
+            showMenuBarIcon: Shared(value: false)
         ),
         reducer: {
             SettingsFeature()

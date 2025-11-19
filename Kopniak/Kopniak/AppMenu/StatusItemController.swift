@@ -13,7 +13,7 @@ import SwiftUI
 final class StatusItemController: NSObject, NSPopoverDelegate {
     private let iconStore: StoreOf<AppMenuIconFeature>
     private let menuStore: StoreOf<AppMenuFeature>
-    private var item: NSStatusItem!
+    private var item: NSStatusItem?
     private var cancellables = Set<AnyCancellable>()
     private let popover: NSPopover
 
@@ -45,8 +45,17 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         setupMenu()
     }
 
+    func removeStatusItem() {
+        guard let item else {
+            return
+        }
+        cancellables.removeAll()
+        NSStatusBar.system.removeStatusItem(item)
+        self.item = nil
+    }
+
     func showMenu() {
-        guard let button = self.item.button else {
+        guard let button = self.item?.button else {
             return
         }
         self.popover.show(
@@ -79,7 +88,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     // MARK: - Private
 
     private func setupIcon() {
-        if let button = self.item.button {
+        if let button = self.item?.button {
             button.font = NSFont.monospacedDigitSystemFont(
                 ofSize: 13,
                 weight: .regular

@@ -84,8 +84,13 @@ struct GeneralSettingsView: View {
                     )
 
                     Toggle(
-                        "Show menu when Kopniak opens",
-                        isOn: $store.showMenuAtLaunch
+                        "Show menu bar icon",
+                        isOn: $store.showMenuBarIcon
+                    )
+
+                    Toggle(
+                        "Show main window when Kopniak opens",
+                        isOn: $store.showMainWindowAtLaunch
                     )
                 } header: {
                     Text("Launch Behavior")
@@ -131,7 +136,9 @@ struct GeneralSettingsView: View {
             reminderInterval: reminderInterval,
             snoozeInterval: snoozeInterval,
             menuIconTimeDisplay: menuIconTimeDisplay,
-            restartAfterScreenLock: restartAfterScreenLock
+            restartAfterScreenLock: restartAfterScreenLock,
+            showMainWindowAtLaunch: Shared(value: true),
+            showMenuBarIcon: Shared(value: false)
         ),
         reducer: {
             GeneralSettingsFeature()

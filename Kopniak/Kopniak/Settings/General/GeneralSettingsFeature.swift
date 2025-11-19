@@ -40,7 +40,8 @@ struct GeneralSettingsFeature {
         @Shared var menuIconTimeDisplay: TimeDisplaySetting
         @Shared var restartAfterScreenLock: Bool
         @Shared var reminderInterval: TimeInterval
-        @Shared var showMenuAtLaunch: Bool
+        @Shared var showMainWindowAtLaunch: Bool
+        @Shared var showMenuBarIcon: Bool
         @Shared var snoozeInterval: TimeInterval
 
         var reminderIntervalFormatted: String {
@@ -88,14 +89,13 @@ struct GeneralSettingsFeature {
             reminderInterval: Shared<TimeInterval>,
             snoozeInterval: Shared<TimeInterval>,
             menuIconTimeDisplay: Shared<TimeDisplaySetting>,
-            restartAfterScreenLock: Shared<Bool>
+            restartAfterScreenLock: Shared<Bool>,
+            showMainWindowAtLaunch: Shared<Bool>,
+            showMenuBarIcon: Shared<Bool>
         ) {
             _reminderInterval = reminderInterval
-            let showMenuAtLaunch = Shared(
-                wrappedValue: true,
-                .appStorage("showMenuAtLaunch")
-            )
-            _showMenuAtLaunch = showMenuAtLaunch
+            _showMainWindowAtLaunch = showMainWindowAtLaunch
+            _showMenuBarIcon = showMenuBarIcon
             _snoozeInterval = snoozeInterval
             _menuIconTimeDisplay = menuIconTimeDisplay
             _restartAfterScreenLock = restartAfterScreenLock

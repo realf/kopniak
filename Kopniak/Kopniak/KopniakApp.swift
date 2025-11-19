@@ -9,45 +9,6 @@ import AppKit
 import ComposableArchitecture
 import SwiftUI
 
-@Reducer
-struct AppDelegateFeature {
-    @ObservableState
-    struct State {
-        var openWindow: WindowID?
-    }
-
-    enum Action {
-        case handleReopen(_ hasVisibleWindows: Bool)
-    }
-
-    var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .handleReopen(let hasVisibleWindows):
-                if !hasVisibleWindows {
-                    state.openWindow = WindowID(destination: .main)
-                }
-                return .none
-            }
-        }
-    }
-}
-
-@Observable
-class AppDelegate: NSObject, NSApplicationDelegate {
-    let store = Store(initialState: AppDelegateFeature.State()) {
-        AppDelegateFeature()
-    }
-
-    func applicationShouldHandleReopen(
-        _ sender: NSApplication,
-        hasVisibleWindows: Bool
-    ) -> Bool {
-        store.send(.handleReopen(hasVisibleWindows))
-        return true
-    }
-}
-
 @main
 struct KopniakApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -67,13 +28,14 @@ struct KopniakApp: App {
             iconStore: store.scope(state: \.menuIcon, action: \.menuIcon),
             menuStore: store.scope(state: \.appMenu, action: \.appMenu)
         )
-        controller.activateStatusItem()
-        DispatchQueue.main.async {
-            store.send(.statusItemDidActivate)
-        }
 
         return controller
     }()
+
+    init() {
+        self.appDelegate.store = Self.store.scope(state: \.appDelegate, action: \.appDelegate)
+        updateMenuBarIconState(Self.store.showMenuBarIcon)
+    }
 
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.openSettings) private var openSettings
@@ -128,40 +90,28 @@ struct KopniakApp: App {
         .defaultPosition(.center)
         .onChange(of: Self.store.openWindow) { _, windowID in
             if let windowID {
-                openWindow(windowID: windowID)
+                open(windowID: windowID)
             }
         }
-        .onChange(
-            of: appDelegate.store.openWindow,
-            { _, windowID in
-                if let windowID {
-                    openWindow(windowID: windowID)
-                }
-            }
-        )
         .onChange(of: Self.store.dismissWindow) { _, windowID in
             if let windowID {
-                switch windowID.destination {
-                case .launchAtLogin:
-                    dismissWindow(id: "launchAtLogin")
-
-                case .main:
-                    dismissWindow(id: "main")
-
-                case .menu:
-                    DispatchQueue.main.async {
-                        statusItemController.hideMenu()
-                    }
-                case .reminder:
-                    reminderController.hideReminder()
-                case .settings:
-                    break
-                }
+                dismiss(windowID: windowID)
             }
+        }
+        .onChange(of: Self.store.showMenuBarIcon) { _, showMenuBarIcon in
+            updateMenuBarIconState(showMenuBarIcon)
         }
     }
 
-    private func openWindow(windowID: WindowID) {
+    private func updateMenuBarIconState(_ showMenuBarIcon: Bool) {
+        if showMenuBarIcon {
+            statusItemController.activateStatusItem()
+        } else {
+            statusItemController.removeStatusItem()
+        }
+    }
+
+    private func open(windowID: WindowID) {
         switch windowID.destination {
         case .launchAtLogin:
             openWindow(id: "launchAtLogin")
@@ -169,16 +119,27 @@ struct KopniakApp: App {
         case .main:
             openWindow(id: "main")
 
-        case .menu:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                statusItemController.showMenu()
-            }
-
         case .reminder:
             reminderController.showReminder(title: "Kopniak Command")
 
         case .settings:
             openSettings()
+        }
+    }
+
+    private func dismiss(windowID: WindowID) {
+        switch windowID.destination {
+        case .launchAtLogin:
+            dismissWindow(id: "launchAtLogin")
+
+        case .main:
+            dismissWindow(id: "main")
+
+        case .reminder:
+            reminderController.hideReminder()
+
+        case .settings:
+            break
         }
     }
 }

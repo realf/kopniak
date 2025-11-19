@@ -19,7 +19,6 @@ struct WindowID: Equatable {
     enum Destination: Equatable {
         case launchAtLogin
         case main
-        case menu
         case reminder
         case settings
     }
@@ -33,8 +32,12 @@ struct AppFeature {
         var dismissWindow: WindowID?
         var openWindow: WindowID?
 
+        @Shared var showMainWindowAtLaunch: Bool
+        @Shared var showMenuBarIcon: Bool
+
         // Child states
         var appMenu: AppMenuFeature.State
+        var appDelegate: AppDelegateFeature.State
         var launchAtLogin: LaunchAtLoginFeature.State
         var menuIcon: AppMenuIconFeature.State
         var reminder: ReminderFeature.State
@@ -47,7 +50,6 @@ struct AppFeature {
                 remindersStatus: remindersStatus()
             )
             self.reminders = reminders
-
             appMenu = AppMenuFeature.State(
                 remindersStatus: reminders.$remindersStatus,
                 remainingTime: reminders.$remainingTime,
@@ -66,6 +68,19 @@ struct AppFeature {
                 menuIconTimeDisplay: .short
             )
             self.menuIcon = menuIcon
+            let showMainWindowAtLaunch = Shared(
+                wrappedValue: true,
+                .appStorage("showMainWindowAtLaunch")
+            )
+            _showMainWindowAtLaunch = showMainWindowAtLaunch
+
+            let showMenuBarIcon = Shared(
+                wrappedValue: false,
+                .appStorage("showMenuBarIcon")
+            )
+            _showMenuBarIcon = showMenuBarIcon
+
+            _appDelegate = AppDelegateFeature.State()
 
             settings = SettingsFeature.State(
                 reminderInterval: reminders.$reminderInterval,
@@ -73,24 +88,28 @@ struct AppFeature {
                 menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay,
                 restartAfterScreenLock: reminders.$restartAfterScreenLock,
                 reminderSound: reminder.$reminderSound,
-                soundVolume: reminder.$soundVolume
+                soundVolume: reminder.$soundVolume,
+                showMainWindowAtLaunch: showMainWindowAtLaunch,
+                showMenuBarIcon: showMenuBarIcon
             )
         }
     }
 
     enum Action {
+        case appDelegate(AppDelegateFeature.Action)
         case appMenu(AppMenuFeature.Action)
         case launchAtLogin(LaunchAtLoginFeature.Action)
         case menuIcon(AppMenuIconFeature.Action)
         case reminder(ReminderFeature.Action)
         case reminders(RemindersFeature.Action)
         case settings(SettingsFeature.Action)
-        case statusItemDidActivate
     }
 
     var body: some Reducer<State, Action> {
+        Scope(state: \.appDelegate, action: \.appDelegate) {
+            AppDelegateFeature()
+        }
         Scope(state: \.appMenu, action: \.appMenu) { AppMenuFeature() }
-
         Scope(state: \.menuIcon, action: \.menuIcon) { AppMenuIconFeature() }
 
         Scope(state: \.launchAtLogin, action: \.launchAtLogin) {
@@ -102,6 +121,9 @@ struct AppFeature {
 
         Reduce { state, action in
             switch action {
+            case .appDelegate(.delegate(let action)):
+                return reduceAppDelegateDelegate(&state, action: action)
+
             case .appMenu(.delegate(let action)):
                 return reduceAppMenuDelegate(&state, action: action)
 
@@ -137,31 +159,8 @@ struct AppFeature {
 
             case .settings:
                 return .none
-
-            case .statusItemDidActivate:
-                return reduceStatusItemDidActivate(&state)
             }
         }
-    }
-}
-
-extension AppFeature {
-    /// Effectively handles app launch
-    fileprivate func reduceStatusItemDidActivate(_ state: inout State)
-        -> Effect<Action>
-    {
-        var effects: [Effect<Action>] = []
-        if state.settings.generalSettings.showMenuAtLaunch {
-            let window = WindowID(destination: .menu)
-            effects.append(showWindow(&state, window: window))
-        }
-        if effects.isEmpty {
-            effects.append(activateApp())
-        }
-        effects.append(
-            reduce(into: &state, action: .reminders(.menuIconOnAppear))
-        )
-        return .merge(effects)
     }
 }
 
@@ -190,6 +189,29 @@ extension AppFeature {
                 &state,
                 window: WindowID(destination: .launchAtLogin)
             )
+        }
+    }
+}
+
+// MARK: - AppDelegateDelegate
+extension AppFeature {
+    fileprivate func reduceAppDelegateDelegate(
+        _ state: inout State,
+        action: AppDelegateFeature.Action.Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .applicationDidFinishLaunching:
+            if state.showMainWindowAtLaunch {
+                state.openWindow = WindowID(destination: .main)
+            }
+
+            return reduce(into: &state, action: .reminders(.applicationDidLaunch))
+
+        case .handleReopen(let hasVisibleWindows):
+            if !hasVisibleWindows {
+                state.openWindow = WindowID(destination: .main)
+            }
+            return .none
         }
     }
 }
@@ -289,7 +311,7 @@ extension AppFeature {
         state.openWindow = window
 
         switch window.destination {
-        case .launchAtLogin, .main, .menu, .settings:
+        case .launchAtLogin, .main, .settings:
             return activateApp()
         case .reminder:
             return .none

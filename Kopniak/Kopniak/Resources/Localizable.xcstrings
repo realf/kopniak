@@ -336,12 +336,12 @@
         }
       }
     },
-    "Reminder Sound" : {
+    "Reminder volume" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Звук нагадування"
+            "value" : "Гучність нагадувань"
           }
         }
       }
@@ -416,12 +416,22 @@
         }
       }
     },
-    "Show menu when Kopniak opens" : {
+    "Show main window when Kopniak opens" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Показати меню, коли Копняк запускається"
+            "value" : "Показувати основне вікно, коли Копняк запускається"
+          }
+        }
+      }
+    },
+    "Show menu bar icon" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показувати іконку в панелі меню"
           }
         }
       }
@@ -436,12 +446,22 @@
         }
       }
     },
-    "Sounds" : {
+    "Sound" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Звуки"
+            "value" : "Звук"
+          }
+        }
+      }
+    },
+    "Sound Effects" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звукові ефекти"
           }
         }
       }
@@ -628,16 +648,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Версія %1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Volume" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Гучність"
           }
         }
       }
