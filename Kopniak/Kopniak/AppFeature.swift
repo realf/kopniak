@@ -18,6 +18,7 @@ struct WindowID: Equatable {
 
     enum Destination: Equatable {
         case launchAtLogin
+        case main
         case menu
         case reminder
         case settings
@@ -288,7 +289,7 @@ extension AppFeature {
         state.openWindow = window
 
         switch window.destination {
-        case .launchAtLogin, .menu, .settings:
+        case .launchAtLogin, .main, .menu, .settings:
             return activateApp()
         case .reminder:
             return .none
