@@ -21,7 +21,10 @@ struct AppMenuView: View {
 
                 HStack(spacing: 12) {
                     Button(action: {
-                        store.send(.delegate(.stopRemindersTapped))
+                        store.send(
+                            .delegate(.stopRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "stop.fill")
                             .foregroundStyle(Color.red)
@@ -31,7 +34,10 @@ struct AppMenuView: View {
                     .help("Stop reminders")
 
                     Button(action: {
-                        store.send(.delegate(.pauseRemindersTapped))
+                        store.send(
+                            .delegate(.pauseRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "pause.fill")
                             .foregroundStyle(Color.orange)
@@ -41,7 +47,10 @@ struct AppMenuView: View {
                     .help("Pause reminders")
 
                     Button(action: {
-                        store.send(.delegate(.restartRemindersTapped))
+                        store.send(
+                            .delegate(.restartRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "backward.end.fill")
                             .foregroundStyle(Color.blue)
@@ -59,7 +68,10 @@ struct AppMenuView: View {
 
                 HStack(spacing: 12) {
                     Button(action: {
-                        store.send(.delegate(.stopRemindersTapped))
+                        store.send(
+                            .delegate(.stopRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "stop.fill")
                             .foregroundStyle(Color.red)
@@ -69,7 +81,10 @@ struct AppMenuView: View {
                     .help("Stop reminders")
 
                     Button(action: {
-                        store.send(.delegate(.resumeRemindersTapped))
+                        store.send(
+                            .delegate(.resumeRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.green)
@@ -79,7 +94,10 @@ struct AppMenuView: View {
                     .help("Resume reminders")
 
                     Button(action: {
-                        store.send(.delegate(.restartRemindersTapped))
+                        store.send(
+                            .delegate(.restartRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "backward.end.fill")
                             .foregroundStyle(Color.blue)
@@ -96,7 +114,10 @@ struct AppMenuView: View {
 
                 HStack(spacing: 12) {
                     Button(action: {
-                        store.send(.delegate(.startRemindersTapped))
+                        store.send(
+                            .delegate(.startRemindersTapped),
+                            animation: .easeInOut
+                        )
                     }) {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.blue)
