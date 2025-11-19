@@ -171,9 +171,17 @@ extension AppFeature {
     ) -> Effect<Action> {
         switch action {
         case .dismissLaunchAtLogin:
-            return dismissWindow(
-                &state,
-                window: WindowID(destination: .launchAtLogin)
+            return .merge(
+                dismissWindow(
+                    &state,
+                    window: WindowID(destination: .launchAtLogin)
+                ),
+                reduce(
+                    into: &state,
+                    action: .settings(
+                        .generalSettings(.launchAtLoginUpdatedExternally)
+                    )
+                )
             )
         case .showLaunchAtLogin:
             return showWindow(
@@ -211,9 +219,15 @@ extension AppFeature {
             return showWindow(&state, window: window)
 
         case .startRemindersTapped:
-            return reduce(
-                into: &state,
-                action: .reminders(.restartRemindersTapped)
+            return .merge(
+                reduce(
+                    into: &state,
+                    action: .launchAtLogin(.startRemindersTapped)
+                ),
+                reduce(
+                    into: &state,
+                    action: .reminders(.startRemindersTapped)
+                )
             )
         case .stopRemindersTapped:
             return reduce(

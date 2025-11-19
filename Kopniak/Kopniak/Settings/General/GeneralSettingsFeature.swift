@@ -107,6 +107,7 @@ struct GeneralSettingsFeature {
         case delegate(Delegate)
         case onAppear
         case updateLaunchAtLogin(Bool)
+        case launchAtLoginUpdatedExternally
 
         enum Delegate {
             case reminderIntervalChanged
@@ -135,7 +136,7 @@ struct GeneralSettingsFeature {
             case .binding, .delegate:
                 return .none
 
-            case .onAppear:
+            case .launchAtLoginUpdatedExternally, .onAppear:
                 // Initialize launch at login state from system
                 state.launchAtLogin = smAppService.isEnabled()
                 return .none

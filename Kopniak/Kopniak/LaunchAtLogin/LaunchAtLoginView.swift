@@ -16,11 +16,11 @@ struct LaunchAtLoginView: View {
             // Message
             Text(
                 """
-                Want to open Kopniak at login?
+                Want to open Kopniak automatically every time you login to your Mac?
                 """
             )
             .font(.largeTitle)
-            .multilineTextAlignment(.leading)
+            .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
 
             // Buttons
@@ -30,7 +30,7 @@ struct LaunchAtLoginView: View {
                 Button {
                     store.send(.noTapped)
                 } label: {
-                    Text("Not now")
+                    Text("No")
                         .frame(width: 200, height: 32)
                 }
 

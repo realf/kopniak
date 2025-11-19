@@ -224,6 +224,16 @@
         }
       }
     },
+    "No" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ні"
+          }
+        }
+      }
+    },
     "None" : {
       "comment" : "Sound option",
       "localizations" : {
@@ -235,32 +245,22 @@
         }
       }
     },
-    "Not now" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не зараз"
-          }
-        }
-      }
-    },
     "Open Kopniak at login" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Відкривати Копняк при вході в систему"
+            "value" : "Запускати Копняк при вході в систему"
           }
         }
       }
     },
-    "Open Kopniak at Login?" : {
+    "Open Kopniak automatically?" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Відкривати Копняк при вході в систему?"
+            "value" : "Запускати Копняк автоматично?"
           }
         }
       }
@@ -641,12 +641,12 @@
         }
       }
     },
-    "Want to open Kopniak at login?" : {
+    "Want to open Kopniak automatically every time you login to your Mac?" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Хочете запускати Копняк при вході?"
+            "value" : "Хочете запускати Копняк автоматично після входу у ваш Мак?"
           }
         }
       }

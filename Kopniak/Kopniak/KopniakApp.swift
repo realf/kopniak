@@ -40,7 +40,7 @@ struct KopniakApp: App {
 
     var body: some Scene {
         // Launch at login dialog
-        Window("Open Kopniak at Login?", id: "launchAtLogin") {
+        Window("Open Kopniak automatically?", id: "launchAtLogin") {
             let store = KopniakApp.store.scope(
                 state: \.launchAtLogin,
                 action: \.launchAtLogin
