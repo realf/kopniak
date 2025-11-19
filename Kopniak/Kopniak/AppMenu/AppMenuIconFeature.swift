@@ -28,10 +28,10 @@ struct AppMenuIconFeature {
             return formatter
         }()
 
-        static let abbreviatedTimeFormatter = {
+        static let shortTimeFormatter = {
             let formatter = DateComponentsFormatter()
             formatter.allowedUnits = [.minute]
-            formatter.unitsStyle = .abbreviated
+            formatter.unitsStyle = .short
             return formatter
         }()
 
@@ -49,8 +49,8 @@ struct AppMenuIconFeature {
             return switch menuIconTimeDisplay {
             case .none:
                 ""
-            case .abbreviated:
-                Self.abbreviatedTimeFormatter.string(from: remainingTime) ?? ""
+            case .short:
+                Self.shortTimeFormatter.string(from: remainingTime) ?? ""
             case .positional:
                 Self.positionalTimeFormatter.string(from: remainingTime) ?? ""
             }

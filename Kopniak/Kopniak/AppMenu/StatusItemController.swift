@@ -52,7 +52,7 @@ final class StatusItemController {
                 ofSize: 13,
                 weight: .regular
             )
-            button.widthAnchor.constraint(equalToConstant: 70.0).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 80.0).isActive = true
 
             let publisher = iconStore.publisher
             publisher.remainingTimeFormatted.sink { [weak self] time in

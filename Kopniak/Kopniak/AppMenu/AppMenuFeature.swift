@@ -14,9 +14,14 @@ struct AppMenuFeature {
     struct State {
         @Shared var remindersStatus: RemindersStatus
         @Shared var remainingTime: TimeInterval
+        @Shared var reminderInterval: TimeInterval
 
         var remainingTimeFormatted: String {
-            formatted(remainingTime: remainingTime)
+            Self.positionalTimeFormatter.string(from: remainingTime) ?? ""
+        }
+
+        var reminderIntervalFormatted: String {
+            Self.positionalTimeFormatter.string(from: reminderInterval) ?? ""
         }
         var isMenuShown = true
 
@@ -27,10 +32,6 @@ struct AppMenuFeature {
             formatter.unitsStyle = .positional
             return formatter
         }()
-
-        private func formatted(remainingTime: TimeInterval) -> String {
-            Self.positionalTimeFormatter.string(from: remainingTime) ?? ""
-        }
     }
 
     enum Action {

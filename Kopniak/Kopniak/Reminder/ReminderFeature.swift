@@ -69,6 +69,7 @@ struct ReminderFeature {
         var snoozeIntervalFormatted: String {
             let formatter = DateComponentsFormatter()
             formatter.allowedUnits = [.minute]
+            formatter.unitsStyle = .short
             return formatter.string(from: snoozeInterval) ?? "0"
         }
 

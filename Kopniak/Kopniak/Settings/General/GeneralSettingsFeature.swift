@@ -9,7 +9,7 @@ import ComposableArchitecture
 import ServiceManagement
 
 enum TimeDisplaySetting: String, CaseIterable, Identifiable {
-    case abbreviated
+    case short
     case positional
     case none
 
@@ -40,7 +40,7 @@ struct GeneralSettingsFeature {
         @Shared var menuIconTimeDisplay: TimeDisplaySetting
         @Shared var restartAfterScreenLock: Bool
         @Shared var reminderInterval: TimeInterval
-        @Shared var showMissionBriefingAtLaunch: Bool
+        @Shared var showMenuAtLaunch: Bool
         @Shared var snoozeInterval: TimeInterval
 
         var reminderIntervalFormatted: String {
@@ -91,11 +91,11 @@ struct GeneralSettingsFeature {
             restartAfterScreenLock: Shared<Bool>
         ) {
             _reminderInterval = reminderInterval
-            let showMissionBriefingAtLaunch = Shared(
+            let showMenuAtLaunch = Shared(
                 wrappedValue: true,
-                .appStorage("showMissionBriefingAtLaunch")
+                .appStorage("showMenuAtLaunch")
             )
-            _showMissionBriefingAtLaunch = showMissionBriefingAtLaunch
+            _showMenuAtLaunch = showMenuAtLaunch
             _snoozeInterval = snoozeInterval
             _menuIconTimeDisplay = menuIconTimeDisplay
             _restartAfterScreenLock = restartAfterScreenLock

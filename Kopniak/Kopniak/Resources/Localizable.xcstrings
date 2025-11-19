@@ -2,7 +2,14 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@" : {
-
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "© 2025 Serhii Dunets" : {
       "localizations" : {
@@ -14,42 +21,12 @@
         }
       }
     },
-    "09:41" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "09:41"
-          }
-        }
-      }
-    },
-    "9m" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "9 хв"
-          }
-        }
-      }
-    },
     "About" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Про додаток"
-          }
-        }
-      }
-    },
-    "At Ease for %@" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вільно на %@"
           }
         }
       }
@@ -65,15 +42,11 @@
       }
     },
     "Break interval" : {
-
-    },
-    "Break interval: %@" : {
-      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Інтервал перерв: %@"
+            "value" : "Інтервал перерв"
           }
         }
       }
@@ -84,16 +57,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Час перерви, рядовий.\nВиконай вправу на взіркову осанку."
-          }
-        }
-      }
-    },
-    "Do not show" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не показувати"
           }
         }
       }
@@ -118,6 +81,16 @@
         }
       }
     },
+    "Done" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        }
+      }
+    },
     "Drop that mouse and march in place!" : {
       "localizations" : {
         "uk" : {
@@ -134,16 +107,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Пусте"
-          }
-        }
-      }
-    },
-    "ENLIST FOR DAILY DUTY?" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ЗАПИСАТИСЯ НА ЩОДЕННУ СЛУЖБУ?"
           }
         }
       }
@@ -241,16 +204,6 @@
         }
       }
     },
-    "Launch Kopniak at Login?" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Запустити Копняка при вході в систему?"
-          }
-        }
-      }
-    },
     "Look out the window - that’s an order!" : {
       "localizations" : {
         "uk" : {
@@ -271,36 +224,6 @@
         }
       }
     },
-    "Mission Completed" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Операція завершена"
-          }
-        }
-      }
-    },
-    "Next in %@" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Наступне через %@"
-          }
-        }
-      }
-    },
-    "No, Sir!" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ні, сержанте!"
-          }
-        }
-      }
-    },
     "None" : {
       "comment" : "Sound option",
       "localizations" : {
@@ -308,6 +231,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Немає"
+          }
+        }
+      }
+    },
+    "Not now" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не зараз"
+          }
+        }
+      }
+    },
+    "Open Kopniak at login" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкривати Копняк при вході в систему"
+          }
+        }
+      }
+    },
+    "Open Kopniak at Login?" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкривати Копняк при вході в систему?"
           }
         }
       }
@@ -342,16 +295,12 @@
         }
       }
     },
-    "Postponed break" : {
-
-    },
-    "Postponed break: %@" : {
-      "extractionState" : "stale",
+    "Positional" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Відкладена перерва: %@"
+            "value" : "Позиційний"
           }
         }
       }
@@ -366,23 +315,12 @@
         }
       }
     },
-    "Quit Kopniak" : {
-      "comment" : "Menu item",
+    "Quit" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вийти з Копняка"
-          }
-        }
-      }
-    },
-    "Remaining time format" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Формат залишкового часу"
+            "value" : "Вийти"
           }
         }
       }
@@ -407,42 +345,12 @@
         }
       }
     },
-    "Reminders off" : {
+    "Reset timer after Lock Screen" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нагадування вимкнені"
-          }
-        }
-      }
-    },
-    "Reminders on" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нагадування увімкнені"
-          }
-        }
-      }
-    },
-    "Reminders paused" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нагадування призупинені"
-          }
-        }
-      }
-    },
-    "Reset timer after screen lock" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Скидати таймер після блокування екрану"
+            "value" : "Скидати таймер після Екрану Блокування"
           }
         }
       }
@@ -497,12 +405,32 @@
         }
       }
     },
-    "Show menu on startup" : {
+    "Short" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Показувати меню при запуску"
+            "value" : "Короткий"
+          }
+        }
+      }
+    },
+    "Show menu when Kopniak opens" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показати меню, коли Копняк відкривається"
+          }
+        }
+      }
+    },
+    "Snooze duration" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тривалість відкладення"
           }
         }
       }
@@ -553,16 +481,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Встань і потягнися, боєць!"
-          }
-        }
-      }
-    },
-    "Start Kopniak at login" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Запустити Копняка при вході в систему"
           }
         }
       }
@@ -667,6 +585,16 @@
         }
       }
     },
+    "Time format" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Формат часу"
+          }
+        }
+      }
+    },
     "Time to stretch those muscles, soldier!\nYour body is your weapon - keep it sharp!" : {
       "localizations" : {
         "uk" : {
@@ -713,12 +641,12 @@
         }
       }
     },
-    "Want me to report for duty automatically every time you log in to your Mac?\n\nI’ll be standing by in your menu bar, ready to keep you moving!" : {
+    "Want to open Kopniak at login?" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Хочеш, щоб я автоматично розпочинав службу кожного разу, коли ти входиш на свій обліковий запис?\n\nЯ буду чекати в панелі меню, готовий тримати тебе в русі!"
+            "value" : "Хочете запускати Копняк при вході?"
           }
         }
       }
@@ -733,12 +661,22 @@
         }
       }
     },
-    "Yes, Sir!" : {
+    "Will comply in %@!" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Так, пане сержант!"
+            "value" : "Виконаю через %@!"
+          }
+        }
+      }
+    },
+    "Yes" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Так"
           }
         }
       }

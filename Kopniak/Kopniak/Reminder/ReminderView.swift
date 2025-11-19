@@ -20,7 +20,7 @@ struct ReminderView: View {
                 .scaledToFit()
                 .frame(width: 300, height: 300)
                 .cornerRadius(40)
-                .shadow(color: .brown, radius: 20)
+                .shadow(color: .brown, radius: 10)
                 .padding(20)
 
             Spacer()
@@ -45,15 +45,15 @@ struct ReminderView: View {
                         HStack {
                             Image(
                                 systemName:
-                                    "arrow.trianglehead.counterclockwise"
+                                    "stopwatch"
                             )
                             .imageScale(.large)
                             Text(
-                                "At Ease for \(store.snoozeIntervalFormatted)"
+                                "Will comply in \(store.snoozeIntervalFormatted)!"
                             )
                             .font(.title3)
                         }
-                        .frame(width: 180, height: 32)
+                        .frame(width: 200, height: 32)
                     }
                     .keyboardShortcut(.cancelAction)
 
@@ -66,10 +66,10 @@ struct ReminderView: View {
                         HStack {
                             Image(systemName: "checkmark.square")
                                 .imageScale(.large)
-                            Text("Mission Completed")
+                            Text("Done")
                                 .font(.title3)
                         }
-                        .frame(width: 180, height: 32)
+                        .frame(width: 200, height: 32)
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)

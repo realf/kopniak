@@ -48,7 +48,8 @@ struct AppFeature {
 
             appMenu = AppMenuFeature.State(
                 remindersStatus: reminders.$remindersStatus,
-                remainingTime: reminders.$remainingTime
+                remainingTime: reminders.$remainingTime,
+                reminderInterval: reminders.$reminderInterval
             )
 
             let reminder = ReminderFeature.State(
@@ -60,7 +61,7 @@ struct AppFeature {
             let menuIcon = AppMenuIconFeature.State(
                 remindersStatus: reminders.$remindersStatus,
                 remainingTime: reminders.$remainingTime,
-                menuIconTimeDisplay: .abbreviated
+                menuIconTimeDisplay: .short
             )
             self.menuIcon = menuIcon
 
@@ -148,7 +149,7 @@ extension AppFeature {
         -> Effect<Action>
     {
         var effects: [Effect<Action>] = []
-        if state.settings.generalSettings.showMissionBriefingAtLaunch {
+        if state.settings.generalSettings.showMenuAtLaunch {
 //            let window = WindowID(destination: .briefing)
 //            effects.append(showWindow(&state, window: window))
         }

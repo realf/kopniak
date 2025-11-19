@@ -15,11 +15,9 @@ struct AppMenuView: View {
         VStack(spacing: 20) {
             switch store.remindersStatus {
             case .on:
-                Text("Reminders on")
-                    .font(.largeTitle)
-                Text("Next in \(store.remainingTimeFormatted)")
+                Text("\(store.remainingTimeFormatted)")
                     .monospacedDigit()
-                    .font(.title)
+                    .font(.largeTitle)
 
                 HStack(spacing: 12) {
                     Button(action: {
@@ -29,7 +27,8 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.red)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Stop reminders"))
+                    .accessibilityLabel("Stop reminders")
+                    .help("Stop reminders")
 
                     Button(action: {
                         store.send(.delegate(.pauseRemindersTapped))
@@ -38,7 +37,8 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.orange)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Pause reminders"))
+                    .accessibilityLabel("Pause reminders")
+                    .help("Pause reminders")
 
                     Button(action: {
                         store.send(.delegate(.restartRemindersTapped))
@@ -47,14 +47,15 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.blue)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Restart reminders"))
+                    .accessibilityLabel("Restart reminders")
+                    .help("Restart reminders")
                 }
             case .paused:
-                Text("Reminders paused")
-                    .font(.largeTitle)
-                Text("Next in \(store.remainingTimeFormatted)")
+                Text("\(store.remainingTimeFormatted)")
+                    .blinking()
                     .monospacedDigit()
-                    .font(.title)
+                    .font(.largeTitle)
+                    .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
                     Button(action: {
@@ -64,7 +65,8 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.red)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Stop reminders"))
+                    .accessibilityLabel("Stop reminders")
+                    .help("Stop reminders")
 
                     Button(action: {
                         store.send(.delegate(.resumeRemindersTapped))
@@ -73,7 +75,8 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.green)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Resume reminders"))
+                    .accessibilityLabel("Resume reminders")
+                    .help("Resume reminders")
 
                     Button(action: {
                         store.send(.delegate(.restartRemindersTapped))
@@ -82,35 +85,38 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.blue)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Restart reminders"))
+                    .accessibilityLabel("Restart reminders")
+                    .help("Restart reminders")
                 }
             case .off:
-                Text("Reminders off")
+                Text("\(store.reminderIntervalFormatted)")
+                    .monospacedDigit()
                     .font(.largeTitle)
+                    .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
-                    Button(action: { store.send(.delegate(.startRemindersTapped)) })
-                    {
+                    Button(action: {
+                        store.send(.delegate(.startRemindersTapped))
+                    }) {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.blue)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel(Text("Start reminders"))
+                    .accessibilityLabel("Start reminders")
+                    .help("Start reminders")
                 }
             }
             Divider()
+                .padding(.top, 6)
             HStack {
-                HStack {
-                    Button {
-                        store.send(.delegate(.quitTapped))
-                    } label: {
-                        HStack {
-                            Image(systemName: "xmark.circle.fill")
-                            Text("Quit Kopniak")
-                        }
+                Button {
+                    store.send(.delegate(.quitTapped))
+                } label: {
+                    HStack {
+                        Text("Quit")
                     }
-                    Spacer()
                 }
+                .buttonStyle(.bordered)
 
                 Spacer()
 
@@ -120,12 +126,13 @@ struct AppMenuView: View {
                     Image(systemName: "gear")
                 }
                 .accessibilityLabel("Settings")
+                .help("Settings")
             }
         }
         .buttonStyle(.plain)
         .imageScale(.large)
         .padding()
-        .frame(width: 500)
+        .frame(width: 300)
     }
 }
 
@@ -148,11 +155,35 @@ extension View {
     }
 }
 
+struct BlinkViewModifier: ViewModifier {
+    let duration: Double
+    @State private var blinking: Bool = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(blinking ? 0 : 1.0)
+            .animation(
+                .easeIn(duration: duration).repeatForever(),
+                value: blinking
+            )
+            .onAppear {
+                blinking = true
+            }
+    }
+}
+
+extension View {
+    func blinking(duration: Double = 0.5) -> some View {
+        modifier(BlinkViewModifier(duration: duration))
+    }
+}
+
 #Preview {
     let store = Store(
         initialState: AppMenuFeature.State(
             remindersStatus: Shared(value: .on),
             remainingTime: Shared(value: 42),
+            reminderInterval: Shared(value: 5),
             isMenuShown: false
         )
     ) {
@@ -166,6 +197,7 @@ extension View {
         initialState: AppMenuFeature.State(
             remindersStatus: Shared(value: .off),
             remainingTime: Shared(value: 42),
+            reminderInterval: Shared(value: 5),
             isMenuShown: false
         )
     ) {
@@ -179,6 +211,7 @@ extension View {
         initialState: AppMenuFeature.State(
             remindersStatus: Shared(value: .paused),
             remainingTime: Shared(value: 42),
+            reminderInterval: Shared(value: 5),
             isMenuShown: false
         )
     ) {

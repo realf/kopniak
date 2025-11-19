@@ -46,9 +46,7 @@ struct GeneralSettingsView: View {
                                 store.maxReminderIntervalFormatted
                             ),
                             label: {
-                                Text(
-                                    "Break interval"
-                                )
+                                Text("Break interval")
                             }
                         )
                     }
@@ -66,14 +64,12 @@ struct GeneralSettingsView: View {
                                 store.maxSnoozeIntervalFormatted
                             ),
                             label: {
-                                Text(
-                                    "Postponed break"
-                                )
+                                Text("Snooze duration")
                             }
                         )
                     }
                     Toggle(
-                        "Reset timer after screen lock",
+                        "Reset timer after Lock Screen",
                         isOn: $store.restartAfterScreenLock
                     )
                 } header: {
@@ -83,13 +79,13 @@ struct GeneralSettingsView: View {
                 // Launch settings
                 Section {
                     Toggle(
-                        "Start Kopniak at login",
+                        "Open Kopniak at login",
                         isOn: $store.launchAtLogin
                     )
 
                     Toggle(
-                        "Show menu on startup",
-                        isOn: $store.showMissionBriefingAtLaunch
+                        "Show menu when Kopniak opens",
+                        isOn: $store.showMenuAtLaunch
                     )
                 } header: {
                     Text("Launch Behavior")
@@ -99,16 +95,16 @@ struct GeneralSettingsView: View {
                 Section {
                     Picker(
                         selection: menuIconTimeDisplayBinding,
-                        label: Text("Remaining time format")
+                        label: Text("Time format")
                     ) {
                         ForEach(TimeDisplaySetting.allCases) { setting in
                             switch setting {
-                            case .abbreviated:
-                                Text("9m")
+                            case .short:
+                                Text("Short")
                             case .positional:
-                                Text("09:41")
+                                Text("Positional")
                             case .none:
-                                Text("Do not show")
+                                Text("None")
                             }
                         }
                     }
@@ -128,7 +124,7 @@ struct GeneralSettingsView: View {
 #Preview {
     let reminderInterval = Shared(value: 25.0 * 60)
     let snoozeInterval = Shared(value: 10.0 * 60)
-    let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.abbreviated)
+    let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.short)
     let restartAfterScreenLock = Shared(value: true)
     let store = Store(
         initialState: GeneralSettingsFeature.State(

@@ -13,30 +13,15 @@ struct LaunchAtLoginView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            // Icon
-            Image(systemName: "calendar.badge.clock")
-                .imageScale(.large)
-                .foregroundStyle(.brown)
-                .font(.largeTitle)
-
-            // Title
-            Text("ENLIST FOR DAILY DUTY?")
-                .font(.title2)
-                .fontWeight(.bold)
-
             // Message
             Text(
                 """
-                Want me to report for duty automatically every time you log in to your Mac?
-
-                I’ll be standing by in your menu bar, ready to keep you moving!
+                Want to open Kopniak at login?
                 """
             )
+            .font(.largeTitle)
             .multilineTextAlignment(.leading)
-            .foregroundColor(.secondary)
             .fixedSize(horizontal: false, vertical: true)
-
-            Divider()
 
             // Buttons
             HStack(spacing: 12) {
@@ -45,18 +30,22 @@ struct LaunchAtLoginView: View {
                 Button {
                     store.send(.noTapped)
                 } label: {
-                    Text("No, Sir!")
+                    Text("Not now")
+                        .frame(width: 200, height: 32)
                 }
 
-                Button("Yes, Sir!") {
+                Button {
                     store.send(.yesTapped)
+                } label: {
+                    Text("Yes")
+                        .frame(width: 200, height: 32)
                 }
                 .keyboardShortcut(.defaultAction)
                 .buttonStyle(.borderedProminent)
             }
         }
         .padding(30)
-        .frame(width: 450)
+        .frame(width: 520)
     }
 }
 
