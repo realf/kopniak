@@ -33,7 +33,10 @@ struct KopniakApp: App {
     }()
 
     init() {
-        self.appDelegate.store = Self.store.scope(state: \.appDelegate, action: \.appDelegate)
+        self.appDelegate.store = Self.store.scope(
+            state: \.appDelegate,
+            action: \.appDelegate
+        )
         updateMenuBarIconState(Self.store.showMenuBarIcon)
     }
 
@@ -69,6 +72,20 @@ struct KopniakApp: App {
         .restorationBehavior(.disabled)
         .commandsRemoved()
         .defaultLaunchBehavior(.suppressed)
+        .commands {
+            CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+                Button(action: {
+                    let store = Self.store.scope(state: \.settings, action: \.settings)
+                    store.send(.selectTab(.about))
+                    open(windowID: WindowID(destination: .settings))
+                }) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                        Text("About Kopniak")
+                    }
+                }
+            }
+        }
 
         // Add this window, so that the app does not close when there are no other windows
         Window("Empty", id: "lastWindow") {

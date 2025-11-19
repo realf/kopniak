@@ -31,6 +31,16 @@
         }
       }
     },
+    "About Kopniak" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Про Копняк"
+          }
+        }
+      }
+    },
     "Blink those eyes 20 times - that’s military precision!" : {
       "localizations" : {
         "uk" : {
