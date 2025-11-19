@@ -34,7 +34,7 @@ struct ReminderContentSource {
         String(localized: "Touch your toes and stretch!\nFlexibility wins battles, trooper!"),
         String(localized: "Whip that posture into shape.\nLet’s move!"),
         String(localized: "Your eyes need rest!\nLook away from that screen!"),
-        String(localized: "Your spine needs you to report for duty."),
+        String(localized: "Your spine needs immediate action, soldier!"),
     ]
 
     static let sgtImages = ["Kopniak1", "Kopniak2", "Kopniak3", "Kopniak4"]

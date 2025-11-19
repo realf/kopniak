@@ -18,6 +18,7 @@ struct WindowID: Equatable {
 
     enum Destination: Equatable {
         case launchAtLogin
+        case menu
         case reminder
         case settings
     }
@@ -150,8 +151,8 @@ extension AppFeature {
     {
         var effects: [Effect<Action>] = []
         if state.settings.generalSettings.showMenuAtLaunch {
-//            let window = WindowID(destination: .briefing)
-//            effects.append(showWindow(&state, window: window))
+            let window = WindowID(destination: .menu)
+            effects.append(showWindow(&state, window: window))
         }
         if effects.isEmpty {
             effects.append(activateApp())
@@ -287,10 +288,10 @@ extension AppFeature {
         state.openWindow = window
 
         switch window.destination {
+        case .launchAtLogin, .menu, .settings:
+            return activateApp()
         case .reminder:
             return .none
-        case .settings, .launchAtLogin:
-            return activateApp()
         }
     }
 

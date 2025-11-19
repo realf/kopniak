@@ -23,7 +23,7 @@ struct AppMenuFeature {
         var reminderIntervalFormatted: String {
             Self.positionalTimeFormatter.string(from: reminderInterval) ?? ""
         }
-        var isMenuShown = true
+        var isMenuShown = false
 
         static let positionalTimeFormatter = {
             let formatter = DateComponentsFormatter()
@@ -36,6 +36,7 @@ struct AppMenuFeature {
 
     enum Action {
         case delegate(Delegate)
+        case menuDidClose
         case menuIconTapped
 
         enum Delegate {
@@ -52,6 +53,10 @@ struct AppMenuFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .menuDidClose:
+                state.isMenuShown = false
+                return .none
+
             case .menuIconTapped:
                 state.isMenuShown.toggle()
                 return .none

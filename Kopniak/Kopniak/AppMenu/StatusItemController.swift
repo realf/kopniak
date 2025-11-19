@@ -10,7 +10,7 @@ import Combine
 import ComposableArchitecture
 import SwiftUI
 
-final class StatusItemController {
+final class StatusItemController: NSObject, NSPopoverDelegate {
     private let iconStore: StoreOf<AppMenuIconFeature>
     private let menuStore: StoreOf<AppMenuFeature>
     private var item: NSStatusItem!
@@ -27,11 +27,10 @@ final class StatusItemController {
         popover.contentViewController = NSHostingController(
             rootView: AppMenuView(store: menuStore)
         )
+        popover.behavior = .transient
         self.popover = popover
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.showMenu()
-        }
+        super.init()
+        self.popover.delegate = self
     }
 
     func activateStatusItem() {
@@ -46,13 +45,46 @@ final class StatusItemController {
         setupMenu()
     }
 
+    func showMenu() {
+        guard let button = self.item.button else {
+            return
+        }
+        self.popover.show(
+            relativeTo: button.bounds,
+            of: button,
+            preferredEdge: .maxY
+        )
+        self.popover
+            .contentViewController?
+            .view.window?
+            .makeKey()
+    }
+
+    func hideMenu() {
+        self.popover.performClose(self)
+    }
+
+    // MARK: - Menu Actions
+
+    @objc private func menuIconTapped() {
+        menuStore.send(.menuIconTapped)
+    }
+
+    // MARK: - NSPopoverDelegate
+
+    func popoverDidClose(_ notification: Notification) {
+        menuStore.send(.menuDidClose)
+    }
+
+    // MARK: - Private
+
     private func setupIcon() {
         if let button = self.item.button {
             button.font = NSFont.monospacedDigitSystemFont(
                 ofSize: 13,
                 weight: .regular
             )
-            button.widthAnchor.constraint(equalToConstant: 80.0).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 60.0).isActive = true
 
             let publisher = iconStore.publisher
             publisher.remainingTimeFormatted.sink { [weak self] time in
@@ -88,27 +120,6 @@ final class StatusItemController {
                 }
             }
             .store(in: &cancellables)
-    }
-
-    private func showMenu() {
-        guard let button = self.item.button else {
-            return
-        }
-        self.popover.show(
-            relativeTo: button.bounds,
-            of: button,
-            preferredEdge: .maxY
-        )
-    }
-
-    private func hideMenu() {
-        self.popover.performClose(self)
-    }
-
-    // MARK: - Menu Actions
-
-    @objc private func menuIconTapped() {
-        menuStore.send(.menuIconTapped)
     }
 
     private func menuBarIcon(status: RemindersStatus) -> NSImage {

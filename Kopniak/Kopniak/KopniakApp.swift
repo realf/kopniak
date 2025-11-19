@@ -76,6 +76,10 @@ struct KopniakApp: App {
                 switch windowID.destination {
                 case .launchAtLogin:
                     openWindow(id: "launchAtLogin")
+                case .menu:
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        statusItemController.showMenu()
+                    }
                 case .reminder:
                     reminderController.showReminder(title: "Kopniak Command")
                 case .settings:
@@ -88,6 +92,10 @@ struct KopniakApp: App {
                 switch windowID.destination {
                 case .launchAtLogin:
                     dismissWindow(id: "launchAtLogin")
+                case .menu:
+                    DispatchQueue.main.async {
+                        statusItemController.hideMenu()
+                    }
                 case .reminder:
                     reminderController.hideReminder()
                 case .settings:
