@@ -171,23 +171,12 @@ extension AppFeature {
         action: LaunchAtLoginFeature.Action.Delegate
     ) -> Effect<Action> {
         switch action {
-        case .dismissLaunchAtLogin:
-            return .merge(
-                dismissWindow(
-                    &state,
-                    window: WindowID(destination: .launchAtLogin)
-                ),
-                reduce(
-                    into: &state,
-                    action: .settings(
-                        .generalSettings(.launchAtLoginUpdatedExternally)
-                    )
+        case .launchAtLoginDidUpdate:
+            return reduce(
+                into: &state,
+                action: .settings(
+                    .generalSettings(.launchAtLoginUpdatedExternally)
                 )
-            )
-        case .showLaunchAtLogin:
-            return showWindow(
-                &state,
-                window: WindowID(destination: .launchAtLogin)
             )
         }
     }

@@ -23,13 +23,10 @@ struct LaunchAtLoginFeature {
 
     enum Action {
         case delegate(Delegate)
-        case noTapped
-        case yesTapped
         case startRemindersTapped
 
         enum Delegate {
-            case showLaunchAtLogin
-            case dismissLaunchAtLogin
+            case launchAtLoginDidUpdate
         }
     }
 
@@ -38,12 +35,11 @@ struct LaunchAtLoginFeature {
             switch action {
             case .delegate:
                 return .none
-
-            case .noTapped:
-                state.$launchAtLoginResponseReceived.withLock { $0 = true }
-                return .run { send in
-                    await send(.delegate(.dismissLaunchAtLogin))
-                }
+//            case .noTapped:
+//                state.$launchAtLoginResponseReceived.withLock { $0 = true }
+//                return .run { send in
+//                    await send(.delegate(.dismissLaunchAtLogin))
+//                }
 
             case .startRemindersTapped:
                 guard !state.launchAtLoginResponseReceived else {
@@ -58,21 +54,21 @@ struct LaunchAtLoginFeature {
                 if state.reminderActivationCount >= 3 {
                     state.$reminderActivationCount.withLock { $0 = 0 }
                     return .run { send in
-                        await send(.delegate(.showLaunchAtLogin))
+//                        await send(.delegate(.showLaunchAtLogin))
                     }
                 }
                 return .none
 
-            case .yesTapped:
-                state.$launchAtLoginResponseReceived.withLock { $0 = true }
-                return .run { send in
-                    do {
-                        try await smAppService.register()
-                    } catch {
-                        NSLog("Failed to enable launch at login: \(error)")
-                    }
-                    await send(.delegate(.dismissLaunchAtLogin))
-                }
+//            case .yesTapped:
+//                state.$launchAtLoginResponseReceived.withLock { $0 = true }
+//                return .run { send in
+//                    do {
+//                        try await smAppService.register()
+//                    } catch {
+//                        NSLog("Failed to enable launch at login: \(error)")
+//                    }
+//                    await send(.delegate(.dismissLaunchAtLogin))
+//                }
             }
         }
     }

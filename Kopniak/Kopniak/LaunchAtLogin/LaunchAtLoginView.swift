@@ -7,7 +7,7 @@
 
 import ComposableArchitecture
 import SwiftUI
-
+/*
 struct LaunchAtLoginView: View {
     var store: StoreOf<LaunchAtLoginFeature>
 
@@ -59,3 +59,4 @@ struct LaunchAtLoginView: View {
         )
     )
 }
+*/

@@ -236,6 +236,7 @@
       }
     },
     "No" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -267,6 +268,7 @@
       }
     },
     "Open Kopniak automatically?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -663,6 +665,7 @@
       }
     },
     "Want to open Kopniak automatically every time you login to your Mac?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -693,6 +696,7 @@
       }
     },
     "Yes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
