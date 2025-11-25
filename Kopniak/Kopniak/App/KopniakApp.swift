@@ -84,20 +84,6 @@ struct KopniakApp: App {
         }
         .defaultLaunchBehavior(.suppressed)
 
-        //        // Launch at login dialog
-        //        Window("Open Kopniak automatically?", id: "launchAtLogin") {
-        //            let store = KopniakApp.store.scope(
-        //                state: \.launchAtLogin,
-        //                action: \.launchAtLogin
-        //            )
-        //            LaunchAtLoginView(store: store)
-        //        }
-        //        .windowResizability(.contentSize)
-        //        .defaultPosition(.center)
-        //        .restorationBehavior(.disabled)
-        //        .commandsRemoved()
-        //        .defaultLaunchBehavior(.suppressed)
-
         // Add this window, so that the app does not close when there are no other windows
         Window("Empty", id: "lastWindow") {
             EmptyView()
