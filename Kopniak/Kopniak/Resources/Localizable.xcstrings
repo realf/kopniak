@@ -71,6 +71,9 @@
         }
       }
     },
+    "Decide Later" : {
+
+    },
     "Do some push-ups against your desk!\nShow me what you’re made of!" : {
       "localizations" : {
         "uk" : {
@@ -80,6 +83,9 @@
           }
         }
       }
+    },
+    "Do you want to open Kopniak automatically every time you login to your Mac?" : {
+
     },
     "Don’t make me come over there.\nStretch those limbs!" : {
       "localizations" : {
@@ -236,7 +242,6 @@
       }
     },
     "No" : {
-      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {
@@ -696,7 +701,6 @@
       }
     },
     "Yes" : {
-      "extractionState" : "stale",
       "localizations" : {
         "uk" : {
           "stringUnit" : {

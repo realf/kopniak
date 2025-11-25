@@ -154,6 +154,7 @@ struct AppMenuView: View {
         .imageScale(.large)
         .padding()
         .frame(width: 300)
+        .alert($store.scope(state: \.alert, action: \.alert))
     }
 }
 
