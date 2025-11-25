@@ -26,7 +26,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Про додаток"
+            "value" : "Про застосунок"
           }
         }
       }
@@ -37,6 +37,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Про Копняк"
+          }
+        }
+      }
+    },
+    "App Behavior" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поведінка застосунку"
+          }
+        }
+      }
+    },
+    "Ask Later" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спитати пізніше"
           }
         }
       }
@@ -71,9 +91,6 @@
         }
       }
     },
-    "Decide Later" : {
-
-    },
     "Do some push-ups against your desk!\nShow me what you’re made of!" : {
       "localizations" : {
         "uk" : {
@@ -84,8 +101,15 @@
         }
       }
     },
-    "Do you want to open Kopniak automatically every time you login to your Mac?" : {
-
+    "Do you want to open Kopniak automatically when you log in?" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хочете відкривати Копняк автоматично після входу у систему?"
+          }
+        }
+      }
     },
     "Don’t make me come over there.\nStretch those limbs!" : {
       "localizations" : {
@@ -168,12 +192,12 @@
         }
       }
     },
-    "Kopniak is an app made by an indie developer [realf](https://github.com/realf/).\nIf you have any suggestions or issues, feel free to visit [GitHub](https://github.com/realf/kopniak/issues).\nConsider rating Kopniak on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310)." : {
+    "Kopniak is an app being made by an indie developer [realf](https://github.com/realf/).\nIf you have any suggestions or issues, feel free to contact me on [GitHub](https://github.com/realf/kopniak/issues).\nIf you like Kopniak, please rate it on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310) - it helps other users to find it." : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Копняк - це додаток, зроблений незалежним розробником [realf](https://github.com/realf/).\nЯкщо маєш пропозиції або проблеми, заходь на [GitHub](https://github.com/realf/kopniak/issues).\nПодумай про те, щоб оцінити Копняка в [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310)."
+            "value" : "Копняк - це застосунок, над яким працює незалежний розробник [realf](https://github.com/realf/).\nЯкщо маєте пропозиції або проблеми, звʼяжіться зі мною на [GitHub](https://github.com/realf/kopniak/issues).\nЯкщо вам подобається Копняк, оцініть його в [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310) - це допоможе іншим користувачам знайти його."
           }
         }
       }
@@ -207,16 +231,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Копняк, нагадування призупинені"
-          }
-        }
-      }
-    },
-    "Launch Behavior" : {
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Поведінка запуску"
           }
         }
       }
@@ -262,23 +276,22 @@
         }
       }
     },
+    "Open at Login" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкривати під час входу в систему"
+          }
+        }
+      }
+    },
     "Open Kopniak at login" : {
       "localizations" : {
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запускати Копняк при вході в систему"
-          }
-        }
-      }
-    },
-    "Open Kopniak automatically?" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Запускати Копняк автоматично?"
+            "value" : "Відкривати Копняк під час входу в систему"
           }
         }
       }
@@ -438,7 +451,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Показувати основне вікно, коли Копняк запускається"
+            "value" : "Показувати основне вікно, коли Копняк відкривається"
           }
         }
       }
@@ -665,17 +678,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Версія %1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Want to open Kopniak automatically every time you login to your Mac?" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Хочете запускати Копняк автоматично після входу у ваш Мак?"
           }
         }
       }

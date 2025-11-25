@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AppMenuView: View {
     var store: StoreOf<AppMenuFeature>
+    @Bindable var launchAtLoginStore: StoreOf<LaunchAtLoginFeature>
 
     var body: some View {
         VStack(spacing: 20) {
@@ -154,7 +155,7 @@ struct AppMenuView: View {
         .imageScale(.large)
         .padding()
         .frame(width: 300)
-        .alert($store.scope(state: \.alert, action: \.alert))
+        .alert($launchAtLoginStore.scope(state: \.alert, action: \.alert))
     }
 }
 
@@ -211,7 +212,10 @@ extension View {
     ) {
         AppMenuFeature()
     }
-    AppMenuView(store: store)
+    let launchAtLoginStore = Store(initialState: LaunchAtLoginFeature.State()) {
+        LaunchAtLoginFeature()
+    }
+    AppMenuView(store: store, launchAtLoginStore: launchAtLoginStore)
 }
 
 #Preview {
@@ -225,7 +229,11 @@ extension View {
     ) {
         AppMenuFeature()
     }
-    AppMenuView(store: store)
+
+    let launchAtLoginStore = Store(initialState: LaunchAtLoginFeature.State()) {
+        LaunchAtLoginFeature()
+    }
+    AppMenuView(store: store, launchAtLoginStore: launchAtLoginStore)
 }
 
 #Preview {
@@ -239,5 +247,8 @@ extension View {
     ) {
         AppMenuFeature()
     }
-    AppMenuView(store: store)
+    let launchAtLoginStore = Store(initialState: LaunchAtLoginFeature.State()) {
+        LaunchAtLoginFeature()
+    }
+    AppMenuView(store: store, launchAtLoginStore: launchAtLoginStore)
 }

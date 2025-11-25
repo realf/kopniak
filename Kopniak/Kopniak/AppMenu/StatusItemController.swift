@@ -20,12 +20,16 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     init(
         iconStore: StoreOf<AppMenuIconFeature>,
         menuStore: StoreOf<AppMenuFeature>,
+        launchAtLoginStore: StoreOf<LaunchAtLoginFeature>
     ) {
         self.iconStore = iconStore
         self.menuStore = menuStore
         let popover = NSPopover()
         popover.contentViewController = NSHostingController(
-            rootView: AppMenuView(store: menuStore)
+            rootView: AppMenuView(
+                store: menuStore,
+                launchAtLoginStore: launchAtLoginStore
+            )
         )
         popover.behavior = .transient
         self.popover = popover

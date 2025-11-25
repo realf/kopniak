@@ -26,7 +26,11 @@ struct KopniakApp: App {
     private let statusItemController: StatusItemController = {
         let controller = StatusItemController(
             iconStore: store.scope(state: \.menuIcon, action: \.menuIcon),
-            menuStore: store.scope(state: \.appMenu, action: \.appMenu)
+            menuStore: store.scope(state: \.appMenu, action: \.appMenu),
+            launchAtLoginStore: store.scope(
+                state: \.launchAtLogin,
+                action: \.launchAtLogin
+            )
         )
 
         return controller
@@ -47,9 +51,13 @@ struct KopniakApp: App {
     var body: some Scene {
         Window("Kopniak", id: "main") {
             AppMenuView(
-                store: KopniakApp.store.scope(
+                store: Self.store.scope(
                     state: \.appMenu,
                     action: \.appMenu
+                ),
+                launchAtLoginStore: Self.store.scope(
+                    state: \.launchAtLogin,
+                    action: \.launchAtLogin
                 )
             )
         }
@@ -60,7 +68,10 @@ struct KopniakApp: App {
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
                 Button(action: {
-                    let store = Self.store.scope(state: \.settings, action: \.settings)
+                    let store = Self.store.scope(
+                        state: \.settings,
+                        action: \.settings
+                    )
                     store.send(.selectTab(.about))
                     open(windowID: WindowID(destination: .settings))
                 }) {
@@ -73,20 +84,19 @@ struct KopniakApp: App {
         }
         .defaultLaunchBehavior(.suppressed)
 
-//        // Launch at login dialog
-//        Window("Open Kopniak automatically?", id: "launchAtLogin") {
-//            let store = KopniakApp.store.scope(
-//                state: \.launchAtLogin,
-//                action: \.launchAtLogin
-//            )
-//            LaunchAtLoginView(store: store)
-//        }
-//        .windowResizability(.contentSize)
-//        .defaultPosition(.center)
-//        .restorationBehavior(.disabled)
-//        .commandsRemoved()
-//        .defaultLaunchBehavior(.suppressed)
-
+        //        // Launch at login dialog
+        //        Window("Open Kopniak automatically?", id: "launchAtLogin") {
+        //            let store = KopniakApp.store.scope(
+        //                state: \.launchAtLogin,
+        //                action: \.launchAtLogin
+        //            )
+        //            LaunchAtLoginView(store: store)
+        //        }
+        //        .windowResizability(.contentSize)
+        //        .defaultPosition(.center)
+        //        .restorationBehavior(.disabled)
+        //        .commandsRemoved()
+        //        .defaultLaunchBehavior(.suppressed)
 
         // Add this window, so that the app does not close when there are no other windows
         Window("Empty", id: "lastWindow") {
@@ -97,7 +107,7 @@ struct KopniakApp: App {
 
         // Settings
         Settings {
-            let store = KopniakApp.store.scope(
+            let store = Self.store.scope(
                 state: \.settings,
                 action: \.settings
             )

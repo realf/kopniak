@@ -53,9 +53,9 @@ private struct Header: View {
                     .font(.largeTitle)
                 Text(
                     """
-                    Kopniak is an app made by an indie developer [realf](https://github.com/realf/).
-                    If you have any suggestions or issues, feel free to visit [GitHub](https://github.com/realf/kopniak/issues).
-                    Consider rating Kopniak on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310).
+                    Kopniak is an app being made by an indie developer [realf](https://github.com/realf/).
+                    If you have any suggestions or issues, feel free to contact me on [GitHub](https://github.com/realf/kopniak/issues).
+                    If you like Kopniak, please rate it on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310) - it helps other users to find it.
                     """
                 )
                 Text(

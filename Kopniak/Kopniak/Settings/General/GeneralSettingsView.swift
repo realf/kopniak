@@ -88,7 +88,7 @@ struct GeneralSettingsView: View {
                         isOn: $store.showMainWindowAtLaunch
                     )
                 } header: {
-                    Text("Launch Behavior")
+                    Text("App Behavior")
                 }
 
                 // Icon settings
