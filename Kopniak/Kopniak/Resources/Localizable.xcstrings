@@ -197,7 +197,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Копняк - це застосунок, над яким працює незалежний розробник [realf](https://github.com/realf/).\nЯкщо маєте пропозиції або проблеми, звʼяжіться зі мною на [GitHub](https://github.com/realf/kopniak/issues).\nЯкщо вам подобається Копняк, оцініть його в [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310) - це допоможе іншим користувачам знайти його."
+            "value" : "Копняк - це застосунок, над яким працює незалежний розробник [realf](https://github.com/realf/).\nЯкщо маєте пропозиції або проблеми, звʼяжіться зі мною на [GitHub](https://github.com/realf/kopniak/issues).\nЯкщо вам подобається Копняк, будь ласка, оцініть його в [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310) - це допоможе іншим користувачам знайти його."
           }
         }
       }
