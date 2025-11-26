@@ -66,14 +66,14 @@ struct KopniakApp: App {
         .restorationBehavior(.disabled)
         .commandsRemoved()
         .commands {
-            CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+            CommandGroup(replacing: .appInfo) {
                 Button(action: {
                     let store = Self.store.scope(
                         state: \.settings,
                         action: \.settings
                     )
                     store.send(.selectTab(.about))
-                    open(windowID: WindowID(destination: .settings))
+                    Self.store.send(.appMenu(.delegate(.settingsTapped)))
                 }) {
                     HStack {
                         Image(systemName: "info.circle")
@@ -102,6 +102,17 @@ struct KopniakApp: App {
         .defaultLaunchBehavior(.suppressed)
         .windowResizability(.contentSize)
         .defaultPosition(.center)
+        .commands {
+            CommandGroup(replacing: .appSettings) {
+                Button {
+                    Self.store.send(.appMenu(.delegate(.settingsTapped)))
+                } label: {
+                    Image(systemName: "gear")
+                    Text("Settings…")
+                }
+                .keyboardShortcut(",", modifiers: .command)
+            }
+        }
         .onChange(of: Self.store.openWindow) { _, windowID in
             if let windowID {
                 open(windowID: windowID)

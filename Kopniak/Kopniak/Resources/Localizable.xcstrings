@@ -436,6 +436,16 @@
         }
       }
     },
+    "Settings…" : {
+      "localizations" : {
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Параметри…"
+          }
+        }
+      }
+    },
     "Short" : {
       "localizations" : {
         "uk" : {
