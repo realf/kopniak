@@ -2,7 +2,7 @@
 //  IdleMonitorFeature.swift
 //  Sergeant Kopniak
 //
-//  Created by Claude Code on 25.10.2025.
+//  Created by alf on 25.10.2025.
 //
 
 import AppKit

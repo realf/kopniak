@@ -26,6 +26,8 @@ struct WindowID: Equatable {
 
 @Reducer
 struct AppFeature {
+    @Dependency(\.soundCache) var soundCache
+
     @ObservableState
     struct State {
         // Open and dismiss windows
@@ -107,6 +109,7 @@ struct AppFeature {
         case appMenu(AppMenuFeature.Action)
         case launchAtLogin(LaunchAtLoginFeature.Action)
         case menuIcon(AppMenuIconFeature.Action)
+        case preloadSounds
         case reminder(ReminderFeature.Action)
         case reminders(RemindersFeature.Action)
         case settings(SettingsFeature.Action)
@@ -145,6 +148,9 @@ struct AppFeature {
 
             case .menuIcon:
                 return .none
+
+            case .preloadSounds:
+                return reducePreloadSounds(&state)
 
             case .reminder(.delegate(let action)):
                 return reduceReminderDelegate(&state, action: action)
@@ -201,7 +207,10 @@ extension AppFeature {
                 state.openWindow = WindowID(destination: .main)
             }
 
-            return reduce(into: &state, action: .reminders(.applicationDidLaunch))
+            return .merge(
+                reduce(into: &state, action: .reminders(.applicationDidLaunch)),
+                reduce(into: &state, action: .preloadSounds)
+            )
 
         case .handleReopen(let hasVisibleWindows):
             if !hasVisibleWindows {
@@ -337,6 +346,20 @@ extension AppFeature {
                     options: .activateAllWindows
                 )
             }
+        }
+    }
+}
+
+// MARK: - Sound Preloading
+extension AppFeature {
+    fileprivate func reducePreloadSounds(_ state: inout State) -> Effect<Action>
+    {
+        let reminderSound = state.reminder.reminderSound
+
+        return .run { send in
+            // Preload the selected sound, or default to "Ping" if none selected
+            let soundToPreload = reminderSound ?? "Ping"
+            await soundCache.preloadSound(soundToPreload)
         }
     }
 }

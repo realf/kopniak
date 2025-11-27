@@ -2,7 +2,7 @@
 //  SimpleReminderView.swift
 //  Sergeant Kopniak
 //
-//  Created by Claude Code
+//  Created by alf on 25.11.2025.
 //
 
 import ComposableArchitecture
