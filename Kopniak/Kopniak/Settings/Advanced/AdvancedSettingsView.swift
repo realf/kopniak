@@ -1,5 +1,5 @@
 //
-//  SoundSettingsView.swift
+//  AdvancedSettingsView.swift
 //  Sergeant Kopniak
 //
 //  Created by alf on 12.11.2025.
@@ -8,13 +8,33 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct SoundSettingsView: View {
-    @Bindable var store: StoreOf<SoundSettingsFeature>
+struct AdvancedSettingsView: View {
+    @Bindable var store: StoreOf<AdvancedSettingsFeature>
 
     var body: some View {
         HStack {
             Spacer()
             Form {
+                // Appearance Section
+                Section {
+                    Picker(
+                        selection: $store.reminderStyle,
+                        label: Text("Reminder style")
+                    ) {
+                        ForEach(ReminderStyle.allCases) { style in
+                            Text(style.displayName).tag(style)
+                        }
+                    }
+
+                    Toggle(
+                        "Show main window when Kopniak opens",
+                        isOn: $store.showMainWindowAtLaunch
+                    )
+                } header: {
+                    Text("Appearance")
+                }
+
+                // Sound Effects Section
                 Section {
                     HStack {
                         Picker(
@@ -58,6 +78,35 @@ struct SoundSettingsView: View {
                 } header: {
                     Text("Sound Effects")
                 }
+
+                // Menu Icon Section
+                Section {
+                    Toggle(
+                        "Show menu bar icon",
+                        isOn: $store.showMenuBarIcon
+                    )
+
+                    Picker(
+                        selection: Binding(
+                            get: { store.menuIconTimeDisplay },
+                            set: { newValue in store.menuIconTimeDisplay = newValue }
+                        ),
+                        label: Text("Time format")
+                    ) {
+                        ForEach(TimeDisplaySetting.allCases) { setting in
+                            switch setting {
+                            case .short:
+                                Text("Short")
+                            case .positional:
+                                Text("Positional")
+                            case .none:
+                                Text("None")
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Menu Icon")
+                }
             }
             .formStyle(.grouped)
             Spacer()
@@ -69,15 +118,23 @@ struct SoundSettingsView: View {
 }
 
 #Preview {
+    let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.short)
     let reminderSound = Shared(value: Optional<String>.none)
+    let reminderStyle = Shared(value: ReminderStyle.simple)
+    let showMainWindowAtLaunch = Shared(value: true)
+    let showMenuBarIcon = Shared(value: false)
     let soundVolume = Shared(value: 1.0)
     let store = Store(
-        initialState: SoundSettingsFeature.State(
+        initialState: AdvancedSettingsFeature.State(
+            menuIconTimeDisplay: menuIconTimeDisplay,
             reminderSound: reminderSound,
+            reminderStyle: reminderStyle,
+            showMainWindowAtLaunch: showMainWindowAtLaunch,
+            showMenuBarIcon: showMenuBarIcon,
             soundVolume: soundVolume
         )
     ) {
-        SoundSettingsFeature()
+        AdvancedSettingsFeature()
     } withDependencies: {
         $0.systemSounds = SystemSoundsDependency(
             availableSounds: {
@@ -101,5 +158,5 @@ struct SoundSettingsView: View {
         )
     }
 
-    SoundSettingsView(store: store)
+    AdvancedSettingsView(store: store)
 }

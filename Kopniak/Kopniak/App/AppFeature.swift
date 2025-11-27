@@ -56,7 +56,13 @@ struct AppFeature {
                 reminderInterval: reminders.$reminderInterval
             )
 
+            let reminderStyle = Shared(
+                wrappedValue: ReminderStyle.simple,
+                .appStorage("reminderStyle")
+            )
+
             let reminder = ReminderFeature.State(
+                reminderStyle: reminderStyle,
                 snoozeInterval: reminders.$snoozeInterval
             )
 
@@ -86,6 +92,7 @@ struct AppFeature {
                 reminderInterval: reminders.$reminderInterval,
                 snoozeInterval: reminders.$snoozeInterval,
                 menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay,
+                reminderStyle: reminderStyle,
                 restartAfterScreenLock: reminders.$restartAfterScreenLock,
                 reminderSound: reminder.$reminderSound,
                 soundVolume: reminder.$soundVolume,

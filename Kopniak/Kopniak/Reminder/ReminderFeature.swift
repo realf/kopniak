@@ -62,6 +62,7 @@ struct ReminderFeature {
         @Shared(.appStorage("dismissReminderStreakCount"))
         var dismissReminderStreakCount = 0
 
+        @Shared var reminderStyle: ReminderStyle
         @Shared var snoozeInterval: TimeInterval
         @Shared var reminderSound: String?
         @Shared var soundVolume: Double
@@ -74,8 +75,10 @@ struct ReminderFeature {
         }
 
         init(
+            reminderStyle: Shared<ReminderStyle>,
             snoozeInterval: Shared<TimeInterval>
         ) {
+            _reminderStyle = reminderStyle
             _snoozeInterval = snoozeInterval
 
             let reminderSound = Shared(

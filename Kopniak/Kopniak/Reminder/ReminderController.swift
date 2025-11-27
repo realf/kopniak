@@ -12,6 +12,7 @@ import SwiftUI
 /// Window controller to manage the floating reminder window
 class ReminderController: NSWindowController {
     let store: StoreOf<ReminderFeature>
+
     // MARK: - Initialization
 
     init(store: StoreOf<ReminderFeature>) {
@@ -28,10 +29,16 @@ class ReminderController: NSWindowController {
     func showReminder(title: String) {
         guard let window = window else { return }
 
-        // Create SwiftUI view and set as window content
-        let reminderView = ReminderView(store: self.store)
+        // Create SwiftUI view based on reminder style setting
+        let hostingView: NSHostingView<AnyView>
+        if store.reminderStyle == .simple {
+            let view = SimpleReminderView(store: self.store)
+            hostingView = NSHostingView(rootView: AnyView(view))
+        } else {
+            let view = ReminderView(store: self.store)
+            hostingView = NSHostingView(rootView: AnyView(view))
+        }
 
-        let hostingView = NSHostingView(rootView: reminderView)
         hostingView.frame = window.contentView?.bounds ?? NSRect.zero
         hostingView.autoresizingMask = [.width, .height]
 

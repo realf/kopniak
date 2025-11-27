@@ -1,57 +1,35 @@
 //
-//  ReminderView.swift
+//  SimpleReminderView.swift
 //  Sergeant Kopniak
 //
-//  Created by alf on 01.10.2025.
+//  Created by Claude Code
 //
 
 import ComposableArchitecture
 import SwiftUI
 
-struct ReminderView: View {
+struct SimpleReminderView: View {
     let store: StoreOf<ReminderFeature>
 
     var body: some View {
-        VStack(spacing: 18) {
-            // App icon - random Kopniak variant
-            Image(store.imageName)
+        VStack(spacing: 20) {
+            // Brown chevron icon
+            Image(systemName: "chevron.up.2")
                 .resizable()
-                .interpolation(.high)
+                .foregroundColor(.brown)
                 .scaledToFit()
-                .frame(width: 300, height: 300)
-                .cornerRadius(40)
-                .shadow(color: .brown, radius: 10)
-                .padding(20)
-
-            Spacer()
-
-            // Message
-            Text(store.message)
-                .font(.title2)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-
-            Spacer()
+                .frame(width: 50, height: 50)
 
             // Buttons
             HStack(spacing: 0) {
                 Group {
-                    Spacer()
-
                     Button(action: {
                         store.send(.delegate(.snoozeTapped))
                     }) {
-                        HStack {
-                            Image(
-                                systemName:
-                                    "stopwatch"
-                            )
-                            .imageScale(.large)
-                            Text(
-                                "Will comply in \(store.snoozeIntervalFormatted)!"
-                            )
-                            .font(.title3)
-                        }
+                        Text(
+                            "Delay for \(store.snoozeIntervalFormatted)"
+                        )
+                        .font(.title3)
                         .frame(width: 200, height: 32)
                     }
                     .keyboardShortcut(.cancelAction)
@@ -61,26 +39,17 @@ struct ReminderView: View {
                     Button(action: {
                         store.send(.delegate(.dismissTapped))
                     }) {
-                        HStack {
-                            Image(systemName: "checkmark.square")
-                                .imageScale(.large)
-                            Text("Done")
-                                .font(.title3)
-                        }
-                        .frame(width: 200, height: 32)
+                        Text("Done")
+                            .font(.title3)
+                            .frame(width: 200, height: 32)
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)
-
-                    Spacer()
                 }
             }
-            .padding(.bottom, 20)
-            .padding(.top, 12)
         }
         .padding(20)
         .frame(width: 520)
-        .frame(minHeight: 600)
         .onAppear {
             store.send(.onAppear)
         }
@@ -95,7 +64,7 @@ struct ReminderView: View {
     #Preview {
         let store = Store(
             initialState: ReminderFeature.State(
-                reminderStyle: Shared(value: .kopniak),
+                reminderStyle: Shared(value: .simple),
                 snoozeInterval: Shared(value: 600.0)
             )
         ) {
@@ -111,6 +80,6 @@ struct ReminderView: View {
 
             $0.withRandomNumberGenerator = WithRandomNumberGenerator(RNG())
         }
-        ReminderView(store: store)
+        SimpleReminderView(store: store)
     }
 #endif

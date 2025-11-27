@@ -23,11 +23,6 @@ struct GeneralSettingsView: View {
             set: { newValue in store.snoozeInterval = newValue.rounded() }
         )
 
-        let menuIconTimeDisplayBinding = Binding(
-            get: { store.menuIconTimeDisplay },
-            set: { newValue in store.menuIconTimeDisplay = newValue }
-        )
-
         HStack {
             Spacer()
             Form {
@@ -82,39 +77,8 @@ struct GeneralSettingsView: View {
                         "Open Kopniak at login",
                         isOn: $store.launchAtLogin
                     )
-
-                    Toggle(
-                        "Show main window when Kopniak opens",
-                        isOn: $store.showMainWindowAtLaunch
-                    )
                 } header: {
                     Text("App Behavior")
-                }
-
-                // Icon settings
-                Section {
-                    Toggle(
-                        "Show menu bar icon",
-                        isOn: $store.showMenuBarIcon
-                    )
-
-                    Picker(
-                        selection: menuIconTimeDisplayBinding,
-                        label: Text("Time format")
-                    ) {
-                        ForEach(TimeDisplaySetting.allCases) { setting in
-                            switch setting {
-                            case .short:
-                                Text("Short")
-                            case .positional:
-                                Text("Positional")
-                            case .none:
-                                Text("None")
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Menu Icon")
                 }
             }
             .formStyle(.grouped)
@@ -129,16 +93,12 @@ struct GeneralSettingsView: View {
 #Preview {
     let reminderInterval = Shared(value: 25.0 * 60)
     let snoozeInterval = Shared(value: 10.0 * 60)
-    let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.short)
     let restartAfterScreenLock = Shared(value: true)
     let store = Store(
         initialState: GeneralSettingsFeature.State(
             reminderInterval: reminderInterval,
             snoozeInterval: snoozeInterval,
-            menuIconTimeDisplay: menuIconTimeDisplay,
-            restartAfterScreenLock: restartAfterScreenLock,
-            showMainWindowAtLaunch: Shared(value: true),
-            showMenuBarIcon: Shared(value: false)
+            restartAfterScreenLock: restartAfterScreenLock
         ),
         reducer: {
             GeneralSettingsFeature()

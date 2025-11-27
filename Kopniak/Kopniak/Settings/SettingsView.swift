@@ -28,14 +28,14 @@ struct SettingsView: View {
                 )
             }
             Tab(
-                "Sound",
-                systemImage: "speaker.wave.3",
-                value: SettingsTab.sound
+                "Advanced",
+                systemImage: "slider.horizontal.3",
+                value: SettingsTab.advanced
             ) {
-                SoundSettingsView(
+                AdvancedSettingsView(
                     store: store.scope(
-                        state: \.sound,
-                        action: \.sound
+                        state: \.advanced,
+                        action: \.advanced
                     )
                 )
             }
@@ -58,6 +58,7 @@ struct SettingsView: View {
     let reminderInterval = Shared(value: 25.0 * 60)
     let snoozeInterval = Shared(value: 10.0 * 60)
     let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.short)
+    let reminderStyle = Shared(value: ReminderStyle.simple)
     let restartAfterScreenLock = Shared(value: true)
     let reminderSound = Shared(value: Optional<String>.none)
     let soundVolume = Shared(value: 1.0)
@@ -66,6 +67,7 @@ struct SettingsView: View {
             reminderInterval: reminderInterval,
             snoozeInterval: snoozeInterval,
             menuIconTimeDisplay: menuIconTimeDisplay,
+            reminderStyle: reminderStyle,
             restartAfterScreenLock: restartAfterScreenLock,
             reminderSound: reminderSound,
             soundVolume: soundVolume,

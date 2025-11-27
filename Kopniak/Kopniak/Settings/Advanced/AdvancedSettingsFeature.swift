@@ -1,5 +1,5 @@
 //
-//  SoundSettingsFeature.swift
+//  AdvancedSettingsFeature.swift
 //  Sergeant Kopniak
 //
 //  Created by alf on 12.11.2025.
@@ -14,7 +14,7 @@ struct SoundOption {
 }
 
 @Reducer
-struct SoundSettingsFeature {
+struct AdvancedSettingsFeature {
     @Dependency(\.soundPlayback) var soundPlayback
     @Dependency(\.systemSounds) var systemSounds
 
@@ -38,8 +38,28 @@ struct SoundSettingsFeature {
             return options
         }
 
+        @Shared var menuIconTimeDisplay: TimeDisplaySetting
         @Shared var reminderSound: String?
+        @Shared var reminderStyle: ReminderStyle
+        @Shared var showMainWindowAtLaunch: Bool
+        @Shared var showMenuBarIcon: Bool
         @Shared var soundVolume: Double
+
+        init(
+            menuIconTimeDisplay: Shared<TimeDisplaySetting>,
+            reminderSound: Shared<String?>,
+            reminderStyle: Shared<ReminderStyle>,
+            showMainWindowAtLaunch: Shared<Bool>,
+            showMenuBarIcon: Shared<Bool>,
+            soundVolume: Shared<Double>
+        ) {
+            _menuIconTimeDisplay = menuIconTimeDisplay
+            _reminderSound = reminderSound
+            _reminderStyle = reminderStyle
+            _showMainWindowAtLaunch = showMainWindowAtLaunch
+            _showMenuBarIcon = showMenuBarIcon
+            _soundVolume = soundVolume
+        }
     }
 
     enum Action: BindableAction {
