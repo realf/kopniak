@@ -145,7 +145,7 @@ struct KopniakApp: App {
             openWindow(id: "main")
 
         case .reminder:
-            reminderController.showReminder(title: "Kopniak Command")
+            reminderController.showReminder(title: String(localized: "Kopniak Reminder"))
 
         case .settings:
             openSettings()
