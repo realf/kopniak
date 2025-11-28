@@ -9,9 +9,9 @@ enum ReminderStyle: String, CaseIterable, Identifiable, Codable {
     var displayName: String {
         switch self {
         case .simple:
-            return "Simple"
+            return String(localized: "Simple")
         case .kopniak:
-            return "Kopniak"
+            return String(localized: "Kopniak")
         }
     }
 }
