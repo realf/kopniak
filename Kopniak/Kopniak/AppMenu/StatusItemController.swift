@@ -100,18 +100,14 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
             button.widthAnchor.constraint(equalToConstant: 60.0).isActive = true
 
             let publisher = iconStore.publisher
-            publisher.remainingTimeFormatted.sink { [weak self] time in
-                guard let self else { return }
-                if iconStore.remindersStatus != .off {
-                    button.title = time
-                }
-            }
-            .store(in: &cancellables)
-
-            publisher.remindersStatus.sink { [weak self] status in
+            publisher.remainingTimeFormatted.combineLatest(
+                publisher.remindersStatus
+            ).sink { [weak self] time, status in
                 guard let self else { return }
                 button.image = menuBarIcon(status: status)
-                if status == .off {
+                if iconStore.remindersStatus != .off {
+                    button.title = time
+                } else {
                     button.title = ""
                 }
             }
