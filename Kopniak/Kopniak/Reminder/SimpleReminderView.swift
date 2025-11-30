@@ -27,7 +27,7 @@ struct SimpleReminderView: View {
                         store.send(.delegate(.snoozeTapped))
                     }) {
                         Text(
-                            "Delay for \(store.snoozeIntervalFormatted)"
+                            "Snooze for \(store.snoozeIntervalFormatted)"
                         )
                         .font(.title3)
                         .frame(width: 200, height: 32)
