@@ -109,6 +109,7 @@ struct AppFeature {
         case appMenu(AppMenuFeature.Action)
         case launchAtLogin(LaunchAtLoginFeature.Action)
         case menuIcon(AppMenuIconFeature.Action)
+        case openMainWindow
         case preloadSounds
         case reminder(ReminderFeature.Action)
         case reminders(RemindersFeature.Action)
@@ -144,6 +145,10 @@ struct AppFeature {
                 return reduceLaunchAtLoginDelegate(&state, action: action)
 
             case .launchAtLogin:
+                return .none
+
+            case .openMainWindow:
+                state.openWindow = WindowID(destination: .main)
                 return .none
 
             case .menuIcon:

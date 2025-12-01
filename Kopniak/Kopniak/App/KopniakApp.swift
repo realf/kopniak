@@ -64,7 +64,6 @@ struct KopniakApp: App {
         .windowResizability(.contentSize)
         .defaultPosition(.center)
         .restorationBehavior(.disabled)
-        .commandsRemoved()
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button(action: {
@@ -81,15 +80,11 @@ struct KopniakApp: App {
                     }
                 }
             }
+            CommandGroup(before: .windowList) {
+                Button("Show Kopniak") { Self.store.send(.openMainWindow) }
+            }
         }
         .defaultLaunchBehavior(.suppressed)
-
-        // Add this window, so that the app does not close when there are no other windows
-        Window("Empty", id: "lastWindow") {
-            EmptyView()
-        }
-        .defaultLaunchBehavior(.suppressed)
-        .restorationBehavior(.disabled)
 
         // Settings
         Settings {
