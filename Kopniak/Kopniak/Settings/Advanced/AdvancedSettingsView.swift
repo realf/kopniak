@@ -17,21 +17,12 @@ struct AdvancedSettingsView: View {
             Form {
                 // Appearance Section
                 Section {
-                    Picker(
-                        selection: $store.reminderStyle,
-                        label: Text("Reminder style")
-                    ) {
-                        ForEach(ReminderStyle.allCases) { style in
-                            Text(style.displayName).tag(style)
-                        }
-                    }
-
                     Toggle(
                         "Show main window when Kopniak opens",
                         isOn: $store.showMainWindowAtLaunch
                     )
                 } header: {
-                    Text("Appearance")
+                    Text("Behavior")
                 }
 
                 // Sound Effects Section
