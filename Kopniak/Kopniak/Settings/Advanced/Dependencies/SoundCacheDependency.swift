@@ -68,7 +68,6 @@ private actor SoundCache {
 
         // Cache it
         cache[soundName] = sound
-        NSLog("Preloaded sound: \(soundName)")
     }
 
     /// Retrieve a cached sound
