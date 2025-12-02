@@ -20,7 +20,7 @@ struct AppMenuView: View {
                     .monospacedDigit()
                     .font(.largeTitle)
 
-                HStack(spacing: 12) {
+                HStack(spacing: 20) {
                     Button(action: {
                         store.send(
                             .delegate(.stopRemindersTapped),
@@ -51,8 +51,8 @@ struct AppMenuView: View {
                             animation: .easeInOut
                         )
                     }) {
-                        Image(systemName: "backward.end.fill")
-                            .foregroundStyle(Color.blue)
+                        Image(systemName: "repeat")
+                            .foregroundStyle(Color.indigo)
                             .roundButtonLabel()
                     }
                     .help("Restart reminders")
@@ -64,7 +64,7 @@ struct AppMenuView: View {
                     .font(.largeTitle)
                     .foregroundStyle(.secondary)
 
-                HStack(spacing: 12) {
+                HStack(spacing: 20) {
                     Button(action: {
                         store.send(
                             .delegate(.stopRemindersTapped),
@@ -95,8 +95,8 @@ struct AppMenuView: View {
                             animation: .easeInOut
                         )
                     }) {
-                        Image(systemName: "backward.end.fill")
-                            .foregroundStyle(Color.blue)
+                        Image(systemName: "repeat")
+                            .foregroundStyle(Color.indigo)
                             .roundButtonLabel()
                     }
                     .help("Restart reminders")
@@ -152,7 +152,7 @@ struct AppMenuView: View {
 struct RoundButtonLabel: ViewModifier {
     @Environment(\.displayScale) private var scale
     @Environment(\.colorScheme) private var colorScheme
-    let buttonSize = 44.0
+    let buttonSize = 50.0
     let buttonMaterial = Material.ultraThick
 
     func body(content: Content) -> some View {
