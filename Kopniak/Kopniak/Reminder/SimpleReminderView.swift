@@ -12,44 +12,59 @@ struct SimpleReminderView: View {
     let store: StoreOf<ReminderFeature>
 
     var body: some View {
-        VStack(spacing: 20) {
-            // Brown chevron icon
+        VStack {
             Image(systemName: "chevron.up.2")
-                .resizable()
-                .foregroundColor(.brown)
-                .scaledToFit()
-                .frame(width: 50, height: 50)
+                .foregroundStyle(Color.accentColor)
+                .imageScale(.large)
+                .font(.system(size: 40))
+                .bold()
+                .symbolEffect(
+                    .wiggle.byLayer,
+                    options: .repeat(.periodic(delay: 1.0)).speed(0.5)
+                )
+                .padding(.top, 20)
+                .accessibilityLabel("It's a break time")
 
             // Buttons
             HStack(spacing: 0) {
                 Group {
+                    Spacer()
+
                     Button(action: {
-                        store.send(.delegate(.snoozeTapped))
-                    }) {
-                        Text(
-                            "Snooze for \(store.snoozeIntervalFormatted)"
+                        store.send(
+                            .delegate(.snoozeTapped),
+                            animation: .easeInOut
                         )
-                        .font(.title3)
-                        .frame(width: 200, height: 32)
+                    }) {
+                        Image(systemName: "zzz")
+                            .foregroundStyle(Color.secondary)
+                            .roundButtonLabel()
                     }
-                    .keyboardShortcut(.cancelAction)
+                    .help("Snooze")
 
                     Spacer()
 
                     Button(action: {
-                        store.send(.delegate(.dismissTapped))
+                        store.send(
+                            .delegate(.dismissTapped),
+                            animation: .easeInOut
+                        )
                     }) {
-                        Text("Done")
-                            .font(.title3)
-                            .frame(width: 200, height: 32)
+                        Image(systemName: "checkmark")
+                            .foregroundStyle(Color.accentColor)
+                            .roundButtonLabel()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
+                    .help("Done")
+
+                    Spacer()
                 }
+                .buttonStyle(.plain)
+                .imageScale(.large)
+                .padding()
             }
         }
         .padding(20)
-        .frame(width: 520)
+        .frame(width: 300)
         .onAppear {
             store.send(.onAppear)
         }

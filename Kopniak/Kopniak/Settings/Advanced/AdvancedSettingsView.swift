@@ -59,7 +59,7 @@ struct AdvancedSettingsView: View {
                                 .imageScale(.large)
                         }
                         .buttonStyle(.borderless)
-                        .accessibilityLabel("Play")
+                        .help("Play")
                         .disabled(store.reminderSound == nil)
                     }
                     Slider(

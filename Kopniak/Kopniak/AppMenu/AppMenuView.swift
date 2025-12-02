@@ -31,7 +31,6 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.red)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel("Stop reminders")
                     .help("Stop reminders")
 
                     Button(action: {
@@ -44,7 +43,6 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.orange)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel("Pause reminders")
                     .help("Pause reminders")
 
                     Button(action: {
@@ -57,7 +55,6 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.blue)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel("Restart reminders")
                     .help("Restart reminders")
                 }
             case .paused:
@@ -78,7 +75,6 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.red)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel("Stop reminders")
                     .help("Stop reminders")
 
                     Button(action: {
@@ -91,7 +87,6 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.green)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel("Resume reminders")
                     .help("Resume reminders")
 
                     Button(action: {
@@ -104,7 +99,6 @@ struct AppMenuView: View {
                             .foregroundStyle(Color.blue)
                             .roundButtonLabel()
                     }
-                    .accessibilityLabel("Restart reminders")
                     .help("Restart reminders")
                 }
             case .off:
@@ -113,20 +107,17 @@ struct AppMenuView: View {
                     .font(.largeTitle)
                     .foregroundStyle(.secondary)
 
-                HStack(spacing: 12) {
-                    Button(action: {
-                        store.send(
-                            .delegate(.startRemindersTapped),
-                            animation: .easeInOut
-                        )
-                    }) {
-                        Image(systemName: "play.fill")
-                            .foregroundStyle(Color.blue)
-                            .roundButtonLabel()
-                    }
-                    .accessibilityLabel("Start reminders")
-                    .help("Start reminders")
+                Button(action: {
+                    store.send(
+                        .delegate(.startRemindersTapped),
+                        animation: .easeInOut
+                    )
+                }) {
+                    Image(systemName: "play.fill")
+                        .foregroundStyle(Color.blue)
+                        .roundButtonLabel()
                 }
+                .help("Start reminders")
             }
             Divider()
                 .padding(.top, 6)
@@ -147,7 +138,6 @@ struct AppMenuView: View {
                 } label: {
                     Image(systemName: "gear")
                 }
-                .accessibilityLabel("Settings")
                 .help("Settings")
             }
         }
@@ -160,15 +150,19 @@ struct AppMenuView: View {
 }
 
 struct RoundButtonLabel: ViewModifier {
-    let buttonSize = 40.0
+    @Environment(\.displayScale) private var scale
+    @Environment(\.colorScheme) private var colorScheme
+    let buttonSize = 44.0
     let buttonMaterial = Material.ultraThick
 
     func body(content: Content) -> some View {
         content
             .frame(width: buttonSize, height: buttonSize)
-            .background(buttonMaterial)
+            .background()
             .clipShape(Circle())
-            .overlay(.primary, in: Circle().stroke(lineWidth: 2))
+            .overlay(.primary.opacity(0.5), in: Circle().stroke(lineWidth: 1 / scale))
+            .shadow(color: .primary.opacity(colorScheme == .light ? 0.5 : 0.3), radius: 3, x: 2, y: 2)
+            .font(.title)
     }
 }
 
@@ -178,7 +172,7 @@ extension View {
     }
 }
 
-struct BlinkViewModifier: ViewModifier {
+private struct BlinkViewModifier: ViewModifier {
     let duration: Double
     @State private var blinking: Bool = false
 
@@ -195,7 +189,7 @@ struct BlinkViewModifier: ViewModifier {
     }
 }
 
-extension View {
+private extension View {
     func blinking(duration: Double = 0.5) -> some View {
         modifier(BlinkViewModifier(duration: duration))
     }
