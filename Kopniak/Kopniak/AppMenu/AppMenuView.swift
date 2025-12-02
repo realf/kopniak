@@ -161,7 +161,7 @@ struct RoundButtonLabel: ViewModifier {
             .background()
             .clipShape(Circle())
             .overlay(.primary.opacity(0.5), in: Circle().stroke(lineWidth: 1 / scale))
-            .shadow(color: .primary.opacity(colorScheme == .light ? 0.5 : 0.3), radius: 3, x: 2, y: 2)
+            .shadow(color: .primary.opacity(colorScheme == .light ? 0.5 : 0.3), radius: 5, x: 2, y: 2)
             .font(.title)
     }
 }

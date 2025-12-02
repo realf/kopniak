@@ -16,7 +16,7 @@ class FloatingWindow: NSPanel {
         // Make it non-activating (won't steal focus)
         super.init(
             contentRect: NSRect(x: 0, y: 0, width: 350, height: 200),
-            styleMask: [.nonactivatingPanel, .titled],
+            styleMask: [.nonactivatingPanel, .borderless],
             backing: .buffered,
             defer: false
         )
@@ -40,8 +40,12 @@ class FloatingWindow: NSPanel {
         // Center on screen
         center()
 
+        isOpaque = false
+        backgroundColor = .clear
+
         isRestorable = false
         isMovableByWindowBackground = true
+        isFloatingPanel = true
     }
 
     // MARK: - Overrides

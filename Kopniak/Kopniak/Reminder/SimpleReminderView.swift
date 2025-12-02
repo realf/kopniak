@@ -14,7 +14,7 @@ struct SimpleReminderView: View {
     var body: some View {
         VStack {
             Image(systemName: "chevron.up.2")
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(Color.primary)
                 .imageScale(.large)
                 .font(.system(size: 40))
                 .bold()
@@ -68,6 +68,8 @@ struct SimpleReminderView: View {
         }
         .padding(20)
         .frame(width: 350)
+        .background(Material.regular.opacity(0.6))
+        .cornerRadius(20)
         .onAppear {
             store.send(.onAppear)
         }
