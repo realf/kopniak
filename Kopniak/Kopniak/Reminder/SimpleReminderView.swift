@@ -40,6 +40,7 @@ struct SimpleReminderView: View {
                             .foregroundStyle(Color.secondary)
                             .roundButtonLabel()
                     }
+                    .keyboardShortcut(.cancelAction)
                     .help("Snooze")
 
                     Spacer()
@@ -54,17 +55,19 @@ struct SimpleReminderView: View {
                             .foregroundStyle(Color.accentColor)
                             .roundButtonLabel()
                     }
+                    .keyboardShortcut(.defaultAction)
                     .help("Done")
 
                     Spacer()
                 }
                 .buttonStyle(.plain)
+                .fontWeight(.bold)
                 .imageScale(.large)
                 .padding()
             }
         }
         .padding(20)
-        .frame(width: 300)
+        .frame(width: 350)
         .onAppear {
             store.send(.onAppear)
         }
