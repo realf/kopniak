@@ -40,7 +40,7 @@ private struct Header: View {
     var body: some View {
         // Header: Icon, Name, Version, Copyright
         HStack(alignment: .top, spacing: 40) {
-            Image("Kopniak1")
+            Image("Icon")
                 .interpolation(.high)
                 .resizable()
                 .frame(width: 100, height: 100)
