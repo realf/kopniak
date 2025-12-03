@@ -32,8 +32,8 @@ struct RemindersFeature {
 
     @ObservableState
     struct State {
-        static let defaultReminderInterval: TimeInterval = 45.0 * 60
-        static let defaultSnoozeInterval: TimeInterval = 10.0 * 60
+        static let defaultReminderInterval: TimeInterval = 30.0 * 60
+        static let defaultSnoozeInterval: TimeInterval = 5.0 * 60
 
         var idleMonitor: IdleMonitorFeature.State
         @Shared var remainingTime: TimeInterval
