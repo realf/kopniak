@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Kopniak - A macOS menu bar utility that reminds you to take breaks from computer work with military-themed motivation.">
-    <meta name="keywords" content="macOS, break reminder, health, menu bar, productivity">
+    <meta name="description" content="Kopniak - A minimal macOS app that reminds you to take breaks from computer work.">
+    <meta name="keywords" content="macOS, break reminder, health, productivity">
     <meta name="author" content="Serhii Dunets">
     <link rel="icon" type="image/png" href="kopniak-icon.png">
     <link rel="apple-touch-icon" href="kopniak-icon.png">
-    <title>Kopniak - Your Personal Drill Sergeant</title>
+    <title>Kopniak - Break Reminder for macOS</title>
     <style>
         * {
             margin: 0;
@@ -20,22 +20,17 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #fef9e7 0%, #f5f0e1 100%);
-            min-height: 100vh;
+            background: #fafafa;
         }
 
-        /* Navigation */
         nav {
-            background-color: rgba(139, 90, 43, 0.95);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         nav .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -43,9 +38,9 @@
         }
 
         nav .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #8b5a2b;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -53,166 +48,106 @@
         }
 
         nav .logo img {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
         }
 
-        nav a {
-            color: #fff;
+        nav a:not(.logo) {
+            color: #666;
             text-decoration: none;
             margin-left: 2rem;
-            transition: opacity 0.3s;
+            font-size: 0.95rem;
         }
 
-        nav a:hover {
-            opacity: 0.8;
+        nav a:not(.logo):hover {
+            color: #8b5a2b;
         }
 
-        /* Container */
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
-        /* Hero Section */
         .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 3rem;
-            padding: 4rem 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .hero-content h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #8b5a2b;
-            line-height: 1.2;
-        }
-
-        .hero-content p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            color: #666;
-        }
-
-        .hero-image {
+            padding: 5rem 2rem 4rem;
             text-align: center;
         }
 
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 16px;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
-            animation: bounce 3s ease-in-out infinite;
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #222;
+            font-weight: 500;
         }
 
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #d4a574 0%, #8b5a2b 100%);
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
+        .hero p {
             font-size: 1.1rem;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 15px rgba(139, 90, 43, 0.3);
-            border: none;
-            cursor: pointer;
+            margin-bottom: 2.5rem;
+            color: #666;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(139, 90, 43, 0.4);
+        .download-button {
+            display: inline-block;
+            background: #8b5a2b;
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.2s;
         }
 
-        /* Features Section */
+        .download-button:hover {
+            background: #704821;
+        }
+
         .features {
-            padding: 4rem 2rem;
-            margin-bottom: 4rem;
+            padding: 3rem 2rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .features h2 {
-            font-size: 2.5rem;
+            font-size: 1.5rem;
             text-align: center;
-            margin-bottom: 3rem;
-            color: #8b5a2b;
+            margin-bottom: 2.5rem;
+            color: #222;
+            font-weight: 500;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+        .features-list {
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+        .features-list li {
+            margin-bottom: 0.75rem;
+            color: #555;
+            padding-left: 0.5rem;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            color: #8b5a2b;
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .feature-card p {
-            color: #666;
-        }
-
-        /* Privacy Policy Section */
         .privacy {
-            background: white;
-            padding: 4rem 2rem;
-            margin-bottom: 4rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 3rem 2rem;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         .privacy h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #8b5a2b;
-        }
-
-        .privacy h3 {
-            font-size: 1.3rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #8b5a2b;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #222;
+            font-weight: 500;
+            text-align: center;
         }
 
         .privacy p {
             margin-bottom: 1rem;
             color: #555;
-            line-height: 1.8;
         }
 
         .privacy ul {
@@ -225,152 +160,82 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Support Section */
         .support {
-            padding: 4rem 2rem;
+            padding: 3rem 2rem;
             text-align: center;
-            margin-bottom: 4rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
         }
 
         .support h2 {
-            font-size: 2.5rem;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #8b5a2b;
+            color: #222;
+            font-weight: 500;
         }
 
         .support p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: #666;
         }
 
-        .support-buttons {
+        .support-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 1rem;
         }
 
-        .support-button {
+        .support-link {
             display: inline-block;
-            background: #f5f5f5;
             color: #8b5a2b;
-            padding: 1rem 2rem;
-            border-radius: 8px;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid #8b5a2b;
+            border: 1px solid #8b5a2b;
+            transition: all 0.2s;
         }
 
-        .support-button:hover {
+        .support-link:hover {
             background: #8b5a2b;
             color: white;
         }
 
-        /* Footer */
         footer {
-            background-color: #8b5a2b;
-            color: white;
+            background: #f5f5f5;
             text-align: center;
             padding: 2rem;
-            margin-top: 4rem;
+            margin-top: 2rem;
+            color: #666;
+            font-size: 0.9rem;
         }
 
-        footer p {
-            margin-bottom: 0.5rem;
+        footer a {
+            color: #8b5a2b;
+            text-decoration: none;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-                padding: 2rem 1rem;
-            }
-
-            .hero-content h1 {
+            .hero h1 {
                 font-size: 2rem;
             }
 
-            .hero-content p {
-                font-size: 1.1rem;
+            .hero p {
+                font-size: 1rem;
             }
 
-            .features h2,
-            .privacy h2,
-            .support h2 {
-                font-size: 2rem;
-            }
-
-            nav .logo {
-                font-size: 1.2rem;
-            }
-
-            nav a {
+            nav a:not(.logo) {
                 margin-left: 1rem;
-                font-size: 0.9rem;
+                font-size: 0.875rem;
             }
-
-            .support-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .support-button {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-
-        /* Utility Classes */
-        .download-section {
-            background: linear-gradient(135deg, #8b5a2b 0%, #d4a574 100%);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 12px;
-            text-align: center;
-            margin: 3rem 0;
-        }
-
-        .download-section h2 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 2rem;
-        }
-
-        .download-section p {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-
-        .app-info {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 3rem;
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 0.95rem;
-        }
-
-        .app-info-item {
-            text-align: center;
-        }
-
-        .app-info-item strong {
-            color: white;
-            display: block;
-            margin-bottom: 0.25rem;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="container">
             <a href="#" class="logo">
-                <img src="kopniak-icon.png" alt="Kopniak Logo">
+                <img src="kopniak-icon.png" alt="Kopniak">
                 Kopniak
             </a>
             <div>
@@ -381,130 +246,60 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>Listen Up, Soldier! ⚔️</h1>
-            <p>Sergeant Kopniak is here to give you a kick in the butt so you don't forget to take a break from the computer.</p>
-            <a href="https://apps.apple.com/us/app/kopniak/id6754943310" class="cta-button">Get Kopniak on Mac App Store</a>
-        </div>
-        <div class="hero-image">
-            <img src="kopniak-character.png" alt="Kopniak">
+        <div class="container">
+            <h1>Kopniak ∙ The Simplest Breaks</h1>
+            <p>A minimal macOS app that reminds you to take breaks from computer work. Simple, private, and open source.</p>
+            <a href="https://apps.apple.com/us/app/kopniak/id6754943310" class="download-button">Download from Mac App Store</a>
         </div>
     </section>
 
-    <!-- Features Section -->
     <section id="features" class="features">
         <div class="container">
-            <h2>Mission Briefing 🎯</h2>
-            <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">⏰</div>
-                <h3>Smart Reminders</h3>
-                <p>Customizable break and snooze intervals with automatic idle detection and screen lock timer reset</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">😴</div>
-                <h3>Idle Detection</h3>
-                <p>Automatically pauses reminders when your computer is idle, locked, or in sleep mode</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎨</div>
-                <h3>Reminder Styles</h3>
-                <p>Choose between Simple and Kopniak reminder styles with customizable display options</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔊</div>
-                <h3>Sound Effects</h3>
-                <p>Select from system sounds with adjustable volume for break reminders</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📍</div>
-                <h3>Menu Bar Integration</h3>
-                <p>Optional menu bar icon with live countdown timer in multiple formats</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🚀</div>
-                <h3>Launch at Login</h3>
-                <p>Automatically start Kopniak when you log in to your Mac with optional main window display</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔓</div>
-                <h3>Open Source</h3>
-                <p>Free and open source under the MIT license on GitHub</p>
-            </div>
-            </div>
+            <h2>Features</h2>
+            <ul class="features-list">
+                <li>Customizable break and snooze intervals</li>
+                <li>Optional menu bar icon with countdown timer</li>
+                <li>Automatic pause when computer is locked</li>
+                <li>Simple reminders</li>
+                <li>Optional sounds</li>
+                <li>Launch at login option</li>
+                <li>Free and open source</li>
+            </ul>
         </div>
     </section>
 
-    <!-- Download Section -->
-    <div class="container">
-        <div class="download-section">
-            <h2>Ready to Take the Drill? 💪</h2>
-            <p>Download Kopniak now and start your journey to better break habits</p>
-            <a href="https://apps.apple.com/us/app/kopniak/id6754943310" class="cta-button">Download from Mac App Store</a>
-            <div class="app-info">
-                <div class="app-info-item">
-                    <strong>Version</strong><br>1.0
-                </div>
-                <div class="app-info-item">
-                    <strong>System</strong><br>macOS 15.0+
-                </div>
-                <div class="app-info-item">
-                    <strong>License</strong><br>MIT
-                </div>
-                <div class="app-info-item">
-                    <strong>Size</strong><br>~18 MB
-                </div>
-            </div>
-        </div>
-    </div>
+    <section id="privacy" class="privacy">
+        <div class="container">
+            <h2>Privacy</h2>
+            <p><strong>Kopniak does not collect any data.</strong> Everything stays on your computer.</p>
 
-    <!-- Privacy Policy Section -->
-    <section id="privacy" class="container">
-        <div class="privacy">
-            <h2>Privacy Policy 🛡️</h2>
-
-            <h3>Data Collection</h3>
-            <p><strong>Kopniak does not collect any personal data.</strong> The application operates entirely on your computer and does not transmit any information to external servers or services.</p>
-
-            <h3>What We Know About You</h3>
-            <p>Kopniak stores configuration data locally on your Mac using macOS system preferences. This data includes your customization choices and preferences needed for the app to function properly.</p>
-            <p><strong>All this data stays on your computer.</strong> It is never sent to us, Apple, or any third party.</p>
-
-            <h3>Privacy Manifest</h3>
-            <p>Kopniak includes a complete Apple Privacy Manifest declaration detailing all APIs and their purpose. You can review this in the App Store listing.</p>
-
-            <h3>No Tracking</h3>
-            <p>Kopniak does not:</p>
+            <p>The app does not:</p>
             <ul>
-                <li>Use analytics or tracking services</li>
-                <li>Collect usage data</li>
-                <li>Access your files or documents</li>
                 <li>Access the internet</li>
-                <li>Track your activity or location</li>
+                <li>Use analytics or tracking</li>
+                <li>Collect usage data</li>
+                <li>Access your files</li>
             </ul>
 
-            <h3>Your Privacy Matters</h3>
-            <p>We believe privacy is a fundamental right. Kopniak is designed as a "zero-knowledge" application—what happens on your Mac stays on your Mac.</p>
+            <p>Your settings are stored locally using macOS preferences and never leave your device.</p>
         </div>
     </section>
 
-    <!-- Support Section -->
     <section id="support" class="support">
-        <h2>Need Help? 🤝</h2>
-        <p>Kopniak is <strong>open source</strong> and free! Have a question, found a bug, or have a feature request? We're here to help!</p>
-        <div class="support-buttons">
-            <a href="https://github.com/realf/kopniak/issues" class="support-button">Report an Issue</a>
-            <a href="https://github.com/realf/kopniak" class="support-button">View on GitHub</a>
+        <div class="container">
+            <h2>Support</h2>
+            <p>Questions or issues? I'm here to help.</p>
+            <div class="support-links">
+                <a href="https://github.com/realf/kopniak/issues" class="support-link">Report an Issue</a>
+                <a href="https://github.com/realf/kopniak" class="support-link">View on GitHub</a>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Serhii Dunets. All rights reserved.</p>
-        <p>Kopniak is released under the <a href="https://github.com/realf/kopniak/blob/main/LICENSE" style="color: #ffd700; text-decoration: none;">MIT License</a></p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Kopniak is a macOS utility for taking healthy work breaks.</p>
+        <p>&copy; 2025 Serhii Dunets</p>
+        <p>Released under the <a href="https://github.com/realf/kopniak/blob/main/LICENSE">MIT License</a></p>
     </footer>
 </body>
 </html>
