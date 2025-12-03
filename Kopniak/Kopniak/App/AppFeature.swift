@@ -95,7 +95,7 @@ struct AppFeature {
                 snoozeInterval: reminders.$snoozeInterval,
                 menuIconTimeDisplay: menuIcon.$menuIconTimeDisplay,
                 reminderStyle: reminderStyle,
-                restartAfterScreenLock: reminders.$restartAfterScreenLock,
+                lockScreenTimerBehavior: reminders.$lockScreenTimerBehavior,
                 reminderSound: reminder.$reminderSound,
                 soundVolume: reminder.$soundVolume,
                 showMainWindowAtLaunch: showMainWindowAtLaunch,

@@ -28,7 +28,7 @@ struct SettingsFeature {
             snoozeInterval: Shared<TimeInterval>,
             menuIconTimeDisplay: Shared<TimeDisplaySetting>,
             reminderStyle: Shared<ReminderStyle>,
-            restartAfterScreenLock: Shared<Bool>,
+            lockScreenTimerBehavior: Shared<LockScreenTimerBehavior>,
             reminderSound: Shared<String?>,
             soundVolume: Shared<Double>,
             showMainWindowAtLaunch: Shared<Bool>,
@@ -36,15 +36,15 @@ struct SettingsFeature {
         ) {
             self.selectedTab = .general
             self.generalSettings = GeneralSettingsFeature.State(
+                lockScreenTimerBehavior: lockScreenTimerBehavior,
                 reminderInterval: reminderInterval,
-                snoozeInterval: snoozeInterval,
-                restartAfterScreenLock: restartAfterScreenLock
+                showMainWindowAtLaunch: showMainWindowAtLaunch,
+                snoozeInterval: snoozeInterval
             )
             self.advanced = AdvancedSettingsFeature.State(
                 menuIconTimeDisplay: menuIconTimeDisplay,
                 reminderSound: reminderSound,
                 reminderStyle: reminderStyle,
-                showMainWindowAtLaunch: showMainWindowAtLaunch,
                 showMenuBarIcon: showMenuBarIcon,
                 soundVolume: soundVolume
             )

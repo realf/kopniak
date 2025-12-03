@@ -59,7 +59,7 @@ struct SettingsView: View {
     let snoozeInterval = Shared(value: 10.0 * 60)
     let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.short)
     let reminderStyle = Shared(value: ReminderStyle.simple)
-    let restartAfterScreenLock = Shared(value: true)
+    let lockScreenTimerBehavior = Shared(value: LockScreenTimerBehavior.reset)
     let reminderSound = Shared(value: Optional<String>.none)
     let soundVolume = Shared(value: 1.0)
     let store = Store(
@@ -68,7 +68,7 @@ struct SettingsView: View {
             snoozeInterval: snoozeInterval,
             menuIconTimeDisplay: menuIconTimeDisplay,
             reminderStyle: reminderStyle,
-            restartAfterScreenLock: restartAfterScreenLock,
+            lockScreenTimerBehavior: lockScreenTimerBehavior,
             reminderSound: reminderSound,
             soundVolume: soundVolume,
             showMainWindowAtLaunch: Shared(value: true),

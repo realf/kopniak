@@ -37,8 +37,9 @@ struct GeneralSettingsFeature {
             return formatter
         }()
 
+        @Shared var lockScreenTimerBehavior: LockScreenTimerBehavior
         @Shared var reminderInterval: TimeInterval
-        @Shared var restartAfterScreenLock: Bool
+        @Shared var showMainWindowAtLaunch: Bool
         @Shared var snoozeInterval: TimeInterval
 
         var reminderIntervalFormatted: String {
@@ -83,13 +84,15 @@ struct GeneralSettingsFeature {
         let snoozeIntervalStep = 1.0 * 60.0
 
         init(
+            lockScreenTimerBehavior: Shared<LockScreenTimerBehavior>,
             reminderInterval: Shared<TimeInterval>,
-            snoozeInterval: Shared<TimeInterval>,
-            restartAfterScreenLock: Shared<Bool>
+            showMainWindowAtLaunch: Shared<Bool>,
+            snoozeInterval: Shared<TimeInterval>
         ) {
+            _lockScreenTimerBehavior = lockScreenTimerBehavior
             _reminderInterval = reminderInterval
+            _showMainWindowAtLaunch = showMainWindowAtLaunch
             _snoozeInterval = snoozeInterval
-            _restartAfterScreenLock = restartAfterScreenLock
         }
     }
 

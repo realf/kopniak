@@ -26,7 +26,6 @@ struct GeneralSettingsView: View {
         HStack {
             Spacer()
             Form {
-                // Reminder settings
                 Section {
                     VStack {
                         Text("\(store.reminderIntervalFormatted)")
@@ -41,7 +40,7 @@ struct GeneralSettingsView: View {
                                 store.maxReminderIntervalFormatted
                             ),
                             label: {
-                                Text("Break interval")
+                                Text("Break reminder interval")
                             }
                         )
                     }
@@ -63,20 +62,26 @@ struct GeneralSettingsView: View {
                             }
                         )
                     }
-                    Toggle(
-                        "Reset timer after Lock Screen",
-                        isOn: $store.restartAfterScreenLock
-                    )
                 } header: {
-                    Text("Schedule")
+                    Text("Break Reminders")
                 }
 
-                // Launch settings
                 Section {
                     Toggle(
                         "Open Kopniak at login",
                         isOn: $store.launchAtLogin
                     )
+
+                    Toggle(
+                        "Show main window when Kopniak opens",
+                        isOn: $store.showMainWindowAtLaunch
+                    )
+
+                    Picker("During the lock screen", selection: $store.lockScreenTimerBehavior) {
+                        ForEach(LockScreenTimerBehavior.allCases) { option in
+                            Text(option.title)
+                        }
+                    }
                 } header: {
                     Text("App Behavior")
                 }
@@ -91,14 +96,16 @@ struct GeneralSettingsView: View {
 }
 
 #Preview {
+    let lockScreenTimerBehavior = Shared(value: LockScreenTimerBehavior.reset)
     let reminderInterval = Shared(value: 25.0 * 60)
     let snoozeInterval = Shared(value: 10.0 * 60)
-    let restartAfterScreenLock = Shared(value: true)
+    let showMainWindowAtLaunch = Shared(value: true)
     let store = Store(
         initialState: GeneralSettingsFeature.State(
+            lockScreenTimerBehavior: lockScreenTimerBehavior,
             reminderInterval: reminderInterval,
-            snoozeInterval: snoozeInterval,
-            restartAfterScreenLock: restartAfterScreenLock
+            showMainWindowAtLaunch: showMainWindowAtLaunch,
+            snoozeInterval: snoozeInterval
         ),
         reducer: {
             GeneralSettingsFeature()

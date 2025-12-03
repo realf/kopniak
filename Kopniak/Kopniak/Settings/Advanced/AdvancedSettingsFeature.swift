@@ -41,7 +41,6 @@ struct AdvancedSettingsFeature {
         @Shared var menuIconTimeDisplay: TimeDisplaySetting
         @Shared var reminderSound: String?
         @Shared var reminderStyle: ReminderStyle
-        @Shared var showMainWindowAtLaunch: Bool
         @Shared var showMenuBarIcon: Bool
         @Shared var soundVolume: Double
 
@@ -49,14 +48,12 @@ struct AdvancedSettingsFeature {
             menuIconTimeDisplay: Shared<TimeDisplaySetting>,
             reminderSound: Shared<String?>,
             reminderStyle: Shared<ReminderStyle>,
-            showMainWindowAtLaunch: Shared<Bool>,
             showMenuBarIcon: Shared<Bool>,
             soundVolume: Shared<Double>
         ) {
             _menuIconTimeDisplay = menuIconTimeDisplay
             _reminderSound = reminderSound
             _reminderStyle = reminderStyle
-            _showMainWindowAtLaunch = showMainWindowAtLaunch
             _showMenuBarIcon = showMenuBarIcon
             _soundVolume = soundVolume
         }

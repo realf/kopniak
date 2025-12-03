@@ -14,6 +14,18 @@ nonisolated enum RemindersStatus: Codable {
     case paused
 }
 
+nonisolated enum LockScreenTimerBehavior: Codable, CaseIterable, Identifiable {
+    case reset
+    case pause
+    var title: String {
+        switch self {
+        case .reset: return String(localized: "Timer Resets")
+        case .pause: return String(localized: "Timer Pauses")
+        }
+    }
+    var id: Self { self }
+}
+
 @Reducer
 struct RemindersFeature {
     @Dependency(\.suspendingClock) var clock
@@ -27,7 +39,7 @@ struct RemindersFeature {
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
-        @Shared var restartAfterScreenLock: Bool
+        @Shared var lockScreenTimerBehavior: LockScreenTimerBehavior
         @Shared var snoozeInterval: TimeInterval
 
         let timerID = UUID()
@@ -50,9 +62,9 @@ struct RemindersFeature {
 
             _reminderInterval = reminderInterval
 
-            _restartAfterScreenLock = Shared(
-                wrappedValue: true,
-                .restartAfterScreenLock
+            _lockScreenTimerBehavior = Shared(
+                wrappedValue: .reset,
+                .lockScreenTimerBehavior
             )
 
             let snoozeInterval = Shared(
@@ -160,9 +172,10 @@ struct RemindersFeature {
 
         // When exiting idle state, restart or start the reminder timer
         case .screenDidUnlock, .sessionDidBecomeActive, .systemDidWake:
-            if state.restartAfterScreenLock {
+            switch state.lockScreenTimerBehavior {
+            case .reset:
                 return restartReminders(&state)
-            } else {
+            case .pause:
                 return startTimer(&state)
             }
         }
@@ -300,8 +313,8 @@ extension SharedReaderKey where Self == AppStorageKey<TimeInterval> {
     }
 }
 
-extension SharedReaderKey where Self == AppStorageKey<Bool> {
-    static var restartAfterScreenLock: Self {
-        .appStorage("restartAfterScreenLock")
+extension SharedReaderKey where Self == AppStorageKey<LockScreenTimerBehavior> {
+    static var lockScreenTimerBehavior: Self {
+        .appStorage("lockScreenTimerBehavior")
     }
 }

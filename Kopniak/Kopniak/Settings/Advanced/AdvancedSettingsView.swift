@@ -15,17 +15,6 @@ struct AdvancedSettingsView: View {
         HStack {
             Spacer()
             Form {
-                // Appearance Section
-                Section {
-                    Toggle(
-                        "Show main window when Kopniak opens",
-                        isOn: $store.showMainWindowAtLaunch
-                    )
-                } header: {
-                    Text("Behavior")
-                }
-
-                // Sound Effects Section
                 Section {
                     HStack {
                         Picker(
@@ -82,21 +71,22 @@ struct AdvancedSettingsView: View {
                             get: { store.menuIconTimeDisplay },
                             set: { newValue in store.menuIconTimeDisplay = newValue }
                         ),
-                        label: Text("Time format")
+                        label: Text("Display remaining time as:")
                     ) {
                         ForEach(TimeDisplaySetting.allCases) { setting in
                             switch setting {
                             case .short:
-                                Text("Short")
+                                Text("Minutes only (9 min)")
                             case .positional:
-                                Text("Positional")
+                                Text("Minutes and Seconds (09:41)")
                             case .none:
-                                Text("None")
+                                Text("Not shown")
                             }
                         }
                     }
+                    .disabled(!store.showMenuBarIcon)
                 } header: {
-                    Text("Menu Icon")
+                    Text("Menu Bar Icon")
                 }
             }
             .formStyle(.grouped)
@@ -112,7 +102,6 @@ struct AdvancedSettingsView: View {
     let menuIconTimeDisplay = Shared(value: TimeDisplaySetting.short)
     let reminderSound = Shared(value: Optional<String>.none)
     let reminderStyle = Shared(value: ReminderStyle.simple)
-    let showMainWindowAtLaunch = Shared(value: true)
     let showMenuBarIcon = Shared(value: false)
     let soundVolume = Shared(value: 1.0)
     let store = Store(
@@ -120,7 +109,6 @@ struct AdvancedSettingsView: View {
             menuIconTimeDisplay: menuIconTimeDisplay,
             reminderSound: reminderSound,
             reminderStyle: reminderStyle,
-            showMainWindowAtLaunch: showMainWindowAtLaunch,
             showMenuBarIcon: showMenuBarIcon,
             soundVolume: soundVolume
         )
