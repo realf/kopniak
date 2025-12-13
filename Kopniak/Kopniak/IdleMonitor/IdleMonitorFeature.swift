@@ -12,12 +12,12 @@ import Foundation
 // MARK: - Notification Observer Dependency
 
 struct IdleNotificationObserverDependency: DependencyKey {
-    var observeScreenLock: @Sendable () async -> AsyncStream<Void>
-    var observeScreenUnlock: @Sendable () async -> AsyncStream<Void>
-    var observeSessionDidResignActive: @Sendable () async -> AsyncStream<Void>
-    var observeSessionDidBecomeActive: @Sendable () async -> AsyncStream<Void>
-    var observeWillSleep: @Sendable () async -> AsyncStream<Void>
-    var observeDidWake: @Sendable () async -> AsyncStream<Void>
+    var observeScreenLock: @Sendable () -> AsyncStream<Void>
+    var observeScreenUnlock: @Sendable () -> AsyncStream<Void>
+    var observeSessionDidResignActive: @Sendable () -> AsyncStream<Void>
+    var observeSessionDidBecomeActive: @Sendable () -> AsyncStream<Void>
+    var observeWillSleep: @Sendable () -> AsyncStream<Void>
+    var observeDidWake: @Sendable () -> AsyncStream<Void>
 
     private static let workspaceCenter = NSWorkspace.shared
         .notificationCenter
@@ -197,7 +197,7 @@ struct IdleMonitorFeature {
 
     private func observeScreenLock() -> Effect<Action> {
         .run { send in
-            for await _ in await notificationObserver.observeScreenLock() {
+            for await _ in notificationObserver.observeScreenLock() {
                 await send(.delegate(.screenDidLock))
             }
         }
@@ -206,7 +206,7 @@ struct IdleMonitorFeature {
 
     private func observeScreenUnlock() -> Effect<Action> {
         .run { send in
-            for await _ in await notificationObserver.observeScreenUnlock() {
+            for await _ in notificationObserver.observeScreenUnlock() {
                 await send(.delegate(.screenDidUnlock))
             }
         }
@@ -215,8 +215,7 @@ struct IdleMonitorFeature {
 
     private func observeSessionDidBecomeActive() -> Effect<Action> {
         .run { send in
-            for await _
-                in await notificationObserver.observeSessionDidBecomeActive()
+            for await _ in notificationObserver.observeSessionDidBecomeActive()
             {
                 await send(.delegate(.sessionDidBecomeActive))
             }
@@ -226,8 +225,7 @@ struct IdleMonitorFeature {
 
     private func observeSessionDidResignActive() -> Effect<Action> {
         .run { send in
-            for await _
-                in await notificationObserver.observeSessionDidResignActive()
+            for await _ in notificationObserver.observeSessionDidResignActive()
             {
                 await send(.delegate(.sessionDidResignActive))
             }
@@ -237,9 +235,7 @@ struct IdleMonitorFeature {
 
     private func observeWillSleep() -> Effect<Action> {
         .run { send in
-            for await _
-                in await notificationObserver.observeWillSleep()
-            {
+            for await _ in notificationObserver.observeWillSleep() {
                 await send(.delegate(.systemWillSleep))
             }
         }
@@ -248,9 +244,7 @@ struct IdleMonitorFeature {
 
     private func observeDidWake() -> Effect<Action> {
         .run { send in
-            for await _
-                in await notificationObserver.observeDidWake()
-            {
+            for await _ in notificationObserver.observeDidWake() {
                 await send(.delegate(.systemDidWake))
             }
         }
