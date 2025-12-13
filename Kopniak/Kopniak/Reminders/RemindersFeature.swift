@@ -8,13 +8,13 @@
 import ComposableArchitecture
 import Foundation
 
-nonisolated enum RemindersStatus: Codable {
+enum RemindersStatus: Codable {
     case off
     case on
     case paused
 }
 
-nonisolated enum LockScreenTimerBehavior: Codable, CaseIterable, Identifiable {
+enum LockScreenTimerBehavior: Codable, CaseIterable, Identifiable {
     case reset
     case pause
     var title: String {

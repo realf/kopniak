@@ -183,7 +183,7 @@ struct ReminderFeature {
 }
 
 // MARK: - ReminderContentSource dependency.
-nonisolated struct ReminderContentSourceDependency {
+struct ReminderContentSourceDependency {
     let messages: [String]
     let sgtImages: [String]
     let catImages: [String]

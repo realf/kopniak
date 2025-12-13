@@ -78,7 +78,7 @@ struct AdvancedSettingsFeature {
             case .onAppear:
                 state.isLoadingSounds = true
                 return .run { send in
-                    let sounds = await systemSounds.availableSounds()
+                    let sounds = systemSounds.availableSounds()
                     await send(.soundsLoaded(sounds))
                 }
 

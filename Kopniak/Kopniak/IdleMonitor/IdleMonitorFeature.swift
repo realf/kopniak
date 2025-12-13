@@ -19,9 +19,9 @@ struct IdleNotificationObserverDependency: DependencyKey {
     var observeWillSleep: @Sendable () async -> AsyncStream<Void>
     var observeDidWake: @Sendable () async -> AsyncStream<Void>
 
-    nonisolated private static let workspaceCenter = NSWorkspace.shared
+    private static let workspaceCenter = NSWorkspace.shared
         .notificationCenter
-    nonisolated private static let distributedCenter =
+    private static let distributedCenter =
         DistributedNotificationCenter.default()
 
     static let liveValue = Self(
@@ -257,7 +257,7 @@ struct IdleMonitorFeature {
         .cancellable(id: ObservationID.systemDidWake)
     }
 
-    nonisolated enum ObservationID: Hashable {
+    enum ObservationID: Hashable {
         case screenLock
         case screenUnlock
         case sessionDidBecomeActive

@@ -88,7 +88,7 @@ struct ReminderView: View {
 }
 
 #if DEBUG
-    private nonisolated struct RNG: RandomNumberGenerator {
+    private struct RNG: RandomNumberGenerator {
         mutating func next() -> UInt64 { 0 }
     }
 

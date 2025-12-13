@@ -143,15 +143,15 @@ struct GeneralSettingsFeature {
     }
 
     // MARK: - Launch at Login Implementation
-    private nonisolated func updateLaunchAtLogin(
+    private func updateLaunchAtLogin(
         enabled: Bool,
         send: Send<Action>
     ) async {
         do {
             if enabled {
-                try await smAppService.register()
+                try smAppService.register()
             } else {
-                try await smAppService.unregister()
+                try smAppService.unregister()
             }
 
             // Update cached state after successful operation
@@ -162,16 +162,16 @@ struct GeneralSettingsFeature {
             )
 
             // Revert cached state on failure and refresh UI
-            let isEnabled = await smAppService.isEnabled()
+            let isEnabled = smAppService.isEnabled()
             await send(.updateLaunchAtLogin(isEnabled))
         }
     }
 }
 
 // MARK: - SMAppService dependency.
-nonisolated struct SMAppServiceDependency {
+struct SMAppServiceDependency {
     var register: () throws -> Void
-    var unregister: () async throws -> Void
+    var unregister: () throws -> Void
     var isEnabled: () -> Bool
 }
 
@@ -180,7 +180,7 @@ extension SMAppServiceDependency: DependencyKey {
     static let liveValue = Self {
         try SMAppService.mainApp.register()
     } unregister: {
-        try await SMAppService.mainApp.unregister()
+        try SMAppService.mainApp.unregister()
     } isEnabled: {
         SMAppService.mainApp.status == .enabled
     }

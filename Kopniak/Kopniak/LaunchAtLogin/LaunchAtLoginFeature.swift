@@ -48,7 +48,7 @@ struct LaunchAtLoginFeature {
                     state.$launchAtLoginResponseReceived.withLock { $0 = true }
                     return .run { send in
                         do {
-                            try await smAppService.register()
+                            try smAppService.register()
                         } catch {
                             NSLog("Failed to enable launch at login: \(error)")
                         }
