@@ -50,9 +50,6 @@ extension DependencyValues {
 private actor SoundCache {
     private var cache: [String: NSSound] = [:]
 
-    /// Default sound to use for initializing the audio system
-    static let defaultSound = "Ping"
-
     /// Preload a sound into the cache
     func preload(soundName: String) {
         // Check if already cached
