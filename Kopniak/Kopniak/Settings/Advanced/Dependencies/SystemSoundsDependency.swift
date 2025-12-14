@@ -10,7 +10,7 @@ import ComposableArchitecture
 import Foundation
 
 struct SystemSoundsDependency {
-    var availableSounds: () -> [String]
+    var availableSounds: @Sendable () -> [String]
 }
 
 // Conform to DependencyKey to provide a live and preview implementation of the interface.

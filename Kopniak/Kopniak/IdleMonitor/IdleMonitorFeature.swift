@@ -36,8 +36,14 @@ struct IdleNotificationObserverDependency: DependencyKey {
                 ) { _ in
                     continuation.yield()
                 }
+                let isolated = Isolated(observer)
+
                 continuation.onTermination = { _ in
-                    distributedCenter.removeObserver(observer)
+                    Task {
+                        await isolated.withValue { observer in
+                            distributedCenter.removeObserver(observer)
+                        }
+                    }
                 }
             }
         },
@@ -52,8 +58,14 @@ struct IdleNotificationObserverDependency: DependencyKey {
                 ) { _ in
                     continuation.yield()
                 }
+                let isolated = Isolated(observer)
+
                 continuation.onTermination = { _ in
-                    distributedCenter.removeObserver(observer)
+                    Task {
+                        await isolated.withValue { observer in
+                            distributedCenter.removeObserver(observer)
+                        }
+                    }
                 }
             }
         },
@@ -66,8 +78,14 @@ struct IdleNotificationObserverDependency: DependencyKey {
                 ) { _ in
                     continuation.yield()
                 }
+                let isolated = Isolated(observer)
+
                 continuation.onTermination = { _ in
-                    workspaceCenter.removeObserver(observer)
+                    Task {
+                        await isolated.withValue { observer in
+                            workspaceCenter.removeObserver(observer)
+                        }
+                    }
                 }
             }
         },
@@ -80,8 +98,14 @@ struct IdleNotificationObserverDependency: DependencyKey {
                 ) { _ in
                     continuation.yield()
                 }
+                let isolated = Isolated(observer)
+
                 continuation.onTermination = { _ in
-                    workspaceCenter.removeObserver(observer)
+                    Task {
+                        await isolated.withValue { observer in
+                            workspaceCenter.removeObserver(observer)
+                        }
+                    }
                 }
             }
         },
@@ -94,8 +118,14 @@ struct IdleNotificationObserverDependency: DependencyKey {
                 ) { _ in
                     continuation.yield()
                 }
+                let isolated = Isolated(observer)
+
                 continuation.onTermination = { _ in
-                    workspaceCenter.removeObserver(observer)
+                    Task {
+                        await isolated.withValue { observer in
+                            workspaceCenter.removeObserver(observer)
+                        }
+                    }
                 }
             }
         },
@@ -108,8 +138,14 @@ struct IdleNotificationObserverDependency: DependencyKey {
                 ) { _ in
                     continuation.yield()
                 }
+                let isolated = Isolated(observer)
+
                 continuation.onTermination = { _ in
-                    workspaceCenter.removeObserver(observer)
+                    Task {
+                        await isolated.withValue { observer in
+                            workspaceCenter.removeObserver(observer)
+                        }
+                    }
                 }
             }
         }

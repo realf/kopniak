@@ -62,7 +62,9 @@ class ReminderController: NSWindowController {
             context.duration = 0.3
             window.animator().alphaValue = 0
         } completionHandler: {
-            window.orderOut(nil)
+            Task { @MainActor in
+                window.orderOut(nil)
+            }
         }
     }
 }

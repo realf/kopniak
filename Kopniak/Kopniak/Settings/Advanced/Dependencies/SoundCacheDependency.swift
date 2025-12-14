@@ -11,10 +11,10 @@ import ComposableArchitecture
 /// Dependency for caching preloaded NSSound objects to eliminate first-play delay
 struct SoundCacheDependency {
     /// Preload a sound by name into the cache
-    var preloadSound: (String) async -> Void
+    var preloadSound: @Sendable (String) async -> Void
 
     /// Retrieve a cached sound by name, returns nil if not cached
-    var getCachedSound: (String) async -> NSSound?
+    var getCachedSound: @Sendable (String) async -> NSSound?
 }
 
 extension SoundCacheDependency: DependencyKey {

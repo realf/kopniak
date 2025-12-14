@@ -10,6 +10,7 @@ import Combine
 import ComposableArchitecture
 import SwiftUI
 
+@MainActor
 final class StatusItemController: NSObject, NSPopoverDelegate {
     private let iconStore: StoreOf<AppMenuIconFeature>
     private let menuStore: StoreOf<AppMenuFeature>

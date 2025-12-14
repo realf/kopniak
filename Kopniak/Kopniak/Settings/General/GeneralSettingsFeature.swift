@@ -170,9 +170,9 @@ struct GeneralSettingsFeature {
 
 // MARK: - SMAppService dependency.
 struct SMAppServiceDependency {
-    var register: () throws -> Void
-    var unregister: () throws -> Void
-    var isEnabled: () -> Bool
+    var register: @Sendable () throws -> Void
+    var unregister: @Sendable () throws -> Void
+    var isEnabled: @Sendable () -> Bool
 }
 
 // Conform to DependencyKey to provide a live and preview implementation of the interface.

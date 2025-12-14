@@ -9,7 +9,7 @@ import AppKit
 import ComposableArchitecture
 
 struct SoundPlaybackDependency {
-    var playSound: (_ soundName: String, _ volume: Double) async -> Void
+    var playSound: @Sendable (_ soundName: String, _ volume: Double) async -> Void
 }
 
 // Conform to DependencyKey to provide a live and preview implementation of the interface.
