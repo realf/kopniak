@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="docs/kopniak-icon.png" alt="Kopniak icon" width=200 height=200/>
+    <img src="docs/icon.png" alt="Kopniak icon" width=200 height=200/>
     <h1>Kopniak</h1>
 </div>
 
