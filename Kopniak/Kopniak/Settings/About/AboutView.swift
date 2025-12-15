@@ -39,14 +39,13 @@ struct AboutView: View {
 private struct Header: View {
     var body: some View {
         // Header: Icon, Name, Version, Copyright
-        HStack(alignment: .top, spacing: 40) {
+        HStack(alignment: .top, spacing: 20) {
             Image("Icon")
                 .interpolation(.high)
                 .resizable()
                 .frame(width: 100, height: 100)
                 .scaledToFit()
                 .cornerRadius(20)
-                .shadow(color: .brown, radius: 10)
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("Kopniak")
