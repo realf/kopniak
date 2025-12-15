@@ -37,8 +37,8 @@ struct ReminderContentSource {
         String(localized: "Your spine needs immediate action, soldier!"),
     ]
 
-    static let sgtImages = ["Kopniak1", "Kopniak2", "Kopniak3", "Kopniak4"]
-    static let catImages = ["KopniakTheCat1"]
+    static let sgtImages = [""]
+    static let catImages = [""]
 }
 
 @Reducer
