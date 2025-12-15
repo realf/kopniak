@@ -6,14 +6,19 @@
     <meta name="description" content="Kopniak - A minimal macOS app that reminds you to take breaks from computer work.">
     <meta name="keywords" content="macOS, break reminder, health, productivity">
     <meta name="author" content="Serhii Dunets">
-    <link rel="icon" type="image/png" href="kopniak-icon.png">
-    <link rel="apple-touch-icon" href="kopniak-icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     <title>Kopniak - Break Reminder for macOS</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            --accent1-color: #B43721;
+            --accent1-dimmed-color: #9D3220;
         }
 
         body {
@@ -40,7 +45,7 @@
         nav .logo {
             font-size: 1.25rem;
             font-weight: 500;
-            color: #8b5a2b;
+            color: var(--accent1-color);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -92,7 +97,7 @@
 
         .download-button {
             display: inline-block;
-            background: #8b5a2b;
+            background: var(--accent1-color);
             color: white;
             padding: 0.875rem 2rem;
             border-radius: 6px;
@@ -102,7 +107,7 @@
         }
 
         .download-button:hover {
-            background: #704821;
+            background: var(--accent1-dimmed-color);
         }
 
         .features {
@@ -132,7 +137,7 @@
         }
 
         .features-list a {
-            color: #8b5a2b;
+            color: var(--accent1-color);
             text-decoration: none;
         }
 
@@ -167,8 +172,8 @@
 
         .idea {
             padding: 3rem 2rem;
-            max-width: 700px;
             margin: 0 auto;
+            border-top: 1px solid #e0e0e0;
         }
 
         .idea h2 {
@@ -212,16 +217,16 @@
 
         .support-link {
             display: inline-block;
-            color: #8b5a2b;
+            color: var(--accent1-color);
             padding: 0.625rem 1.5rem;
             border-radius: 6px;
             text-decoration: none;
-            border: 1px solid #8b5a2b;
+            border: 1px solid var(--accent1-color);
             transition: all 0.2s;
         }
 
         .support-link:hover {
-            background: #8b5a2b;
+            background: var(--accent1-color);
             color: white;
         }
 
@@ -235,7 +240,7 @@
         }
 
         footer a {
-            color: #8b5a2b;
+            color: var(--accent1-color);
             text-decoration: none;
         }
 
@@ -258,10 +263,6 @@
 <body>
     <nav>
         <div class="container">
-            <a href="#" class="logo">
-                <img src="kopniak-icon.png" alt="Kopniak">
-                Kopniak
-            </a>
             <div>
                 <a href="#features">Features</a>
                 <a href="#privacy">Privacy</a>
@@ -273,18 +274,15 @@
 
     <section class="hero">
         <div class="container">
+            <a href="#" class="logo">
+                <img src="icon.png" alt="Kopniak" width=128px height=128px>
+            </a>
             <h1>Kopniak ∙ The Simplest Breaks</h1>
             <p>The most straightforward macOS app that reminds you to take regular breaks from your Mac.</p>
             <p>Simple, private, and open-source. </p>
             <a href="https://apps.apple.com/us/app/kopniak/id6754943310" class="download-button">Download from Mac App Store</a>
         </div>
     </section>
-
-    <section id="idea" class="idea">
-        <h2>Idea</h2>
-        <p>In Ukrainian, "копняк" [kopˈnʲiak] means "a kick". The app gives you a regular kick so you don't forget to take a break from the computer. Kopniak is made by an indie developer (me) who uses it every day.</p>
-    </section>
-
 
     <section id="features" class="features">
         <div class="container">
@@ -328,6 +326,13 @@
                 <a href="https://github.com/realf/kopniak/issues" class="support-link">Report an Issue</a>
                 <a href="https://github.com/realf/kopniak" class="support-link">View on GitHub</a>
             </div>
+        </div>
+    </section>
+
+    <section id="idea" class="idea">
+        <div class="container">
+            <h2>Idea</h2>
+            <p>In Ukrainian, "копняк" [kopˈnʲiak] means "a kick". The app gives you a regular kick so you don't forget to take a break from the computer. Kopniak is made by an indie developer (me) who uses it every day.</p>
         </div>
     </section>
 
