@@ -64,6 +64,7 @@ class ReminderController: NSWindowController {
         } completionHandler: {
             Task { @MainActor in
                 window.orderOut(nil)
+                window.contentView = nil
             }
         }
     }
