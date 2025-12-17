@@ -68,10 +68,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
             of: button,
             preferredEdge: .maxY
         )
-        self.popover
-            .contentViewController?
-            .view.window?
-            .makeKey()
+        if let window = self.popover.contentViewController?.view.window {
+            window.collectionBehavior = [.fullScreenAuxiliary, .canJoinAllSpaces]
+            window.makeKey()
+        }
     }
 
     func hideMenu() {
