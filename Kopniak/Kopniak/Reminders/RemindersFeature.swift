@@ -76,6 +76,7 @@ struct RemindersFeature {
     }
 
     enum Action {
+        case appIntent(AppIntentFeature.Action)
         case applicationDidLaunch
         case delegate(Delegate)
         case idleMonitor(IdleMonitorFeature.Action)
@@ -101,6 +102,9 @@ struct RemindersFeature {
         }
         Reduce { state, action in
             switch action {
+            case .appIntent(.delegate(let action)):
+                return reduceAppIntentDelegate(&state, action: action)
+
             case .applicationDidLaunch:
                 return restoreTimerState(&state)
 
@@ -153,6 +157,19 @@ struct RemindersFeature {
             case .delegate:
                 return .none
             }
+        }
+    }
+
+    private func reduceAppIntentDelegate(
+        _ state: inout State,
+        action: AppIntentFeature.Action
+            .Delegate
+    ) -> Effect<Action> {
+        switch action {
+        case .startReminders:
+            return startReminders(&state)
+        case .stopReminders:
+            return stopReminders(&state)
         }
     }
 

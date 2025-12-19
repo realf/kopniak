@@ -5,6 +5,7 @@
 //  Created by alf on 02.10.2025.
 //
 
+import AppIntents
 import AppKit
 import ComposableArchitecture
 import SwiftUI
@@ -42,6 +43,11 @@ struct KopniakApp: App {
             action: \.appDelegate
         )
         updateMenuBarIconState(Self.store.showMenuBarIcon)
+        let appIntentStore = Self.store.scope(
+            state: \.appIntent,
+            action: \.appIntent
+        )
+        AppDependencyManager.shared.add(dependency: appIntentStore)
     }
 
     @Environment(\.dismissWindow) private var dismissWindow
@@ -140,7 +146,9 @@ struct KopniakApp: App {
             openWindow(id: "main")
 
         case .reminder:
-            reminderController.showReminder(title: String(localized: "Kopniak Reminder"))
+            reminderController.showReminder(
+                title: String(localized: "Kopniak Reminder")
+            )
 
         case .settings:
             openSettings()

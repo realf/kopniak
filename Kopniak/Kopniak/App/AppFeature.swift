@@ -38,6 +38,7 @@ struct AppFeature {
         @Shared var showMenuBarIcon: Bool
 
         // Child states
+        var appIntent: AppIntentFeature.State
         var appMenu: AppMenuFeature.State
         var appDelegate: AppDelegateFeature.State
         var launchAtLogin: LaunchAtLoginFeature.State
@@ -47,6 +48,8 @@ struct AppFeature {
         var settings: SettingsFeature.State
 
         init(remindersStatus: @autoclosure () -> RemindersStatus) {
+            appIntent = AppIntentFeature.State()
+
             launchAtLogin = LaunchAtLoginFeature.State()
             let reminders = RemindersFeature.State(
                 remindersStatus: remindersStatus()
@@ -106,6 +109,7 @@ struct AppFeature {
 
     enum Action {
         case appDelegate(AppDelegateFeature.Action)
+        case appIntent(AppIntentFeature.Action)
         case appMenu(AppMenuFeature.Action)
         case launchAtLogin(LaunchAtLoginFeature.Action)
         case menuIcon(AppMenuIconFeature.Action)
@@ -119,6 +123,9 @@ struct AppFeature {
     var body: some Reducer<State, Action> {
         Scope(state: \.appDelegate, action: \.appDelegate) {
             AppDelegateFeature()
+        }
+        Scope(state: \.appIntent, action: \.appIntent) {
+            AppIntentFeature()
         }
         Scope(state: \.appMenu, action: \.appMenu) { AppMenuFeature() }
         Scope(state: \.menuIcon, action: \.menuIcon) { AppMenuIconFeature() }
@@ -134,6 +141,12 @@ struct AppFeature {
             switch action {
             case .appDelegate(.delegate(let action)):
                 return reduceAppDelegateDelegate(&state, action: action)
+
+            case .appIntent(let action):
+                return reduce(
+                    into: &state,
+                    action: .reminders(.appIntent(action))
+                )
 
             case .appMenu(.delegate(let action)):
                 return reduceAppMenuDelegate(&state, action: action)
