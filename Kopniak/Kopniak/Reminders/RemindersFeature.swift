@@ -182,10 +182,13 @@ struct RemindersFeature {
             return .none
         }
 
-        // When entering idle state, cancel the reminder timer
+        // When entering idle state, cancel the reminder timer and dismiss the reminder
         switch action {
         case .screenDidLock, .sessionDidResignActive, .systemWillSleep:
-            return cancelTimer(state)
+            return .merge(
+                cancelTimer(state),
+                dismissReminder(&state)
+            )
 
         // When exiting idle state, restart or start the reminder timer
         case .screenDidUnlock, .sessionDidBecomeActive, .systemDidWake:
@@ -301,10 +304,7 @@ struct RemindersFeature {
     }
 
     private func showReminder(_ state: inout State) -> Effect<Action> {
-        return .merge(
-            .run { send in await send(.delegate(.showReminder)) },
-            reduce(into: &state, action: .idleMonitor(.stopObserving))
-        )
+        return .run { send in await send(.delegate(.showReminder)) }
     }
 
     private func dismissReminder(_ state: inout State) -> Effect<Action> {
