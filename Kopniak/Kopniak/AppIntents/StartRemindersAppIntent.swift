@@ -10,7 +10,7 @@ import ComposableArchitecture
 import Foundation
 
 struct StartRemindersAppIntent: AppIntent {
-    static let title: LocalizedStringResource = "Start Break Reminders"
+    static let title: LocalizedStringResource = "Start Reminders"
     static let description: IntentDescription = IntentDescription(
         "Opens the app and starts break reminders."
     )
