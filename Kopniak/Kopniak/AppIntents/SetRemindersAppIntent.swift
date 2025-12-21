@@ -15,9 +15,9 @@ enum RemindersStateSwitchOption: String, AppEnum {
 
     static let caseDisplayRepresentations:
         [RemindersStateSwitchOption: DisplayRepresentation] = [
-            .start: "Start",
-            .stop: "Stop",
-            .toggle: "Toggle",
+            .start: DisplayRepresentation(title: "Start", image: .init(systemName: "play.fill")),
+            .stop: DisplayRepresentation(title: "Stop", image: .init(systemName: "stop.fill")),
+            .toggle: DisplayRepresentation(title: "Toggle", image: .init(systemName: "playpause.fill"))
         ]
 
     case start
