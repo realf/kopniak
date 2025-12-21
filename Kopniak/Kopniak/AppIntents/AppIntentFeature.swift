@@ -16,6 +16,7 @@ struct AppIntentFeature {
         enum Delegate {
             case startReminders
             case stopReminders
+            case toggleReminders
         }
     }
 }

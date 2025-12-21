@@ -170,6 +170,15 @@ struct RemindersFeature {
             return startReminders(&state)
         case .stopReminders:
             return stopReminders(&state)
+        case .toggleReminders:
+            switch state.remindersStatus {
+            case .off:
+                return startReminders(&state)
+            case .on:
+                return pauseReminders(&state)
+            case .paused:
+                return resumeReminders(&state)
+            }
         }
     }
 
