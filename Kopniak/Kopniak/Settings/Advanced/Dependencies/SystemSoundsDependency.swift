@@ -8,6 +8,7 @@
 import AppKit
 import ComposableArchitecture
 import Foundation
+import OSLog
 
 struct SystemSoundsDependency {
     var availableSounds: @Sendable () -> [String]
@@ -69,7 +70,7 @@ private func getAvailableSystemSounds() -> [String] {
             }
         }
     } catch {
-        NSLog("Error reading system sounds directory: \(error)")
+        Logger.soundsLogging.error("Unable to read system sounds directory: \(error)")
     }
 
     // Sort alphabetically for consistent display

@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
+import OSLog
 
 @Reducer
 struct LaunchAtLoginFeature {
@@ -50,7 +51,7 @@ struct LaunchAtLoginFeature {
                         do {
                             try smAppService.register()
                         } catch {
-                            NSLog("Failed to enable launch at login: \(error)")
+                            Logger.launchAtLoginLogging.error("Failed to enable launch at login: \(error)")
                         }
                         await send(.delegate(.launchAtLoginDidUpdate))
                     }

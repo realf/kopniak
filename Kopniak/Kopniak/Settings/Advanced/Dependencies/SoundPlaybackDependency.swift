@@ -7,6 +7,7 @@
 
 import AppKit
 import ComposableArchitecture
+import OSLog
 
 struct SoundPlaybackDependency {
     var playSound: @Sendable (_ soundName: String, _ volume: Double) async -> Void
@@ -28,7 +29,7 @@ extension SoundPlaybackDependency: DependencyKey {
             // Fall back to creating new NSSound if not cached
             guard let sound = NSSound(named: soundName) else {
                 // Sound not available, fall back to beep
-                NSLog("Sound not found: \(soundName), playing beep instead")
+                Logger.soundsLogging.error("Sound not found: \(soundName), playing beep instead")
                 NSSound.beep()
                 return
             }

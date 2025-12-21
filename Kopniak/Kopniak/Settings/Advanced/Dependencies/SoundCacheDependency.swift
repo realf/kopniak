@@ -7,6 +7,7 @@
 
 import AppKit
 import ComposableArchitecture
+import OSLog
 
 /// Dependency for caching preloaded NSSound objects to eliminate first-play delay
 struct SoundCacheDependency {
@@ -59,7 +60,7 @@ private actor SoundCache {
 
         // Load the sound
         guard let sound = NSSound(named: soundName) else {
-            NSLog("Failed to preload sound: \(soundName)")
+            Logger.soundsLogging.error("Failed to preload sound: \(soundName)")
             return
         }
 

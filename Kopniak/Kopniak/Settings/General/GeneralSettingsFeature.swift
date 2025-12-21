@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import OSLog
 import ServiceManagement
 
 enum TimeDisplaySetting: String, CaseIterable, Identifiable {
@@ -157,7 +158,7 @@ struct GeneralSettingsFeature {
             // Update cached state after successful operation
             await send(.updateLaunchAtLogin(enabled))
         } catch {
-            NSLog(
+            Logger.settingsLogging.error(
                 "Failed to \(enabled ? "enable" : "disable") launch at login: \(error)"
             )
 
