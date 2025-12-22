@@ -31,10 +31,7 @@ struct SimpleReminderView: View {
                     Spacer()
 
                     Button(action: {
-                        store.send(
-                            .delegate(.snoozeTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.snoozeTapped))
                     }) {
                         Image(systemName: "zzz")
                             .foregroundStyle(Color.secondary)
@@ -46,10 +43,7 @@ struct SimpleReminderView: View {
                     Spacer()
 
                     Button(action: {
-                        store.send(
-                            .delegate(.dismissTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.dismissTapped))
                     }) {
                         Image(systemName: "checkmark")
                             .foregroundStyle(Color.accentColor)

@@ -22,10 +22,7 @@ struct AppMenuView: View {
 
                 HStack(spacing: 20) {
                     Button(action: {
-                        store.send(
-                            .delegate(.stopRemindersTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.stopRemindersTapped))
                     }) {
                         Image(systemName: "stop.fill")
                             .foregroundStyle(Color.red)
@@ -34,10 +31,7 @@ struct AppMenuView: View {
                     .help("Stop reminders")
 
                     Button(action: {
-                        store.send(
-                            .delegate(.pauseRemindersTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.pauseRemindersTapped))
                     }) {
                         Image(systemName: "pause.fill")
                             .foregroundStyle(Color.orange)
@@ -46,10 +40,7 @@ struct AppMenuView: View {
                     .help("Pause reminders")
 
                     Button(action: {
-                        store.send(
-                            .delegate(.restartRemindersTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.restartRemindersTapped))
                     }) {
                         Image(systemName: "repeat")
                             .foregroundStyle(Color.indigo)
@@ -66,10 +57,7 @@ struct AppMenuView: View {
 
                 HStack(spacing: 20) {
                     Button(action: {
-                        store.send(
-                            .delegate(.stopRemindersTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.stopRemindersTapped))
                     }) {
                         Image(systemName: "stop.fill")
                             .foregroundStyle(Color.red)
@@ -78,10 +66,7 @@ struct AppMenuView: View {
                     .help("Stop reminders")
 
                     Button(action: {
-                        store.send(
-                            .delegate(.resumeRemindersTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.resumeRemindersTapped))
                     }) {
                         Image(systemName: "play.fill")
                             .foregroundStyle(Color.green)
@@ -90,10 +75,7 @@ struct AppMenuView: View {
                     .help("Resume reminders")
 
                     Button(action: {
-                        store.send(
-                            .delegate(.restartRemindersTapped),
-                            animation: .easeInOut
-                        )
+                        store.send(.delegate(.restartRemindersTapped))
                     }) {
                         Image(systemName: "repeat")
                             .foregroundStyle(Color.indigo)
@@ -108,10 +90,7 @@ struct AppMenuView: View {
                     .foregroundStyle(.secondary)
 
                 Button(action: {
-                    store.send(
-                        .delegate(.startRemindersTapped),
-                        animation: .easeInOut
-                    )
+                    store.send(.delegate(.startRemindersTapped))
                 }) {
                     Image(systemName: "play.fill")
                         .foregroundStyle(Color.blue)
@@ -160,8 +139,16 @@ struct RoundButtonLabel: ViewModifier {
             .frame(width: buttonSize, height: buttonSize)
             .background()
             .clipShape(Circle())
-            .overlay(.primary.opacity(0.5), in: Circle().stroke(lineWidth: 1 / scale))
-            .shadow(color: .primary.opacity(colorScheme == .light ? 0.5 : 0.3), radius: 5, x: 2, y: 2)
+            .overlay(
+                .primary.opacity(0.5),
+                in: Circle().stroke(lineWidth: 1 / scale)
+            )
+            .shadow(
+                color: .primary.opacity(colorScheme == .light ? 0.5 : 0.3),
+                radius: 5,
+                x: 2,
+                y: 2
+            )
             .font(.title)
     }
 }
@@ -189,8 +176,8 @@ private struct BlinkViewModifier: ViewModifier {
     }
 }
 
-private extension View {
-    func blinking(duration: Double = 0.5) -> some View {
+extension View {
+    fileprivate func blinking(duration: Double = 0.5) -> some View {
         modifier(BlinkViewModifier(duration: duration))
     }
 }
