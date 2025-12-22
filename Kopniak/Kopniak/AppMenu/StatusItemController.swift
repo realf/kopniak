@@ -116,6 +116,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
             button.target = self
             button.action = #selector(menuIconTapped)
+            button.toolTip = NSLocalizedString("Kopniak", comment: "Menu bar button tooltip")
         }
     }
 
