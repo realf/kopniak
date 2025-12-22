@@ -15,7 +15,7 @@ struct KopniakApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     private static let store = Store(
-        initialState: AppFeature.State(remindersStatus: .off)
+        initialState: AppFeature.State(remindersStatus: .on)
     ) {
         AppFeature()
     }
