@@ -17,6 +17,7 @@ struct AppIntentFeature {
             case startReminders
             case stopReminders
             case toggleReminders
+            case focusFilterDidSetAutoPause(Bool)
         }
     }
 }

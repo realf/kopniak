@@ -5,8 +5,10 @@
 //  Created by alf on 23.10.2025.
 //
 
+import AppIntents
 import ComposableArchitecture
 import Foundation
+import OSLog
 
 enum RemindersStatus: Codable {
     case off
@@ -36,6 +38,7 @@ struct RemindersFeature {
         static let defaultSnoozeInterval: TimeInterval = 5.0 * 60
 
         var idleMonitor: IdleMonitorFeature.State
+        var isFocusFilterAutoPauseActive: Bool
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
@@ -72,6 +75,8 @@ struct RemindersFeature {
                 .snoozeInterval
             )
             _snoozeInterval = snoozeInterval
+
+            self.isFocusFilterAutoPauseActive = false
         }
     }
 
@@ -89,6 +94,7 @@ struct RemindersFeature {
         case startRemindersTapped
         case stopRemindersTapped
         case timerTicked
+        case focusFilterAutoPauseDidUpdate(Bool)
 
         enum Delegate {
             case dismissReminder
@@ -106,7 +112,24 @@ struct RemindersFeature {
                 return reduceAppIntentDelegate(&state, action: action)
 
             case .applicationDidLaunch:
-                return restoreTimerState(&state)
+                return .concatenate(
+                    .run { send in
+                        do {
+                            let isAutoPauseActive =
+                                try await updateFocusFilterAutoPause()
+                            await send(
+                                .focusFilterAutoPauseDidUpdate(
+                                    isAutoPauseActive
+                                )
+                            )
+                        } catch {
+                            Logger.reminders.info(
+                                "Error loading current filter: \(error)"
+                            )
+                        }
+                    },
+                    restoreTimerState(&state)
+                )
 
             case .idleMonitor(.delegate(let delegateAction)):
                 return reduceIdleMonitorDelegate(&state, action: delegateAction)
@@ -154,6 +177,13 @@ struct RemindersFeature {
             case .timerTicked:
                 return processTimerTick(&state)
 
+            case .focusFilterAutoPauseDidUpdate(let isActive):
+                state.isFocusFilterAutoPauseActive = isActive
+                Logger.reminders.info(
+                    "Received focusFilterAutoPauseDidUpdate: \(isActive)"
+                )
+                return .none
+
             case .delegate:
                 return .none
             }
@@ -166,6 +196,12 @@ struct RemindersFeature {
             .Delegate
     ) -> Effect<Action> {
         switch action {
+        case .focusFilterDidSetAutoPause(let isFilterAutoPauseActive):
+            Logger.reminders.info(
+                "Received focusFilterDidSetAutoPause: \(isFilterAutoPauseActive)"
+            )
+            state.isFocusFilterAutoPauseActive = isFilterAutoPauseActive
+            return .none
         case .startReminders:
             return startReminders(&state)
         case .stopReminders:
@@ -226,6 +262,11 @@ struct RemindersFeature {
         return .merge(effects)
     }
 
+    private func updateFocusFilterAutoPause() async throws -> Bool {
+        let currentFilter = try await FocusFilterAppIntent.current
+        return currentFilter.isAutoPauseActive
+    }
+
     private func restoreTimerState(_ state: inout State) -> Effect<Action> {
         if state.remindersStatus == .on {
             if state.remainingTime <= 0 {
@@ -282,6 +323,9 @@ struct RemindersFeature {
     }
 
     private func processTimerTick(_ state: inout State) -> Effect<Action> {
+        guard !state.isFocusFilterAutoPauseActive else {
+            return .none
+        }
         state.$remainingTime.withLock { $0 -= 1.0 }
         if state.remainingTime <= 0 {
             state.$remainingTime.withLock { $0 = 0.0 }
