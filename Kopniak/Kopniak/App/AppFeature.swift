@@ -90,7 +90,7 @@ struct AppFeature {
             _showMainWindowAtLaunch = showMainWindowAtLaunch
 
             let showMenuBarIcon = Shared(
-                wrappedValue: false,
+                wrappedValue: true,
                 .appStorage("showMenuBarIcon")
             )
             _showMenuBarIcon = showMenuBarIcon
