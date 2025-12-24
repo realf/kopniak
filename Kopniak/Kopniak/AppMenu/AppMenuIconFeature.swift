@@ -12,6 +12,7 @@ import Foundation
 struct AppMenuIconFeature {
     @ObservableState
     struct State {
+        @Shared var isFocusFilterAutoPauseActive: Bool
         @Shared var menuIconTimeDisplay: TimeDisplaySetting
         @Shared var remindersStatus: RemindersStatus
         @Shared var remainingTime: TimeInterval
@@ -35,7 +36,13 @@ struct AppMenuIconFeature {
             return formatter
         }()
 
-        init(remindersStatus: Shared<RemindersStatus>, remainingTime: Shared<TimeInterval>, menuIconTimeDisplay: TimeDisplaySetting) {
+        init(
+            isFocusFilterAutoPauseActive: Shared<Bool>,
+            remindersStatus: Shared<RemindersStatus>,
+            remainingTime: Shared<TimeInterval>,
+            menuIconTimeDisplay: TimeDisplaySetting
+        ) {
+            _isFocusFilterAutoPauseActive = isFocusFilterAutoPauseActive
             _remindersStatus = remindersStatus
             _remainingTime = remainingTime
             let menuIconTimeDisplay = Shared(

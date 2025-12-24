@@ -15,9 +15,18 @@ enum BreakRemindersAction: String, AppEnum {
 
     static let caseDisplayRepresentations:
         [BreakRemindersAction: DisplayRepresentation] = [
-            .start: DisplayRepresentation(title: "Start", image: .init(systemName: "play.fill")),
-            .stop: DisplayRepresentation(title: "Stop", image: .init(systemName: "stop.fill")),
-            .toggle: DisplayRepresentation(title: "Toggle", image: .init(systemName: "playpause.fill"))
+            .start: DisplayRepresentation(
+                title: "Start",
+                image: .init(systemName: "play.fill")
+            ),
+            .stop: DisplayRepresentation(
+                title: "Stop",
+                image: .init(systemName: "stop.fill")
+            ),
+            .toggle: DisplayRepresentation(
+                title: "Toggle",
+                image: .init(systemName: "playpause.fill")
+            ),
         ]
 
     case start

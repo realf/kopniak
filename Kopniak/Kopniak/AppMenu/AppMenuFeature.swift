@@ -12,6 +12,7 @@ import Foundation
 struct AppMenuFeature {
     @ObservableState
     struct State {
+        @Shared var isFocusFilterAutoPauseActive: Bool
         @Shared var remindersStatus: RemindersStatus
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval

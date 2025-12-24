@@ -69,7 +69,9 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
             preferredEdge: .maxY
         )
         if let window = self.popover.contentViewController?.view.window {
-            window.collectionBehavior = [.fullScreenAuxiliary, .canJoinAllSpaces]
+            window.collectionBehavior = [
+                .fullScreenAuxiliary, .canJoinAllSpaces,
+            ]
             window.makeKey()
         }
     }
@@ -101,22 +103,29 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
             button.widthAnchor.constraint(equalToConstant: 60.0).isActive = true
 
             let publisher = iconStore.publisher
-            publisher.remainingTimeFormatted.combineLatest(
-                publisher.remindersStatus
-            ).sink { [weak self] time, status in
-                guard let self else { return }
-                button.image = menuBarIcon(status: status)
-                if iconStore.remindersStatus != .off {
-                    button.title = time
-                } else {
-                    button.title = ""
+            publisher.remainingTimeFormatted
+                .combineLatest(
+                    publisher.remindersStatus,
+                    publisher.isFocusFilterAutoPauseActive
+                ).sink { [weak self] time, status, focus in
+                    guard let self else { return }
+                    button.image = menuBarIcon(status: status)
+                    if focus {
+                        button.title = "􀆹"
+                    } else if iconStore.remindersStatus != .off {
+                        button.title = time
+                    } else {
+                        button.title = ""
+                    }
                 }
-            }
-            .store(in: &cancellables)
+                .store(in: &cancellables)
 
             button.target = self
             button.action = #selector(menuIconTapped)
-            button.toolTip = NSLocalizedString("Kopniak", comment: "Menu bar button tooltip")
+            button.toolTip = NSLocalizedString(
+                "Kopniak",
+                comment: "Menu bar button tooltip"
+            )
         }
     }
 

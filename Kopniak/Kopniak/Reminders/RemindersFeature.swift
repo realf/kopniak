@@ -38,7 +38,8 @@ struct RemindersFeature {
         static let defaultSnoozeInterval: TimeInterval = 5.0 * 60
 
         var idleMonitor: IdleMonitorFeature.State
-        var isFocusFilterAutoPauseActive: Bool
+        @Shared(.inMemory("isFocusFilterAutoPauseActive"))
+        var isFocusFilterAutoPauseActive = false
         @Shared var remainingTime: TimeInterval
         @Shared var reminderInterval: TimeInterval
         @Shared var remindersStatus: RemindersStatus
@@ -75,8 +76,6 @@ struct RemindersFeature {
                 .snoozeInterval
             )
             _snoozeInterval = snoozeInterval
-
-            self.isFocusFilterAutoPauseActive = false
         }
     }
 
@@ -178,7 +177,9 @@ struct RemindersFeature {
                 return processTimerTick(&state)
 
             case .focusFilterAutoPauseDidUpdate(let isActive):
-                state.isFocusFilterAutoPauseActive = isActive
+                state.$isFocusFilterAutoPauseActive.withLock {
+                    $0 = isActive
+                }
                 Logger.reminders.info(
                     "Received focusFilterAutoPauseDidUpdate: \(isActive)"
                 )
@@ -200,7 +201,9 @@ struct RemindersFeature {
             Logger.reminders.info(
                 "Received focusFilterDidSetAutoPause: \(isFilterAutoPauseActive)"
             )
-            state.isFocusFilterAutoPauseActive = isFilterAutoPauseActive
+            state.$isFocusFilterAutoPauseActive.withLock {
+                $0 = isFilterAutoPauseActive
+            }
             return .none
         case .startReminders:
             return startReminders(&state)

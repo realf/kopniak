@@ -14,11 +14,22 @@ struct AppMenuView: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            if store.isFocusFilterAutoPauseActive {
+                Image(systemName: "moon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 31, height: 31)
+                    .foregroundStyle(Color.indigo)
+                    .help("Focus mode is active")
+            }
+
             switch store.remindersStatus {
             case .on:
-                Text("\(store.remainingTimeFormatted)")
-                    .monospacedDigit()
-                    .font(.largeTitle)
+                if !store.isFocusFilterAutoPauseActive {
+                    Text("\(store.remainingTimeFormatted)")
+                        .monospacedDigit()
+                        .font(.largeTitle)
+                }
 
                 HStack(spacing: 20) {
                     Button(action: {
@@ -48,12 +59,15 @@ struct AppMenuView: View {
                     }
                     .help("Restart reminders")
                 }
+                .disabled(store.isFocusFilterAutoPauseActive)
             case .paused:
-                Text("\(store.remainingTimeFormatted)")
-                    .blinking()
-                    .monospacedDigit()
-                    .font(.largeTitle)
-                    .foregroundStyle(.secondary)
+                if !store.isFocusFilterAutoPauseActive {
+                    Text("\(store.remainingTimeFormatted)")
+                        .blinking()
+                        .monospacedDigit()
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                }
 
                 HStack(spacing: 20) {
                     Button(action: {
@@ -83,11 +97,14 @@ struct AppMenuView: View {
                     }
                     .help("Restart reminders")
                 }
+                .disabled(store.isFocusFilterAutoPauseActive)
             case .off:
-                Text("\(store.reminderIntervalFormatted)")
-                    .monospacedDigit()
-                    .font(.largeTitle)
-                    .foregroundStyle(.secondary)
+                if !store.isFocusFilterAutoPauseActive {
+                    Text("\(store.reminderIntervalFormatted)")
+                        .monospacedDigit()
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                }
 
                 Button(action: {
                     store.send(.delegate(.startRemindersTapped))
@@ -97,6 +114,7 @@ struct AppMenuView: View {
                         .roundButtonLabel()
                 }
                 .help("Start reminders")
+                .disabled(store.isFocusFilterAutoPauseActive)
             }
             Divider()
                 .padding(.top, 6)
@@ -185,6 +203,7 @@ extension View {
 #Preview {
     let store = Store(
         initialState: AppMenuFeature.State(
+            isFocusFilterAutoPauseActive: Shared(value: false),
             remindersStatus: Shared(value: .on),
             remainingTime: Shared(value: 42),
             reminderInterval: Shared(value: 5),
@@ -202,6 +221,25 @@ extension View {
 #Preview {
     let store = Store(
         initialState: AppMenuFeature.State(
+            isFocusFilterAutoPauseActive: Shared(value: true),
+            remindersStatus: Shared(value: .on),
+            remainingTime: Shared(value: 42),
+            reminderInterval: Shared(value: 5),
+            isMenuShown: false
+        )
+    ) {
+        AppMenuFeature()
+    }
+    let launchAtLoginStore = Store(initialState: LaunchAtLoginFeature.State()) {
+        LaunchAtLoginFeature()
+    }
+    AppMenuView(store: store, launchAtLoginStore: launchAtLoginStore)
+}
+
+#Preview {
+    let store = Store(
+        initialState: AppMenuFeature.State(
+            isFocusFilterAutoPauseActive: Shared(value: false),
             remindersStatus: Shared(value: .off),
             remainingTime: Shared(value: 42),
             reminderInterval: Shared(value: 5),
@@ -220,6 +258,7 @@ extension View {
 #Preview {
     let store = Store(
         initialState: AppMenuFeature.State(
+            isFocusFilterAutoPauseActive: Shared(value: false),
             remindersStatus: Shared(value: .paused),
             remainingTime: Shared(value: 42),
             reminderInterval: Shared(value: 5),

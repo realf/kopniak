@@ -29,7 +29,8 @@ struct FocusFilterAppIntent: SetFocusFilterIntent {
 
         titleList.append("Automatic Pause")
         subtitleList.append(
-            self.isAutoPauseActive ? "Automatic Pause: On" : "Automatic Pause: Off"
+            self.isAutoPauseActive
+                ? "Automatic Pause: On" : "Automatic Pause: Off"
         )
 
         let title = LocalizedStringResource(

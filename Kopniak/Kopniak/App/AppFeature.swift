@@ -56,6 +56,8 @@ struct AppFeature {
             )
             self.reminders = reminders
             appMenu = AppMenuFeature.State(
+                isFocusFilterAutoPauseActive: reminders
+                    .$isFocusFilterAutoPauseActive,
                 remindersStatus: reminders.$remindersStatus,
                 remainingTime: reminders.$remainingTime,
                 reminderInterval: reminders.$reminderInterval
@@ -74,6 +76,8 @@ struct AppFeature {
             self.reminder = reminder
 
             let menuIcon = AppMenuIconFeature.State(
+                isFocusFilterAutoPauseActive: reminders
+                    .$isFocusFilterAutoPauseActive,
                 remindersStatus: reminders.$remindersStatus,
                 remainingTime: reminders.$remainingTime,
                 menuIconTimeDisplay: .short
