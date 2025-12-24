@@ -28,7 +28,6 @@ struct AboutView: View {
                         }
                     }
                 }
-                .frame(minHeight: 150)
             }
 
             Spacer()
@@ -37,6 +36,30 @@ struct AboutView: View {
 }
 
 private struct Header: View {
+    var mailtoLink: some View {
+        let emailBody = "Please describe your issue below:"
+        let mailto =
+            "mailto:dunets.devel@gmail.com?subject=Kopniak \(version)&body=\(emailBody)"
+        return Link(
+            "Contact Me",
+            destination: URL(string: mailto)!
+        )
+        .buttonStyle(.bordered)
+    }
+
+    let shortVersion =
+        Bundle.main.infoDictionary?[
+            "CFBundleShortVersionString"
+        ] as? String ?? "1.0"
+
+    let buildVersion =
+        Bundle.main.infoDictionary?["CFBundleVersion"]
+        as? String ?? "1"
+
+    var version: String {
+        "Version \(shortVersion) (\(buildVersion))"
+    }
+
     var body: some View {
         // Header: Icon, Name, Version, Copyright
         HStack(alignment: .top, spacing: 20) {
@@ -50,26 +73,20 @@ private struct Header: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Kopniak")
                     .font(.largeTitle)
+                Text("This app is made by an independent developer.")
                 Text(
-                    """
-                    Kopniak is an app being made by an indie developer [realf](https://github.com/realf/).
-                    If you have any suggestions or issues, feel free to contact me on [GitHub](https://github.com/realf/kopniak/issues).
-                    If you like Kopniak, please rate it on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310) - it helps other users to find it.
-                    """
+                    "Learn more at https://realf.github.io/kopniak/."
                 )
                 Text(
-                    "Thanks to Olena for her valuable contributions, and to my family for their continuous support."
+                    "If you like the app, please rate it on [AppStore](https://apps.apple.com/us/app/kopniak/id6754943310)."
                 )
+                Text("Thanks to Olena for her valuable contributions.")
+                Text("Thank you to my family for their continuous support.")
                 Text("Special thanks to \(NSFullUserName()) ❤️")
 
-                let shortVersion =
-                    Bundle.main.infoDictionary?[
-                        "CFBundleShortVersionString"
-                    ] as? String ?? "1.0"
-                let buildVersion =
-                    Bundle.main.infoDictionary?["CFBundleVersion"]
-                    as? String ?? "1"
-                Text("Version \(shortVersion) (\(buildVersion))")
+                mailtoLink
+
+                Text(version)
                     .font(.body)
                     .foregroundColor(.secondary)
 
@@ -78,7 +95,6 @@ private struct Header: View {
                     .foregroundColor(.secondary)
             }
         }
-        .frame(height: 200)
     }
 }
 
@@ -94,7 +110,6 @@ private struct LibrariesHeader: View {
             )
             .foregroundColor(.secondary)
         }
-        .frame(height: 80)
     }
 }
 
